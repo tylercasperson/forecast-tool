@@ -1,0 +1,31 @@
+{
+  "name": "forecast-tool",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type":"module",
+  "scripts": {
+    "start": "server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tylercasperson/forecast-tool.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tylercasperson/forecast-tool/issues"
+  },
+  "homepage": "https://github.com/tylercasperson/forecast-tool#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "concurrently": "^6.3.0",
+    "nodemon": "^2.0.14"
+  }
+}
