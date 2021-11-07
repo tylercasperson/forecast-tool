@@ -1,8 +1,7 @@
 {
   "name": "forecast-tool",
   "version": "1.0.0",
-  "main": "server.js",
-  "type":"module",
+  "main": "index.js",
   "scripts": {
     "start": "server.js",
     "server": "nodemon server.js",
@@ -22,7 +21,11 @@
   "homepage": "https://github.com/tylercasperson/forecast-tool#readme",
   "description": "",
   "dependencies": {
-    "express": "^4.17.1"
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mysql2": "^2.3.3-rc.0",
+    "sequelize": "^6.9.0"
   },
   "devDependencies": {
     "concurrently": "^6.3.0",
