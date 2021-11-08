@@ -13,7 +13,6 @@ CREATE TABLE forecastMethods (
     id int auto_increment,
     name varChar(255),
     description varChar(255),
-    calculation integer,
     bestToUseWhen varChar(255),
     createdAt datetime,
     updatedAt datetime,

@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-  const forecastedMethods = sequelize.define('forecastedMethods', {
+  const forecastMethods = sequelize.define('forecastMethods', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -12,13 +12,10 @@ module.exports = function (sequelize, DataTypes) {
     description: {
       type: DataTypes.STRING,
     },
-    calculation: {
-      type: DataTypes.INTEGER,
-    },
     bestToUseWhen: {
       type: DataTypes.STRING,
     },
   });
 
-  return forecastedMethods;
+  return forecastMethods;
 };
