@@ -7,6 +7,7 @@ const db = require('./models');
 const forecastMethodsRoute = require('./routes/forecastMethodsRoute.js');
 const dataRoute = require('./routes/dataRoutes.js');
 const dataTypesRoute = require('./routes/dataTypesRoute.js');
+const timePeriodsRoute = require('./routes/timePeriodsRoute.js');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use(cors());
 app.use('/api/forecastMethods', forecastMethodsRoute);
 app.use('/api/data', dataRoute);
 app.use('/api/dataTypes', dataTypesRoute);
+app.use('/api/timePeriods', timePeriodsRoute);
 
 db.sequelize
   .sync({ force: false })
