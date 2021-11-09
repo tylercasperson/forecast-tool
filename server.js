@@ -1,3 +1,4 @@
+const colors = require('colors');
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -5,7 +6,7 @@ const PORT = process.env.PORT || 5001;
 
 const db = require('./models');
 const forecastMethodsRoute = require('./routes/forecastMethodsRoute.js');
-const dataRoute = require('./routes/dataRoutes.js');
+const dataRoute = require('./routes/dataRoute.js');
 const dataTypesRoute = require('./routes/dataTypesRoute.js');
 const timePeriodsRoute = require('./routes/timePeriodsRoute.js');
 
@@ -23,4 +24,6 @@ app.use('/api/timePeriods', timePeriodsRoute);
 
 db.sequelize
   .sync({ force: false })
-  .then(app.listen(PORT, console.log(`Server running on ${PORT}.`)));
+  .then(
+    app.listen(PORT, console.log(`Server running on ${PORT}.`.yellow.bold))
+  );
