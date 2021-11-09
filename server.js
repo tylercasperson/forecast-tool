@@ -10,6 +10,8 @@ const dataRoute = require('./routes/dataRoute.js');
 const dataTypesRoute = require('./routes/dataTypesRoute.js');
 const timePeriodsRoute = require('./routes/timePeriodsRoute.js');
 
+const { notFound, errorHandler } = require('./middleware/errorMiddleware.js');
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -21,6 +23,9 @@ app.use('/api/forecastMethods', forecastMethodsRoute);
 app.use('/api/data', dataRoute);
 app.use('/api/dataTypes', dataTypesRoute);
 app.use('/api/timePeriods', timePeriodsRoute);
+
+app.use(notFound);
+app.use(errorHandler);
 
 db.sequelize
   .sync({ force: false })
