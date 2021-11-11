@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TableRow from './TableRow';
-import data from './DummyData';
+import { useDispatch, useSelector } from 'react-redux';
+import { listData } from '../data/actions/dataActions';
 
 const TableData = () => {
+  const dispatch = useDispatch();
+
+  const dataList = useSelector((state) => state.data);
+  const { data } = dataList;
+
+  useEffect(() => {
+    dispatch(listData());
+  }, [dispatch]);
+
   return (
     <div
       style={{
