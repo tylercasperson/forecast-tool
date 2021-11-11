@@ -5,8 +5,6 @@ import salesHistory from './DummyData';
 const LineGraph = () => {
   const lineChart = useRef();
 
-  console.log([0.8 * document.documentElement.clientWidth]);
-
   const [data, setData] = useState(salesHistory);
   const [width, setWidth] = useState(
     0.8 * document.documentElement.clientWidth

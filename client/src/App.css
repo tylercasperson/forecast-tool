@@ -36,3 +36,27 @@
     transform: rotate(360deg);
   }
 }
+
+tr:nth-child(even) {
+  background-color: lightgray;
+}
+
+input {
+  text-align: center;
+  padding: 0;
+  border: none;
+}
+
+input::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
