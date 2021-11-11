@@ -7,7 +7,7 @@ VALUES (1, 'Last Year', "Last year's data.", 'ly', 'Great way to compare current
 (3, 'weighted 3 month moving average', 'Provides more weight to recent trends while still using an average of recent months.', 'w3ma', 'To show recent trends with an emphasis on recent months', @createdAt, @updatedAt),
 (4, 'Linear Regression', 'Shows the relationship between two or more data points.', 'lr', 'To show a correlation between data points to show increase/decrease in future trends.', @createdAt, @updatedAt);
 
-INSERT INTO timePeriods (id, type, startDate, endDate, createdAt, updatedAt)
+INSERT INTO timePeriods (id, groupName, startDate, endDate, createdAt, updatedAt)
 VALUES (1, 'full year', '2022-01-01 00:00:00', '2022-12-31 00:00:00', @createdAt, @updatedAt),
 (2, 'Q1', '2022-01-01 00:00:00', '2022-3-31 00:00:00', @createdAt, @updatedAt),
 (3,'Q2', '2022-04-01 00:00:00', '2022-6-30 00:00:00', @createdAt, @updatedAt),

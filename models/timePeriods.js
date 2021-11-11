@@ -6,7 +6,7 @@ module.exports = function (sequelize, DataTypes) {
       allowNulls: false,
       required: true,
     },
-    type: {
+    groupName: {
       type: DataTypes.STRING,
     },
     startDate: {
@@ -18,7 +18,7 @@ module.exports = function (sequelize, DataTypes) {
   });
 
   timePeriods.associate = (models) => {
-    timePeriods.hasMany(models.data, {
+    timePeriods.hasMany(models.forecastData, {
       onDelete: 'cascade',
     });
   };

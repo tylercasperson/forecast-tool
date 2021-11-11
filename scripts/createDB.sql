@@ -14,7 +14,7 @@ CREATE TABLE forecastMethods (
 );
 CREATE TABLE timePeriods (
     id int auto_increment,
-    type varChar(255),
+    groupName varChar(255),
     startDate datetime,
     endDate datetime,
     createdAt datetime,

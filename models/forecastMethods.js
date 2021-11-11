@@ -12,6 +12,9 @@ module.exports = function (sequelize, DataTypes) {
     description: {
       type: DataTypes.STRING,
     },
+    abbreviation: {
+      type: DataTypes.STRING,
+    },
     bestToUseWhen: {
       type: DataTypes.STRING,
     },
