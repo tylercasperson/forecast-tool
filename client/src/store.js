@@ -2,9 +2,9 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import { dataListReducer } from './components/data/reducers/dataReducers.js';
+import { forecastDataListReducer } from './components/data/reducers/forecastDataReducers.js';
 
-const reducer = combineReducers({ data: dataListReducer });
+const reducer = combineReducers({ forecastData: forecastDataListReducer });
 
 const initialState = {};
 

@@ -3,7 +3,9 @@ const db = require('../models');
 const { Op } = require('sequelize');
 
 const getForecastData = asyncHandler(async (req, res) => {
-  const forecastData = await db.forecastData.findAll({});
+  const forecastData = await db.forecastData.findAll({
+    include: [{ model: db.timePeriods }],
+  });
   res.json({ forecastData });
 });
 
