@@ -12,8 +12,18 @@ CREATE TABLE forecastMethods (
     updatedAt datetime,
     PRIMARY KEY (id)
 );
+CREATE TABLE timePeriodTypes (
+    id int auto_increment,
+    type varChar(255),
+    dayEquivalent integer,
+    createdAt datetime,
+    updatedAt datetime,
+    PRIMARY KEY (id)
+);
+
 CREATE TABLE timePeriods (
     id int auto_increment,
+    timePeriodTypesID integer,
     groupName varChar(255),
     startDate datetime,
     endDate datetime,
@@ -35,6 +45,14 @@ CREATE TABLE forecastData (
     m3ma integer,
     m3wa integer,
     linearRegression integer,
+    createdAt datetime,
+    updatedAt datetime,
+    PRIMARY KEY (id)
+);
+CREATE TABLE groupedData (
+    id int auto_increment,
+    timePeriodID integer,
+    data integer,
     createdAt datetime,
     updatedAt datetime,
     PRIMARY KEY (id)

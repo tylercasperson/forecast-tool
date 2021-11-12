@@ -7,7 +7,7 @@ const getForecastData = asyncHandler(async (req, res) => {
   res.json({ forecastData });
 });
 
-const getOneforecastData = asyncHandler(async (req, res) => {
+const getOneForecastData = asyncHandler(async (req, res) => {
   const forecastData = await db.forecastData.findAll({
     where: {
       id: { [Op.eq]: req.params.id },
@@ -41,7 +41,7 @@ const deleteForecastData = asyncHandler(async (req, res) => {
 
 module.exports = {
   getForecastData,
-  getOneforecastData,
+  getOneForecastData,
   updateForecastData,
   addForecastData,
   deleteForecastData,

@@ -20,7 +20,10 @@ module.exports = function (sequelize, DataTypes) {
   timePeriods.associate = (models) => {
     timePeriods.hasMany(models.forecastData, {
       onDelete: 'cascade',
-    });
+    }),
+      timePeriods.hasMany(models.timePeriodTypes, {
+        onDelete: 'cascade',
+      });
   };
 
   return timePeriods;

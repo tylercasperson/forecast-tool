@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   getForecastData,
-  getOneforecastData,
+  getOneForecastData,
   updateForecastData,
   addForecastData,
   deleteForecastData,
@@ -11,7 +11,7 @@ const {
 router.route('/').get(getForecastData).post(addForecastData);
 router
   .route('/:id')
-  .get(getOneforecastData)
+  .get(getOneForecastData)
   .put(updateForecastData)
   .delete(deleteForecastData);
 
