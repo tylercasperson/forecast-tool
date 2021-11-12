@@ -42,6 +42,8 @@ CREATE TABLE salesData (
 CREATE TABLE forecastData (
     id int auto_increment,
     timePeriodID integer,
+    forecast integer,
+    lastYear integer,
     m3ma integer,
     m3wa integer,
     linearRegression integer,

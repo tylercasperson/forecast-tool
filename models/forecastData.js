@@ -6,6 +6,12 @@ module.exports = function (sequelize, DataTypes) {
       allowNulls: false,
       required: true,
     },
+    forecast: {
+      type: DataTypes.INTEGER,
+    },
+    lastYear: {
+      type: DataTypes.INTEGER,
+    },
     m3ma: {
       type: DataTypes.INTEGER,
     },
