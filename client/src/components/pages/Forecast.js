@@ -4,6 +4,7 @@ import { format, add } from 'date-fns';
 
 import { listForecastData } from '../data/actions/forecastDataActions.js';
 import { listSalesData } from '../data/actions/salesDataActions.js';
+import { listGroupedData } from '../data/actions/groupedDataActions.js';
 import salesHistory from '../../components/layout/DummyData';
 
 import LineGraph from '../layout/LineGraph';
@@ -17,6 +18,9 @@ const Forecast = () => {
 
   const salesDataList = useSelector((state) => state.salesData);
   const { salesData } = salesDataList;
+
+  const groupedDataList = useSelector((state) => state.groupedData);
+  const { groupedData } = salesDataList;
 
   const [startDate, setStartDate] = useState(
     format(add(Date.now(), { years: -2 }), 'MM/dd/yyyy')
@@ -42,6 +46,7 @@ const Forecast = () => {
   useEffect(() => {
     dispatch(listForecastData());
     dispatch(listSalesData(startDate, endDate));
+    dispatch(listGroupedData());
   }, [dispatch, startDate, endDate]);
 
   return (
