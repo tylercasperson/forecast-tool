@@ -23,6 +23,9 @@ module.exports = function (sequelize, DataTypes) {
     }),
       timePeriods.hasMany(models.timePeriodTypes, {
         onDelete: 'cascade',
+      }),
+      timePeriods.hasMany(models.groupedData, {
+        onDelete: 'cascade',
       });
   };
 
