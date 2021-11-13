@@ -15,77 +15,100 @@ const LineGraph = (props) => {
   let data = props.data;
 
   useEffect(() => {
-    const margin = { top: 0, right: 30, bottom: 50, left: 30 };
-    const graphWidth = width - margin.left - margin.right;
-    const graphHeight = height - margin.top - margin.bottom;
+    if (props.data.length !== 0) {
+      const margin = { top: 0, right: 30, bottom: 50, left: 30 };
+      const graphWidth = width - margin.left - margin.right;
+      const graphHeight = height - margin.top - margin.bottom;
 
-    // const nested = nest()
-    //   .key((d) => d.timePeriod.groupName)
-    //   .entries(props.data);
+      const nested = nest()
+        .key((d) => d.dataType.abbreviation)
+        .entries(props.data);
 
-    // console.log('nest: ', nested);
+      console.log('nest: ', nested);
 
-    const xScale = d3
-      .scalePoint()
-      .domain(data.map((d) => d.key))
-      .range([0 + margin.right, graphWidth - margin.left]);
+      const xScale = d3
+        .scalePoint()
+        .domain(data.map((d) => d.timePeriod.groupName))
+        .range([0 + margin.right, graphWidth - margin.left]);
 
-    const yScale = d3
-      .scaleLinear()
-      .domain([
-        0,
-        d3.max(data, (d) => {
-          return d.m3wa;
-        }),
-      ])
-      .range([graphHeight, margin.bottom]);
+      const yScale = d3
+        .scaleLinear()
+        .domain([
+          0,
+          d3.max(data, (d) => {
+            return d.data;
+          }),
+        ])
+        .range([graphHeight, margin.bottom]);
 
-    const line = d3
-      .line()
-      .x((d) => xScale(d.timePeriod.groupName))
-      .y((d) => yScale(d.m3wa));
+      const line = d3
+        .line()
+        .x((d) => xScale(d.timePeriod.groupName))
+        .y((d) => yScale(d.data));
 
-    const svg = d3
-      .select(lineChart.current)
-      .append('svg')
-      .style('background-color', 'lightgrey')
-      .style('width', graphWidth + margin.left + margin.right)
-      .style('height', graphHeight + margin.top + margin.bottom);
+      const svg = d3
+        .select(lineChart.current)
+        .append('svg')
+        .style('background-color', 'lightgrey')
+        .style('width', graphWidth + margin.left + margin.right)
+        .style('height', graphHeight + margin.top + margin.bottom);
 
-    svg
-      .append('path')
-      .attr('d', () => line(data))
-      .attr('fill', 'none')
-      .attr('stroke', 'black')
-      .attr('stroke-width', 2);
+      var color = d3
+        .scaleOrdinal()
+        .range([
+          '#e41a1c',
+          '#377eb8',
+          '#4daf4a',
+          '#984ea3',
+          '#ff7f00',
+          '#ffff33',
+          '#a65628',
+          '#f781bf',
+          '#999999',
+        ]);
 
-    let xTicks = Math.ceil(data.length / (graphWidth / data.length));
+      svg
+        .selectAll('path')
+        .data(nested)
+        .enter()
+        .append('path')
+        .attr('d', (d) => line(d.values))
+        .attr('fill', 'none')
+        .attr('stroke', (d) => color([d]))
+        .attr('stroke-width', 1.5);
 
-    const xAxis = d3
-      .axisBottom(xScale)
-      .tickFormat((interval, i) => {
-        return i % xTicks !== 0 ? ' ' : interval;
-      })
-      .tickSize(10);
+      svg.exit().remove();
 
-    svg
-      .append('g')
-      .attr('class', 'xAxis')
-      .attr('transform', `translate(0,${graphHeight})`)
-      .call(xAxis);
+      const xAxis = d3
+        .axisBottom(xScale)
+        .tickFormat((interval, i) => {
+          return i % 3 !== 0 ? ' ' : interval;
+        })
+        .tickSize(10);
 
-    const yAxis = d3
-      .axisLeft(yScale)
-      .tickFormat((interval, i) => {
-        return i % 2 !== 0 ? ' ' : interval;
-      })
-      .tickSize(8);
+      svg
+        .append('g')
+        .attr('class', 'xAxis')
+        .attr('transform', `translate(0,${graphHeight})`)
+        .call(xAxis);
 
-    svg
-      .append('g')
-      .attr('class', 'yAxis')
-      .attr('transform', `translate(30,0)`)
-      .call(yAxis);
+      svg.exit().remove();
+
+      const yAxis = d3
+        .axisLeft(yScale)
+        .tickFormat((interval, i) => {
+          return i % 2 !== 0 ? ' ' : interval;
+        })
+        .tickSize(8);
+
+      svg.exit().remove();
+
+      svg
+        .append('g')
+        .attr('class', 'yAxis')
+        .attr('transform', `translate(30,0)`)
+        .call(yAxis);
+    }
   }, [data, height, width]);
 
   return <div ref={lineChart}></div>;

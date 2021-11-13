@@ -20,7 +20,7 @@ const Forecast = () => {
   const { salesData } = salesDataList;
 
   const groupedDataList = useSelector((state) => state.groupedData);
-  const { groupedData } = salesDataList;
+  const { groupedData } = groupedDataList;
 
   const [startDate, setStartDate] = useState(
     format(add(Date.now(), { years: -2 }), 'MM/dd/yyyy')
@@ -31,6 +31,7 @@ const Forecast = () => {
 
   console.log('fd: ', forecastData);
   console.log('sd: ', salesData);
+  console.log('gd: ', groupedData);
 
   const onChange = (e) => {
     switch (e.target.name) {
@@ -51,7 +52,7 @@ const Forecast = () => {
 
   return (
     <div>
-      <LineGraph data={forecastData} />
+      <LineGraph data={groupedData} />
       <TableData
         startDate={startDate}
         endDate={endDate}
