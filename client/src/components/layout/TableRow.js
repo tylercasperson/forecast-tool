@@ -81,7 +81,10 @@ const TableRow = (props) => {
       />
 
       <input
-        style={{ width: '8vw', backgroundColor: props.background }}
+        style={{
+          width: '8vw',
+          backgroundColor: props.background,
+        }}
         type='number'
         name={'m3wa'}
         onChange={(e) => onChange(e, 'm3wa')}

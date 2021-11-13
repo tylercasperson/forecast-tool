@@ -1,74 +1,64 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { format, add } from 'date-fns';
-import { listForecastData } from '../data/actions/forecastDataActions.js';
-import { listSalesData } from '../data/actions/salesDataActions.js';
+import React from 'react';
+import { format } from 'date-fns';
 import TableRow from './TableRow';
-import Filter from './Filter';
 
-const TableData = () => {
-  const dispatch = useDispatch();
-
-  const forecastDataList = useSelector((state) => state.forecastData);
-  const { forecastData } = forecastDataList;
-
-  const salesDataList = useSelector((state) => state.salesData);
-  const { salesData } = salesDataList;
-
-  const [startDate, setStartDate] = useState(
-    format(add(Date.now(), { years: -2 }), 'MM/dd/yyyy')
-  );
-  const [endDate, setEndDate] = useState(
-    format(add(Date.now(), { years: -1 }), 'MM/dd/yyyy')
-  );
-
-  console.log('fd: ', forecastData);
-  console.log('sd: ', salesData);
-
-  const onChange = (e) => {
-    switch (e.target.name) {
-      case 'startDate':
-        return setStartDate(e.target.value);
-      case 'endDate':
-        return setEndDate(e.target.value);
-      default:
-        return;
-    }
-  };
-
-  useEffect(() => {
-    dispatch(listForecastData());
-    dispatch(listSalesData(startDate, endDate));
-  }, [dispatch, startDate, endDate]);
-
+const TableData = (props) => {
   return (
     <div
       style={{
         display: 'table',
         marginLeft: 'auto',
         marginRight: 'auto',
-        marginTop: '-5px',
+        marginTop: '-3px',
         width: '70vw',
       }}
     >
-      <Filter
-        startDate={startDate}
-        endDate={endDate}
-        onChange={(e) => onChange(e)}
-      />
       <div
         style={{
           display: 'flex',
           background: 'lightGrey',
+          paddingBottom: '10px',
         }}
       >
         <div style={{ width: '5vw', marginTop: 'auto', marginBottom: 'auto' }}>
           Time Period
         </div>
         <div style={{ width: '12vw', marginTop: 'auto', marginBottom: 'auto' }}>
+          <input
+            type='text'
+            name='startDate'
+            onChange={props.onChange}
+            value={props.startDate}
+            style={{
+              backgroundColor: 'lightgrey',
+              width: '80%',
+              marginBottom: '3%',
+              fontSize: '110%',
+              fontWeight: 'bold',
+            }}
+          />
           Start Date
         </div>
-        <div style={{ width: '12vw', marginTop: 'auto', marginBottom: 'auto' }}>
+        <div
+          style={{
+            width: '12vw',
+            marginTop: 'auto',
+            marginBottom: 'auto',
+          }}
+        >
+          <input
+            type='text'
+            name='endDate'
+            onChange={props.onChange}
+            value={props.endDate}
+            style={{
+              backgroundColor: 'lightgrey',
+              width: '80%',
+              marginBottom: '3%',
+              fontSize: '110%',
+              fontWeight: 'bold',
+            }}
+          />
           End Date
         </div>
         <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
@@ -77,7 +67,13 @@ const TableData = () => {
         <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
           Last Year
         </div>
-        <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
+        <div
+          style={{
+            width: '8vw',
+            marginTop: 'auto',
+            marginBottom: 'auto',
+          }}
+        >
           3 month weight average
         </div>
         <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
@@ -88,7 +84,7 @@ const TableData = () => {
         </div>
       </div>
       <div style={{ height: '40vh', overflowY: 'auto' }}>
-        {forecastData.map((i, index) => {
+        {props.data.map((i, index) => {
           let background = index % 2 !== 0 ? 'lightgrey' : 'none';
           return (
             <TableRow

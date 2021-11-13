@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import salesHistory from './DummyData';
 
-const LineGraph = () => {
+const LineGraph = (props) => {
   const lineChart = useRef();
 
   const [data, setData] = useState(salesHistory);
