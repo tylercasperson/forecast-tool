@@ -91,11 +91,17 @@ const TableData = (props) => {
               key={index}
               background={background}
               timePeriod={i.timePeriod.groupName}
-              startDate={format(new Date(i.timePeriod.startDate), 'MM/dd/yyyy')}
-              endDate={format(new Date(i.timePeriod.endDate), 'MM/dd/yyyy')}
+              startDate={format(new Date(i.startDate), 'M/d/yyyy')}
+              endDate={format(new Date(i.endDate), 'M/d/yyyy')}
               currentData={i.forecastData === null ? '' : i.forecastData}
               lastYear={i.lastYear === null ? '' : i.lastYear}
-              m3wa={i.m3wa === null ? '' : i.m3wa}
+              m3wa={
+                i.timePeriod.groupName === 'W9'
+                  ? i.m3wa === null
+                    ? ''
+                    : i.m3wa
+                  : '9999'
+              }
               m3ma={i.m3ma === null ? '' : i.m3ma}
               linearRegression={
                 i.linearRegression === null ? '' : i.linearRegression

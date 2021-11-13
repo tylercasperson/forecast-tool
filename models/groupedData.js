@@ -14,7 +14,10 @@ module.exports = function (sequelize, DataTypes) {
   groupedData.associate = (models) => {
     groupedData.belongsTo(models.timePeriods, {
       onDelete: 'cascade',
-    });
+    }),
+      groupedData.belongsTo(models.dataTypes, {
+        onDelete: 'cascade',
+      });
   };
 
   return groupedData;

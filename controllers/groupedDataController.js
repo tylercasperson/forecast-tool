@@ -3,7 +3,10 @@ const db = require('../models');
 const { Op } = require('sequelize');
 
 const getGroupedData = asyncHandler(async (req, res) => {
-  const groupedData = await db.groupedData.findAll({});
+  const groupedData = await db.groupedData.findAll({
+    include: [{ model: db.timePeriods }],
+    include: [{ model: db.dataTypes }],
+  });
   res.json({ groupedData });
 });
 

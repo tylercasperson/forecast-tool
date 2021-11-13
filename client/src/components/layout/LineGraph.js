@@ -1,26 +1,33 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import salesHistory from './DummyData';
+import { nest } from 'd3-collection';
 
 const LineGraph = (props) => {
   const lineChart = useRef();
 
-  const [data, setData] = useState(salesHistory);
-  const [width, setWidth] = useState(
-    0.8 * document.documentElement.clientWidth
-  );
-  const [height, setHeight] = useState(
-    0.3 * document.documentElement.clientHeight
-  );
+  // const [data, setData] = useState(props.data);
+  const documentWidth = document.documentElement.clientWidth;
+  const documentHeight = document.documentElement.clientHeight;
+  const [width, setWidth] = useState(0.8 * documentWidth);
+  const [height, setHeight] = useState(0.3 * documentHeight);
+  // const [data, setData] = useState(props.data);
+
+  let data = props.data;
 
   useEffect(() => {
     const margin = { top: 0, right: 30, bottom: 50, left: 30 };
     const graphWidth = width - margin.left - margin.right;
     const graphHeight = height - margin.top - margin.bottom;
 
+    // const nested = nest()
+    //   .key((d) => d.timePeriod.groupName)
+    //   .entries(props.data);
+
+    // console.log('nest: ', nested);
+
     const xScale = d3
       .scalePoint()
-      .domain(data.map((d) => d.timePeriod))
+      .domain(data.map((d) => d.key))
       .range([0 + margin.right, graphWidth - margin.left]);
 
     const yScale = d3
@@ -28,15 +35,15 @@ const LineGraph = (props) => {
       .domain([
         0,
         d3.max(data, (d) => {
-          return d.data;
+          return d.m3wa;
         }),
       ])
       .range([graphHeight, margin.bottom]);
 
     const line = d3
       .line()
-      .x((d) => xScale(d.timePeriod))
-      .y((d) => yScale(d.data));
+      .x((d) => xScale(d.timePeriod.groupName))
+      .y((d) => yScale(d.m3wa));
 
     const svg = d3
       .select(lineChart.current)

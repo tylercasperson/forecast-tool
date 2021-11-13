@@ -6,7 +6,7 @@ module.exports = function (sequelize, DataTypes) {
       allowNulls: false,
       required: true,
     },
-    date: { type: DataTypes.DATE },
+    date: { type: DataTypes.DATEONLY },
     data: {
       type: DataTypes.INTEGER,
     },

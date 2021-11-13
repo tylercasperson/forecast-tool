@@ -4,6 +4,7 @@ import { format, add } from 'date-fns';
 
 import { listForecastData } from '../data/actions/forecastDataActions.js';
 import { listSalesData } from '../data/actions/salesDataActions.js';
+import salesHistory from '../../components/layout/DummyData';
 
 import LineGraph from '../layout/LineGraph';
 import TableData from '../layout/TableData';
@@ -23,6 +24,9 @@ const Forecast = () => {
   const [endDate, setEndDate] = useState(
     format(add(Date.now(), { years: -1 }), 'MM/dd/yyyy')
   );
+
+  console.log('fd: ', forecastData);
+  console.log('sd: ', salesData);
 
   const onChange = (e) => {
     switch (e.target.name) {
@@ -46,7 +50,7 @@ const Forecast = () => {
       <TableData
         startDate={startDate}
         endDate={endDate}
-        data={forecastData}
+        data={salesHistory}
         onChange={(e) => onChange(e)}
       />
     </div>

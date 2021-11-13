@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-  const forecastMethods = sequelize.define('forecastMethods', {
+  const dataTypes = sequelize.define('dataTypes', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -20,5 +20,5 @@ module.exports = function (sequelize, DataTypes) {
     },
   });
 
-  return forecastMethods;
+  return dataTypes;
 };
