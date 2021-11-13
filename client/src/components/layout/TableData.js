@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { format, add } from 'date-fns';
 import { listForecastData } from '../data/actions/forecastDataActions.js';
+import { listSalesData } from '../data/actions/salesDataActions.js';
 import TableRow from './TableRow';
+import Filter from './Filter';
 
 const TableData = () => {
   const dispatch = useDispatch();
@@ -9,32 +12,34 @@ const TableData = () => {
   const forecastDataList = useSelector((state) => state.forecastData);
   const { forecastData } = forecastDataList;
 
-  const getDate = (dateToConvert) => {
-    let dateParts = dateToConvert.split('-');
-    let jsDate = new Date(
-      dateParts[0],
-      dateParts[1] - 1,
-      dateParts[2].substr(0, 2)
-    );
+  const salesDataList = useSelector((state) => state.salesData);
+  const { salesData } = salesDataList;
 
-    let month = (jsDate.getMonth() + 1).toString();
-    let day = jsDate.getDate().toString();
-    let year = jsDate.getFullYear();
-
-    return month + '/' + day + '/' + year;
-  };
+  const [startDate, setStartDate] = useState(
+    format(add(Date.now(), { years: -2 }), 'MM/dd/yyyy')
+  );
+  const [endDate, setEndDate] = useState(
+    format(add(Date.now(), { years: -1 }), 'MM/dd/yyyy')
+  );
 
   console.log('fd: ', forecastData);
-  forecastData.length === 0
-    ? console.log('wait')
-    : console.log(
-        'date?: ',
-        forecastData[0].timePeriod.startDate instanceof Date
-      );
+  console.log('sd: ', salesData);
+
+  const onChange = (e) => {
+    switch (e.target.name) {
+      case 'startDate':
+        return setStartDate(e.target.value);
+      case 'endDate':
+        return setEndDate(e.target.value);
+      default:
+        return;
+    }
+  };
 
   useEffect(() => {
     dispatch(listForecastData());
-  }, [dispatch]);
+    dispatch(listSalesData(startDate, endDate));
+  }, [dispatch, startDate, endDate]);
 
   return (
     <div
@@ -43,8 +48,14 @@ const TableData = () => {
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: '-5px',
+        width: '70vw',
       }}
     >
+      <Filter
+        startDate={startDate}
+        endDate={endDate}
+        onChange={(e) => onChange(e)}
+      />
       <div
         style={{
           display: 'flex',
@@ -84,8 +95,8 @@ const TableData = () => {
               key={index}
               background={background}
               timePeriod={i.timePeriod.groupName}
-              startDate={getDate(i.timePeriod.startDate)}
-              endDate={getDate(i.timePeriod.endDate)}
+              startDate={format(new Date(i.timePeriod.startDate), 'MM/dd/yyyy')}
+              endDate={format(new Date(i.timePeriod.endDate), 'MM/dd/yyyy')}
               currentData={i.forecastData === null ? '' : i.forecastData}
               lastYear={i.lastYear === null ? '' : i.lastYear}
               m3wa={i.m3wa === null ? '' : i.m3wa}

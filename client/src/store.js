@@ -3,8 +3,12 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { forecastDataListReducer } from './components/data/reducers/forecastDataReducers.js';
+import { salesDataListReducer } from './components/data/reducers/salesDataReducers.js';
 
-const reducer = combineReducers({ forecastData: forecastDataListReducer });
+const reducer = combineReducers({
+  forecastData: forecastDataListReducer,
+  salesData: salesDataListReducer,
+});
 
 const initialState = {};
 

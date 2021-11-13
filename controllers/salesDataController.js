@@ -3,7 +3,18 @@ const db = require('../models');
 const { Op } = require('sequelize');
 
 const getSalesData = asyncHandler(async (req, res) => {
-  const salesData = await db.salesData.findAll({});
+  const salesData = await db.salesData.findAll({
+    where: {
+      date: {
+        [Op.and]: [
+          {
+            [Op.gte]: req.query.startDate,
+            [Op.lte]: req.query.endDate,
+          },
+        ],
+      },
+    },
+  });
   res.json({ salesData });
 });
 
