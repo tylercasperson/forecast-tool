@@ -5,6 +5,17 @@ const { Op } = require('sequelize');
 const getGroupedData = asyncHandler(async (req, res) => {
   const groupedData = await db.groupedData.findAll({
     include: [{ model: db.timePeriods }, { model: db.dataTypes }],
+    where: {
+      [Op.and]: [
+        {
+          '$timePeriod.startDate$': {
+            [Op.gte]: [req.query.startDate],
+          },
+        },
+        { '$timePeriod.endDate$': { [Op.lte]: req.query.endDate } },
+      ],
+    },
+    order: [['dataTypeId'], ['timePeriodId']],
   });
   res.json({ groupedData });
 });

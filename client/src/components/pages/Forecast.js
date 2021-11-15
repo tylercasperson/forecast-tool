@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { format, add } from 'date-fns';
+import { nest } from 'd3-collection';
 
-import { listForecastData } from '../data/actions/forecastDataActions.js';
-import { listSalesData } from '../data/actions/salesDataActions.js';
+// import { listForecastData } from '../data/actions/forecastDataActions.js';
+// import { listSalesData } from '../data/actions/salesDataActions.js';
 import { listGroupedData } from '../data/actions/groupedDataActions.js';
-import salesHistory from '../../components/layout/DummyData';
 
 import LineGraph from '../layout/LineGraph';
 import TableData from '../layout/TableData';
@@ -13,50 +13,72 @@ import TableData from '../layout/TableData';
 const Forecast = () => {
   const dispatch = useDispatch();
 
-  const forecastDataList = useSelector((state) => state.forecastData);
-  const { forecastData } = forecastDataList;
+  // const forecastDataList = useSelector((state) => state.forecastData);
+  // const { forecastData } = forecastDataList;
 
-  const salesDataList = useSelector((state) => state.salesData);
-  const { salesData } = salesDataList;
+  // const salesDataList = useSelector((state) => state.salesData);
+  // const { salesData } = salesDataList;
 
   const groupedDataList = useSelector((state) => state.groupedData);
   const { groupedData } = groupedDataList;
 
-  const [startDate, setStartDate] = useState(
-    format(add(Date.now(), { years: -2 }), 'MM/dd/yyyy')
-  );
-  const [endDate, setEndDate] = useState(
-    format(add(Date.now(), { years: -1 }), 'MM/dd/yyyy')
-  );
+  const [startDay, setStartDay] = useState(1);
+  const [startMonth, setStartMonth] = useState(1);
+  const [startYear, setStartYear] = useState(2022);
 
-  console.log('fd: ', forecastData);
-  console.log('sd: ', salesData);
-  console.log('gd: ', groupedData);
+  const [endDay, setEndDay] = useState(31);
+  const [endMonth, setEndMonth] = useState(12);
+  const [endYear, setEndYear] = useState(2022);
+
+  const [startDate, setStartDate] = useState('2022-1-1');
+  const [endDate, setEndDate] = useState('2022-12-31');
 
   const onChange = (e) => {
+    let month = e.target.value.split('/')[0];
+    let day = e.target.value.split('/')[1];
+    let year = e.target.value.split('/')[2];
+
     switch (e.target.name) {
       case 'startDate':
-        return setStartDate(e.target.value);
+        setStartMonth(month);
+        setStartDay(day);
+        setStartYear(year);
+        if (month > 0 && month < 13) {
+          if (day > 0 && day < 31) {
+            if (year > 0 && year < 9999) {
+              setStartDate(year + '-' + month + '-' + day);
+            }
+          }
+        }
+        break;
       case 'endDate':
-        return setEndDate(e.target.value);
+        setEndMonth(month);
+        setEndDay(day);
+        setEndYear(year);
+        if (month > 0 && month < 13) {
+          if (day > 0 && day < 31) {
+            if (year > 0 && year < 9999) {
+              setEndDate(year + '-' + month + '-' + day);
+            }
+          }
+        }
+        break;
       default:
         return;
     }
   };
 
   useEffect(() => {
-    dispatch(listForecastData());
-    dispatch(listSalesData(startDate, endDate));
-    dispatch(listGroupedData());
+    dispatch(listGroupedData(startDate, endDate));
   }, [dispatch, startDate, endDate]);
 
   return (
     <div>
       <LineGraph data={groupedData} />
       <TableData
-        startDate={startDate}
+        startDate={startMonth + '/' + startDay + '/' + startYear}
         endDate={endDate}
-        data={salesHistory}
+        data={groupedData}
         onChange={(e) => onChange(e)}
       />
     </div>

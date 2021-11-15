@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import { format, add } from 'date-fns';
 
 const TableRow = (props) => {
   const [timePeriod, setTimePeriod] = useState(props.timePeriod);
   const [startDate, setSetartDate] = useState(props.startDate);
   const [endDate, setEndDate] = useState(props.endDate);
-  const [currentData, setCurrentData] = useState(props.data);
+  const [currentData, setCurrentData] = useState(props.currentData);
   const [lastYear, setLastYear] = useState(props.lastYear);
   const [m3wa, setM3wa] = useState(props.m3wa);
   const [m3ma, setm3ma] = useState(props.m3ma);
@@ -44,7 +45,6 @@ const TableRow = (props) => {
         onChange={(e) => onChange(e, 'timePeriod')}
         value={timePeriod}
       />
-
       <input
         style={{
           width: '12vw',
@@ -55,7 +55,6 @@ const TableRow = (props) => {
         onChange={(e) => onChange(e, 'startDate')}
         value={startDate}
       />
-
       <input
         style={{ width: '12vw', backgroundColor: props.background }}
         type='text'
@@ -63,7 +62,6 @@ const TableRow = (props) => {
         onChange={(e) => onChange(e, 'endDate')}
         value={endDate}
       />
-
       <input
         style={{ width: '8vw', backgroundColor: props.background }}
         type='number'
@@ -71,7 +69,6 @@ const TableRow = (props) => {
         onChange={(e) => onChange(e, 'currentData')}
         value={currentData}
       />
-
       <input
         style={{ width: '8vw', backgroundColor: props.background }}
         type='number'
@@ -79,7 +76,6 @@ const TableRow = (props) => {
         onChange={(e) => onChange(e, 'lastYear')}
         value={lastYear}
       />
-
       <input
         style={{
           width: '8vw',
@@ -90,7 +86,6 @@ const TableRow = (props) => {
         onChange={(e) => onChange(e, 'm3wa')}
         value={m3wa}
       />
-
       <input
         style={{ width: '8vw', backgroundColor: props.background }}
         type='number'
@@ -98,7 +93,6 @@ const TableRow = (props) => {
         onChange={(e) => onChange(e, 'm3ma')}
         value={m3ma}
       />
-
       <input
         style={{ width: '8vw', backgroundColor: props.background }}
         type='number'

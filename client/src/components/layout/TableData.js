@@ -1,8 +1,21 @@
 import React from 'react';
-import { format } from 'date-fns';
+import { nest } from 'd3-collection';
 import TableRow from './TableRow';
 
 const TableData = (props) => {
+  let data = nest()
+    .key((d) => d.timePeriod.groupName)
+    .entries(props.data);
+
+  const dateFormat = (date) => {
+    let dateParts = date.split('T')[0].split('-');
+    let month = dateParts[1][0] === '0' ? dateParts[1][1] : dateParts[1];
+    let day = dateParts[2][0] === '0' ? dateParts[2][1] : dateParts[2];
+    let year = dateParts[0];
+
+    return month + '/' + day + '/' + year;
+  };
+
   return (
     <div
       style={{
@@ -84,28 +97,26 @@ const TableData = (props) => {
         </div>
       </div>
       <div style={{ height: '40vh', overflowY: 'auto' }}>
-        {props.data.map((i, index) => {
+        {data.map((i, index) => {
+          let findData = (something) => {
+            let exists = i.values.find(
+              (o) => o.dataType.abbreviation === something
+            );
+            return exists === undefined ? 0 : exists.data;
+          };
           let background = index % 2 !== 0 ? 'lightgrey' : 'none';
           return (
             <TableRow
               key={index}
               background={background}
-              timePeriod={i.timePeriod.groupName}
-              startDate={format(new Date(i.startDate), 'M/d/yyyy')}
-              endDate={format(new Date(i.endDate), 'M/d/yyyy')}
-              currentData={i.forecastData === null ? '' : i.forecastData}
-              lastYear={i.lastYear === null ? '' : i.lastYear}
-              m3wa={
-                i.timePeriod.groupName === 'W9'
-                  ? i.m3wa === null
-                    ? ''
-                    : i.m3wa
-                  : '9999'
-              }
-              m3ma={i.m3ma === null ? '' : i.m3ma}
-              linearRegression={
-                i.linearRegression === null ? '' : i.linearRegression
-              }
+              timePeriod={i.key}
+              startDate={dateFormat(i.values[0].timePeriod.startDate)}
+              endDate={dateFormat(i.values[0].timePeriod.endDate)}
+              currentData={findData('sh')}
+              lastYear={findData('ly')}
+              m3wa={findData('w3ma')}
+              m3ma={findData('m3ma')}
+              linearRegression={findData('lr')}
             />
           );
         })}

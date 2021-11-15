@@ -5,14 +5,10 @@ import { nest } from 'd3-collection';
 const LineGraph = (props) => {
   const lineChart = useRef();
 
-  // const [data, setData] = useState(props.data);
   const documentWidth = document.documentElement.clientWidth;
   const documentHeight = document.documentElement.clientHeight;
   const [width, setWidth] = useState(0.8 * documentWidth);
   const [height, setHeight] = useState(0.3 * documentHeight);
-  // const [data, setData] = useState(props.data);
-
-  let data = props.data;
 
   useEffect(() => {
     if (props.data.length !== 0) {
@@ -20,22 +16,20 @@ const LineGraph = (props) => {
       const graphWidth = width - margin.left - margin.right;
       const graphHeight = height - margin.top - margin.bottom;
 
-      const nested = nest()
+      const data = nest()
         .key((d) => d.dataType.abbreviation)
         .entries(props.data);
 
-      console.log('nest: ', nested);
-
       const xScale = d3
         .scalePoint()
-        .domain(data.map((d) => d.timePeriod.groupName))
+        .domain(props.data.map((d) => d.timePeriod.groupName))
         .range([0 + margin.right, graphWidth - margin.left]);
 
       const yScale = d3
         .scaleLinear()
         .domain([
           0,
-          d3.max(data, (d) => {
+          d3.max(props.data, (d) => {
             return d.data;
           }),
         ])
@@ -69,15 +63,13 @@ const LineGraph = (props) => {
 
       svg
         .selectAll('path')
-        .data(nested)
+        .data(data)
         .enter()
         .append('path')
         .attr('d', (d) => line(d.values))
         .attr('fill', 'none')
         .attr('stroke', (d) => color([d]))
         .attr('stroke-width', 1.5);
-
-      svg.exit().remove();
 
       const xAxis = d3
         .axisBottom(xScale)
@@ -92,8 +84,6 @@ const LineGraph = (props) => {
         .attr('transform', `translate(0,${graphHeight})`)
         .call(xAxis);
 
-      svg.exit().remove();
-
       const yAxis = d3
         .axisLeft(yScale)
         .tickFormat((interval, i) => {
@@ -101,15 +91,15 @@ const LineGraph = (props) => {
         })
         .tickSize(8);
 
-      svg.exit().remove();
-
       svg
         .append('g')
         .attr('class', 'yAxis')
         .attr('transform', `translate(30,0)`)
         .call(yAxis);
+
+      // svg.exit().remove();
     }
-  }, [data, height, width]);
+  }, [props.data, height, width]);
 
   return <div ref={lineChart}></div>;
 };

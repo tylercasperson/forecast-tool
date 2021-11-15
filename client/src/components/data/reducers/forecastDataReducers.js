@@ -12,7 +12,7 @@ export const forecastDataListReducer = (
     case FORECAST_DATA_LIST_REQUEST:
       return { forecastData: [] };
     case FORECAST_DATA_LIST_SUCCESS:
-      return { forecastData: action.payload.forecastData };
+      return { forecastData: action.payload };
     case FORECAST_DATA_LIST_FAIL:
       return { error: action.payload };
     default:
