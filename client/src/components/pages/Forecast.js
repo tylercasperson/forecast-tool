@@ -25,13 +25,23 @@ const Forecast = () => {
   const [startDay, setStartDay] = useState(1);
   const [startMonth, setStartMonth] = useState(1);
   const [startYear, setStartYear] = useState(2022);
-
   const [endDay, setEndDay] = useState(31);
   const [endMonth, setEndMonth] = useState(12);
   const [endYear, setEndYear] = useState(2022);
-
   const [startDate, setStartDate] = useState('2022-1-1');
   const [endDate, setEndDate] = useState('2022-12-31');
+
+  const [color, setColor] = useState([
+    '#e41a1c',
+    '#377eb8',
+    '#4daf4a',
+    '#984ea3',
+    '#ff7f00',
+    '#ffff33',
+    '#a65628',
+    '#f781bf',
+    '#999999',
+  ]);
 
   const onChange = (e) => {
     let month = e.target.value.split('/')[0];
@@ -74,11 +84,12 @@ const Forecast = () => {
 
   return (
     <div>
-      <LineGraph data={groupedData} />
+      <LineGraph data={groupedData} color={color} />
       <TableData
         startDate={startMonth + '/' + startDay + '/' + startYear}
-        endDate={endDate}
+        endDate={endMonth + '/' + endDay + '/' + endYear}
         data={groupedData}
+        color={color}
         onChange={(e) => onChange(e)}
       />
     </div>

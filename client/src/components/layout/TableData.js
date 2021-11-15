@@ -87,9 +87,39 @@ const TableData = (props) => {
           End Date
         </div>
         <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
-          Current Data
+          <div
+            style={{
+              height: '1vh',
+              width: '1vw',
+              marginRight: 'auto',
+              marginLeft: 'auto',
+              backgroundColor: props.color[0],
+            }}
+          ></div>
+          User Input
         </div>
         <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
+          <div
+            style={{
+              height: '1vh',
+              width: '1vw',
+              marginRight: 'auto',
+              marginLeft: 'auto',
+              backgroundColor: props.color[1],
+            }}
+          ></div>
+          Sales History
+        </div>
+        <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
+          <div
+            style={{
+              height: '1vh',
+              width: '1vw',
+              marginRight: 'auto',
+              marginLeft: 'auto',
+              backgroundColor: props.color[2],
+            }}
+          ></div>
           Last Year
         </div>
         <div
@@ -99,16 +129,44 @@ const TableData = (props) => {
             marginBottom: 'auto',
           }}
         >
+          <div
+            style={{
+              height: '1vh',
+              width: '1vw',
+              marginRight: 'auto',
+              marginLeft: 'auto',
+              backgroundColor: props.color[3],
+            }}
+          ></div>
           3 month weight average
         </div>
         <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
+          <div
+            style={{
+              height: '1vh',
+              width: '1vw',
+              marginRight: 'auto',
+              marginLeft: 'auto',
+              backgroundColor: props.color[4],
+            }}
+          ></div>
           3 month moving average
         </div>
         <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
+          <div
+            style={{
+              height: '1vh',
+              width: '1vw',
+              marginRight: 'auto',
+              marginLeft: 'auto',
+              backgroundColor: props.color[5],
+            }}
+          ></div>
           Linear Regression
         </div>
       </div>
       <div style={{ height: '40vh', overflowY: 'auto' }}>
+        {console.log(data)}
         {data.map((i, index) => {
           let findData = (something) => {
             let exists = i.values.find(
@@ -124,7 +182,8 @@ const TableData = (props) => {
               timePeriod={i.key}
               startDate={dateFormat(i.values[0].timePeriod.startDate)}
               endDate={dateFormat(i.values[0].timePeriod.endDate)}
-              currentData={findData('sh')}
+              salesHistory={findData('sh')}
+              userInput={findData('ui')}
               lastYear={findData('ly')}
               m3wa={findData('w3ma')}
               m3ma={findData('m3ma')}
