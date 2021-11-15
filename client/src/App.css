@@ -45,6 +45,7 @@ input {
   text-align: center;
   padding: 0;
   border: none;
+  font-size: 1.2vw;
 }
 
 input::-webkit-calendar-picker-indicator {

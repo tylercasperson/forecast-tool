@@ -44,6 +44,7 @@ const TableRow = (props) => {
         name={'timePeriod'}
         onChange={(e) => onChange(e, 'timePeriod')}
         value={timePeriod}
+        className='timePeriod'
       />
       <input
         style={{

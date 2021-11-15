@@ -24,6 +24,7 @@ const TableData = (props) => {
         marginRight: 'auto',
         marginTop: '-3px',
         width: '70vw',
+        fontSize: '1.5vw',
       }}
     >
       <div
@@ -33,10 +34,22 @@ const TableData = (props) => {
           paddingBottom: '10px',
         }}
       >
-        <div style={{ width: '5vw', marginTop: 'auto', marginBottom: 'auto' }}>
+        <div
+          style={{
+            width: '5vw',
+            marginTop: 'auto',
+            marginBottom: 'auto',
+          }}
+        >
           Time Period
         </div>
-        <div style={{ width: '12vw', marginTop: 'auto', marginBottom: 'auto' }}>
+        <div
+          style={{
+            width: '12vw',
+            marginTop: 'auto',
+            marginBottom: 'auto',
+          }}
+        >
           <input
             type='text'
             name='startDate'
@@ -44,11 +57,11 @@ const TableData = (props) => {
             value={props.startDate}
             style={{
               backgroundColor: 'lightgrey',
-              width: '80%',
+              width: '90%',
               marginBottom: '3%',
-              fontSize: '110%',
               fontWeight: 'bold',
             }}
+            id='one'
           />
           Start Date
         </div>
@@ -66,9 +79,8 @@ const TableData = (props) => {
             value={props.endDate}
             style={{
               backgroundColor: 'lightgrey',
-              width: '80%',
+              width: '90%',
               marginBottom: '3%',
-              fontSize: '110%',
               fontWeight: 'bold',
             }}
           />
