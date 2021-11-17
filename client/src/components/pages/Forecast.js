@@ -79,6 +79,9 @@ const Forecast = () => {
         startDay={startDay}
         startMonth={startMonth}
         startYear={startYear}
+        endDay={endDay}
+        endMonth={endMonth}
+        endYear={endYear}
         startDate={startMonth + '/' + startDay + '/' + startYear}
         endDate={endMonth + '/' + endDay + '/' + endYear}
         data={groupedData}

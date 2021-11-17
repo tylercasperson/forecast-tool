@@ -48,7 +48,7 @@ const addGroupedData = asyncHandler(async (req, res) => {
 });
 
 const deleteGroupedData = asyncHandler(async (req, res) => {
-  dataTypes = await db.groupedData.destroy({
+  const groupedData = await db.groupedData.destroy({
     where: {
       id: { [Op.eq]: req.params.id },
     },

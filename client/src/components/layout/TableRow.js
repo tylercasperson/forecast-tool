@@ -117,6 +117,21 @@ const TableRow = (props) => {
         onChangeCapture={props.onChange}
         value={linearRegression}
       />
+      <div
+        style={{
+          width: '3vw',
+          backgroundColor: props.background,
+        }}
+        onClick={props.delete}
+      >
+        <i
+          style={{
+            fontSize: '0.7rem',
+            margin: '2px',
+          }}
+          className='far fa-trash-alt'
+        ></i>
+      </div>
     </div>
   );
 };

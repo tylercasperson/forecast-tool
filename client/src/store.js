@@ -7,6 +7,7 @@ import { salesDataListReducer } from './components/data/reducers/salesDataReduce
 import {
   groupedDataListReducer,
   groupedDataUpdateReducer,
+  groupedDataDeleteReducer,
 } from './components/data/reducers/groupedDataReducers.js';
 
 const reducer = combineReducers({
@@ -14,6 +15,7 @@ const reducer = combineReducers({
   salesData: salesDataListReducer,
   groupedData: groupedDataListReducer,
   groupedDataUpdate: groupedDataUpdateReducer,
+  groupedDataDelete: groupedDataDeleteReducer,
 });
 
 const initialState = {};
