@@ -32,7 +32,7 @@ const TableRow = (props) => {
         return setM3wa(e.target.value);
       case 'm3ma':
         return setm3ma(e.target.value);
-      case 'linearRegresion':
+      case 'linearRegression':
         return setLinearRegression(e.target.value);
       default:
         return;
@@ -71,6 +71,7 @@ const TableRow = (props) => {
         type='number'
         name={'userInput'}
         onChange={(e) => onChange(e)}
+        onChangeCapture={props.onChange}
         value={userInput}
       />
       <input
@@ -78,6 +79,7 @@ const TableRow = (props) => {
         type='number'
         name={'salesHistory'}
         onChange={(e) => onChange(e)}
+        onChangeCapture={props.onChange}
         value={salesHistory}
       />
       <input
@@ -85,7 +87,16 @@ const TableRow = (props) => {
         type='number'
         name={'lastYear'}
         onChange={(e) => onChange(e)}
+        onChangeCapture={props.onChange}
         value={lastYear}
+      />
+      <input
+        style={{ width: '8vw', backgroundColor: props.background }}
+        type='number'
+        name={'m3ma'}
+        onChange={(e) => onChange(e)}
+        onChangeCapture={props.onChange}
+        value={m3ma}
       />
       <input
         style={{
@@ -95,20 +106,15 @@ const TableRow = (props) => {
         type='number'
         name={'m3wa'}
         onChange={(e) => onChange(e)}
+        onChangeCapture={props.onChange}
         value={m3wa}
-      />
-      <input
-        style={{ width: '8vw', backgroundColor: props.background }}
-        type='number'
-        name={'m3ma'}
-        onChange={(e) => onChange(e)}
-        value={m3ma}
       />
       <input
         style={{ width: '8vw', backgroundColor: props.background }}
         type='number'
         name={'linearRegression'}
         onChange={(e) => onChange(e)}
+        onChangeCapture={props.onChange}
         value={linearRegression}
       />
     </div>

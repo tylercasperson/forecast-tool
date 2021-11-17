@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import * as d3 from 'd3';
 import { nest } from 'd3-collection';
 
 const LineGraph = (props) => {
   const lineChart = useRef();
+
+  const groupedDataUpdate = useSelector((state) => state.groupedDataUpdate);
+  const { success } = groupedDataUpdate;
 
   const documentWidth = document.documentElement.clientWidth;
   const documentHeight = document.documentElement.clientHeight;
@@ -96,7 +100,15 @@ const LineGraph = (props) => {
       .attr('class', 'yAxis')
       .attr('transform', `translate(30,0)`)
       .call(yAxis);
-  }, [props.data, height, width, documentWidth, documentHeight]);
+  }, [
+    props.data,
+    height,
+    width,
+    documentWidth,
+    documentHeight,
+    props.color,
+    success,
+  ]);
 
   return <div ref={lineChart}></div>;
 };

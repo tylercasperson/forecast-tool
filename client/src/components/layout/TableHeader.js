@@ -97,6 +97,18 @@ const TableHeader = (props) => {
         ></div>
         Last Year
       </div>
+      <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
+        <div
+          style={{
+            height: '1vh',
+            width: '1vw',
+            marginRight: 'auto',
+            marginLeft: 'auto',
+            backgroundColor: props.color[4],
+          }}
+        ></div>
+        3 month moving average
+      </div>
       <div
         style={{
           width: '8vw',
@@ -115,18 +127,7 @@ const TableHeader = (props) => {
         ></div>
         3 month weight average
       </div>
-      <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
-        <div
-          style={{
-            height: '1vh',
-            width: '1vw',
-            marginRight: 'auto',
-            marginLeft: 'auto',
-            backgroundColor: props.color[4],
-          }}
-        ></div>
-        3 month moving average
-      </div>
+
       <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
         <div
           style={{

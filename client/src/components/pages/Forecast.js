@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { format, add } from 'date-fns';
-import { nest } from 'd3-collection';
 
-// import { listForecastData } from '../data/actions/forecastDataActions.js';
-// import { listSalesData } from '../data/actions/salesDataActions.js';
 import { listGroupedData } from '../data/actions/groupedDataActions.js';
 
 import LineGraph from '../layout/LineGraph';
@@ -12,12 +8,6 @@ import TableData from '../layout/TableData';
 
 const Forecast = () => {
   const dispatch = useDispatch();
-
-  // const forecastDataList = useSelector((state) => state.forecastData);
-  // const { forecastData } = forecastDataList;
-
-  // const salesDataList = useSelector((state) => state.salesData);
-  // const { salesData } = salesDataList;
 
   const groupedDataList = useSelector((state) => state.groupedData);
   const { groupedData } = groupedDataList;
@@ -54,7 +44,7 @@ const Forecast = () => {
         setStartDay(day);
         setStartYear(year);
         if (month > 0 && month < 13) {
-          if (day > 0 && day < 31) {
+          if (day > 0 && day < 32) {
             if (year > 0 && year < 9999) {
               setStartDate(year + '-' + month + '-' + day);
             }
@@ -66,7 +56,7 @@ const Forecast = () => {
         setEndDay(day);
         setEndYear(year);
         if (month > 0 && month < 13) {
-          if (day > 0 && day < 31) {
+          if (day > 0 && day < 32) {
             if (year > 0 && year < 9999) {
               setEndDate(year + '-' + month + '-' + day);
             }
@@ -86,6 +76,9 @@ const Forecast = () => {
     <div>
       <LineGraph data={groupedData} color={color} />
       <TableData
+        startDay={startDay}
+        startMonth={startMonth}
+        startYear={startYear}
         startDate={startMonth + '/' + startDay + '/' + startYear}
         endDate={endMonth + '/' + endDay + '/' + endYear}
         data={groupedData}

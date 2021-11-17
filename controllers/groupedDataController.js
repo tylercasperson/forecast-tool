@@ -30,11 +30,15 @@ const getOneGroupedData = asyncHandler(async (req, res) => {
 });
 
 const updateGroupedData = asyncHandler(async (req, res) => {
-  const groupedData = await db.groupedData.update(req.body, {
-    where: {
-      id: { [Op.eq]: req.params.id },
-    },
-  });
+  const groupedData = await db.groupedData.update(
+    { data: req.body.data },
+    {
+      where: {
+        id: { [Op.eq]: req.params.id },
+      },
+    }
+  );
+
   res.json({ groupedData });
 });
 

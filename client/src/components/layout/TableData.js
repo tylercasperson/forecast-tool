@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { nest } from 'd3-collection';
+import { updateGroupedData } from '../data/actions/groupedDataActions.js';
+import { GROUPED_DATA_UPDATE_RESET } from '../data/constants/groupedDataConstants.js';
+
 import TableHeader from './TableHeader';
 import TableRow from './TableRow';
 
 const TableData = (props) => {
+  const dispatch = useDispatch();
+
+  const groupedDataUpdate = useSelector((state) => state.groupedDataUpdate);
+  const { success } = groupedDataUpdate;
+
   let data = nest()
     .key((d) => d.timePeriod.groupName)
     .entries(props.data);
@@ -16,6 +25,36 @@ const TableData = (props) => {
 
     return month + '/' + day + '/' + year;
   };
+
+  const onChange = (e, arr) => {
+    const dataTypes = {
+      userInput: 1,
+      salesHistory: 2,
+      lastYear: 3,
+      m3ma: 4,
+      m3wa: 5,
+      linearRegression: 6,
+    };
+
+    console.log(arr);
+
+    dispatch(
+      updateGroupedData(
+        arr[dataTypes[e.target.name] - 1].id,
+        e.target.value,
+        props.startDate,
+        props.endDate
+      )
+    );
+
+    arr[dataTypes[e.target.name] - 1].data = e.target.value;
+  };
+
+  useEffect(() => {
+    if (success) {
+      dispatch({ type: GROUPED_DATA_UPDATE_RESET });
+    }
+  }, [dispatch, success]);
 
   return (
     <div
@@ -56,6 +95,7 @@ const TableData = (props) => {
               m3wa={findData('w3ma')}
               m3ma={findData('m3ma')}
               linearRegression={findData('lr')}
+              onChange={(e) => onChange(e, i.values)}
             />
           );
         })}
