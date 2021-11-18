@@ -59,7 +59,8 @@ const LineGraph = (props) => {
       .attr('width', graphWidth + margin.left + margin.right)
       .attr('height', graphHeight + margin.top + margin.bottom);
 
-    var color = d3.scaleOrdinal().range(props.color);
+    let color = d3.scaleOrdinal().range(props.color);
+    let colorArr = [];
 
     svg
       .selectAll('path')
@@ -69,6 +70,7 @@ const LineGraph = (props) => {
       .attr('d', (d) => line(d.values))
       .attr('fill', 'none')
       .attr('stroke', (d) => color([d]))
+      .attr('class', (d) => colorArr.push(color([d])))
       .attr('stroke-width', 1.5);
 
     let widthPerTick = Math.round(width / 100) - 13;

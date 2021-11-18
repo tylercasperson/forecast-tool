@@ -84,7 +84,6 @@ const TableData = (props) => {
         marginLeft: 'auto',
         marginRight: 'auto',
         marginTop: '-3px',
-        width: '70vw',
         fontSize: '1.5vw',
       }}
     >
@@ -93,6 +92,11 @@ const TableData = (props) => {
         onChange={props.onChange}
         startDate={props.startDate}
         endDate={props.endDate}
+        showSalesHistory={props.showSalesHistory}
+        showLastYear={props.showLastYear}
+        showMovingAverage={props.showMovingAverage}
+        showWeightedAverage={props.showWeightedAverage}
+        showLinearRegression={props.showLinearRegression}
       />
       <div style={{ height: '40vh', overflowY: 'auto' }}>
         {data.map((i, index) => {
@@ -118,6 +122,11 @@ const TableData = (props) => {
               linearRegression={findData('lr')}
               onChange={(e) => onChange(e, i.values)}
               delete={(e) => onDelete(i.values)}
+              showSalesHistory={props.showSalesHistory}
+              showLastYear={props.showLastYear}
+              showMovingAverage={props.showMovingAverage}
+              showWeightedAverage={props.showWeightedAverage}
+              showLinearRegression={props.showLinearRegression}
             />
           );
         })}

@@ -75,7 +75,11 @@ const TableRow = (props) => {
         value={userInput}
       />
       <input
-        style={{ width: '8vw', backgroundColor: props.background }}
+        style={{
+          width: '8vw',
+          backgroundColor: props.background,
+          display: props.showSalesHistory,
+        }}
         type='number'
         name={'salesHistory'}
         onChange={(e) => onChange(e)}
@@ -83,7 +87,11 @@ const TableRow = (props) => {
         value={salesHistory}
       />
       <input
-        style={{ width: '8vw', backgroundColor: props.background }}
+        style={{
+          width: '8vw',
+          backgroundColor: props.background,
+          display: props.showLastYear,
+        }}
         type='number'
         name={'lastYear'}
         onChange={(e) => onChange(e)}
@@ -91,7 +99,11 @@ const TableRow = (props) => {
         value={lastYear}
       />
       <input
-        style={{ width: '8vw', backgroundColor: props.background }}
+        style={{
+          width: '8vw',
+          backgroundColor: props.background,
+          display: props.showMovingAverage,
+        }}
         type='number'
         name={'m3ma'}
         onChange={(e) => onChange(e)}
@@ -102,6 +114,7 @@ const TableRow = (props) => {
         style={{
           width: '8vw',
           backgroundColor: props.background,
+          display: props.showWeightedAverage,
         }}
         type='number'
         name={'m3wa'}
@@ -110,7 +123,11 @@ const TableRow = (props) => {
         value={m3wa}
       />
       <input
-        style={{ width: '8vw', backgroundColor: props.background }}
+        style={{
+          width: '8vw',
+          backgroundColor: props.background,
+          display: props.showLinearRegression,
+        }}
         type='number'
         name={'linearRegression'}
         onChange={(e) => onChange(e)}

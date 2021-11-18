@@ -5,6 +5,7 @@ import { listGroupedData } from '../data/actions/groupedDataActions.js';
 
 import LineGraph from '../layout/LineGraph';
 import TableData from '../layout/TableData';
+import ShowHide from '../layout/ShowHide';
 
 const Forecast = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,12 @@ const Forecast = () => {
   const [endYear, setEndYear] = useState(2022);
   const [startDate, setStartDate] = useState('2022-1-1');
   const [endDate, setEndDate] = useState('2022-12-31');
+
+  const [salesHistoryLock, setSalesHistoryLock] = useState(false);
+  const [lastYearLock, setLastYearLock] = useState(false);
+  const [movingAverageLock, setMovingAverageLock] = useState(false);
+  const [weightedAverageLock, setWeightedAverageLock] = useState(false);
+  const [linearRegressionLock, setLinearRegressionLock] = useState(false);
 
   const [color, setColor] = useState([
     '#e41a1c',
@@ -63,18 +70,69 @@ const Forecast = () => {
           }
         }
         break;
+      case 'salesHistory':
+        setSalesHistoryLock(salesHistoryLock ? false : true);
+        break;
+      case 'lastYear':
+        setLastYearLock(lastYearLock ? false : true);
+        break;
+      case 'movingAverage':
+        setMovingAverageLock(movingAverageLock ? false : true);
+        break;
+      case 'weightedAverage':
+        setWeightedAverageLock(weightedAverageLock ? false : true);
+        break;
+      case 'linearRegression':
+        setLinearRegressionLock(linearRegressionLock ? false : true);
+        break;
       default:
         return;
     }
+    filteredData();
+  };
+
+  const filteredData = () => {
+    let removeSalesHistory = salesHistoryLock ? 2 : 0;
+    let removeLastYear = lastYearLock ? 3 : 0;
+    let removeMovingAverage = movingAverageLock ? 4 : 0;
+    let removeWeightedAverage = weightedAverageLock ? 5 : 0;
+    let removeLinearRegression = linearRegressionLock ? 6 : 0;
+
+    return groupedData.filter(
+      (data) =>
+        data.dataTypeId !== removeSalesHistory &&
+        data.dataTypeId !== removeLastYear &&
+        data.dataTypeId !== removeMovingAverage &&
+        data.dataTypeId !== removeWeightedAverage &&
+        data.dataTypeId !== removeLinearRegression
+    );
+  };
+
+  const filteredColor = () => {
+    let removeSalesHistory = salesHistoryLock ? color[1] : 0;
+    let removeLastYear = lastYearLock ? color[2] : 0;
+    let removeMovingAverage = movingAverageLock ? color[3] : 0;
+    let removeWeightedAverage = weightedAverageLock ? color[4] : 0;
+    let removeLinearRegression = linearRegressionLock ? color[5] : 0;
+
+    return color.filter(
+      (i) =>
+        i !== removeSalesHistory &&
+        i !== removeLastYear &&
+        i !== removeMovingAverage &&
+        i !== removeWeightedAverage &&
+        i !== removeLinearRegression
+    );
   };
 
   useEffect(() => {
     dispatch(listGroupedData(startDate, endDate));
-  }, [dispatch, startDate, endDate]);
+  }, [dispatch, startDate, endDate, color]);
 
   return (
     <div>
-      <LineGraph data={groupedData} color={color} />
+      <LineGraph data={filteredData()} color={filteredColor()} />
+      <ShowHide onChange={(e) => onChange(e)} />
       <TableData
         startDay={startDay}
         startMonth={startMonth}
@@ -87,6 +145,11 @@ const Forecast = () => {
         data={groupedData}
         color={color}
         onChange={(e) => onChange(e)}
+        showSalesHistory={salesHistoryLock ? 'none' : ''}
+        showLastYear={lastYearLock ? 'none' : ''}
+        showMovingAverage={movingAverageLock ? 'none' : ''}
+        showWeightedAverage={weightedAverageLock ? 'none' : ''}
+        showLinearRegression={linearRegressionLock ? 'none' : ''}
       />
     </div>
   );

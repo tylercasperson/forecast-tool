@@ -73,7 +73,14 @@ const TableHeader = (props) => {
         ></div>
         User Input
       </div>
-      <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
+      <div
+        style={{
+          width: '8vw',
+          marginTop: 'auto',
+          marginBottom: 'auto',
+          display: props.showSalesHistory,
+        }}
+      >
         <div
           style={{
             height: '1vh',
@@ -84,8 +91,16 @@ const TableHeader = (props) => {
           }}
         ></div>
         Sales History
+        {console.log()}
       </div>
-      <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
+      <div
+        style={{
+          width: '8vw',
+          marginTop: 'auto',
+          marginBottom: 'auto',
+          display: props.showLastYear,
+        }}
+      >
         <div
           style={{
             height: '1vh',
@@ -97,23 +112,12 @@ const TableHeader = (props) => {
         ></div>
         Last Year
       </div>
-      <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
-        <div
-          style={{
-            height: '1vh',
-            width: '1vw',
-            marginRight: 'auto',
-            marginLeft: 'auto',
-            backgroundColor: props.color[4],
-          }}
-        ></div>
-        3 month moving average
-      </div>
       <div
         style={{
           width: '8vw',
           marginTop: 'auto',
           marginBottom: 'auto',
+          display: props.showMovingAverage,
         }}
       >
         <div
@@ -125,10 +129,36 @@ const TableHeader = (props) => {
             backgroundColor: props.color[3],
           }}
         ></div>
+        3 month moving average
+      </div>
+      <div
+        style={{
+          width: '8vw',
+          marginTop: 'auto',
+          marginBottom: 'auto',
+          display: props.showWeightedAverage,
+        }}
+      >
+        <div
+          style={{
+            height: '1vh',
+            width: '1vw',
+            marginRight: 'auto',
+            marginLeft: 'auto',
+            backgroundColor: props.color[4],
+          }}
+        ></div>
         3 month weight average
       </div>
 
-      <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
+      <div
+        style={{
+          width: '8vw',
+          marginTop: 'auto',
+          marginBottom: 'auto',
+          display: props.showLinearRegression,
+        }}
+      >
         <div
           style={{
             height: '1vh',
