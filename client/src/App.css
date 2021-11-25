@@ -46,16 +46,6 @@ body {
   min-height: 100vh;
   font-family: sans-serif;
 }
-
-ul {
-  position: absolute;
-  top: 5%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  margin: 0;
-  padding: 0;
-}
 ul li {
   list-style: none;
 }
