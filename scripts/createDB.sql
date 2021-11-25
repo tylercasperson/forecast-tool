@@ -22,7 +22,7 @@ CREATE TABLE timePeriodTypes (
 );
 CREATE TABLE timePeriods (
     id int auto_increment,
-    timePeriodTypesID integer,
+    timePeriodTypeID integer,
     groupName varChar(255),
     startDate datetime,
     endDate datetime,

@@ -64,8 +64,7 @@ const TableData = (props) => {
       dispatch(deleteGroupedData(i.id));
     });
 
-    let startDay =
-      props.startYear + '-' + props.startMonth + '-' + props.startDay;
+    let startDay = props.startYear + '-' + props.startMonth + '-' + props.startDay;
     let endDay = props.endYear + '-' + props.endMonth + '-' + props.endDay;
 
     dispatch(listGroupedData(startDay, endDay));
@@ -101,9 +100,7 @@ const TableData = (props) => {
       <div style={{ height: '40vh', overflowY: 'auto' }}>
         {data.map((i, index) => {
           let findData = (something) => {
-            let exists = i.values.find(
-              (o) => o.dataType.abbreviation === something
-            );
+            let exists = i.values.find((o) => o.dataType.abbreviation === something);
             return exists === undefined ? 0 : exists.data;
           };
           let background = index % 2 !== 0 ? 'lightgrey' : 'none';

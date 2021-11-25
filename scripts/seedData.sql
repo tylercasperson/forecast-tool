@@ -16,7 +16,7 @@ VALUES (1,'Yeary', 365,@createdAt,@updatedAt),
 (4,'Quarter', 90,@createdAt,@updatedAt),
 (5,'Seasonal', 0,@createdAt,@updatedAt);
 
-INSERT INTO timePeriods (id, timePeriodTypesID, groupName, startDate, endDate, createdAt, updatedAt)
+INSERT INTO timePeriods (id, timePeriodTypeID, groupName, startDate, endDate, createdAt, updatedAt)
 VALUES (1, 1, 'full year', '2022-01-01 00:00:00', '2022-12-31 00:00:00', @createdAt, @updatedAt),
 (2, 4, 'Q1', '2022-01-01 00:00:00', '2022-3-31 00:00:00', @createdAt, @updatedAt),
 (3, 4, 'Q2', '2022-04-01 00:00:00', '2022-6-30 00:00:00', @createdAt, @updatedAt),
