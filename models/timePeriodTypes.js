@@ -14,5 +14,11 @@ module.exports = function (sequelize, DataTypes) {
     },
   });
 
+  timePeriodTypes.associate = (models) => {
+    timePeriodTypes.hasMany(models.timePeriods, {
+      onDelete: 'cascade',
+    });
+  };
+
   return timePeriodTypes;
 };
