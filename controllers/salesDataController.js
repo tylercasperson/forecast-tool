@@ -3,6 +3,18 @@ const db = require('../models');
 const { Op } = require('sequelize');
 
 const getSalesData = asyncHandler(async (req, res) => {
+  const salesData = await db.salesData.findAll({});
+  res.json({ salesData });
+});
+
+const minMaxDates = asyncHandler(async (req, res) => {
+  const maxDate = await db.salesData.max('date');
+  const minDate = await db.salesData.min('date');
+
+  res.json({ minDate, maxDate });
+});
+
+const getSalesDataRange = asyncHandler(async (req, res) => {
   const salesData = await db.salesData.findAll({
     where: {
       date: {
@@ -52,8 +64,10 @@ const deleteSalesData = asyncHandler(async (req, res) => {
 
 module.exports = {
   getSalesData,
+  getSalesDataRange,
   getOneSalesData,
   updateSalesData,
   addSalesData,
   deleteSalesData,
+  minMaxDates,
 };

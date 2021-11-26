@@ -3,7 +3,10 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { forecastDataListReducer } from './components/data/reducers/forecastDataReducers.js';
-import { salesDataListReducer } from './components/data/reducers/salesDataReducers.js';
+import {
+  salesDataListReducer,
+  salesDateMinMaxReducer,
+} from './components/data/reducers/salesDataReducers.js';
 import {
   groupedDataListReducer,
   groupedDataUpdateReducer,
@@ -14,6 +17,7 @@ import { timePeriodTypeListReducer } from './components/data/reducers/timePeriod
 const reducer = combineReducers({
   forecastData: forecastDataListReducer,
   salesData: salesDataListReducer,
+  salesDateMinMax: salesDateMinMaxReducer,
   groupedData: groupedDataListReducer,
   groupedDataUpdate: groupedDataUpdateReducer,
   groupedDataDelete: groupedDataDeleteReducer,
