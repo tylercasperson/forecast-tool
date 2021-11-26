@@ -6,6 +6,7 @@ import { dateFormat } from '../data/formulas/dateFormulas.js';
 
 import List from '../layout/List';
 import DateSlider from '../layout/calendar/DateSlider';
+import ForecastList from '../layout/ForecastList';
 
 const ForecastSetup = () => {
   const dispatch = useDispatch();
@@ -19,14 +20,13 @@ const ForecastSetup = () => {
 
   return (
     <div>
-      <div style={{ display: 'flex' }}>
-        <List />
-        <div style={{ display: 'block' }}>
-          {minDate && maxDate && (
-            <DateSlider minDate={dateFormat(minDate)} maxDate={dateFormat(maxDate)} />
-          )}
-        </div>
+      <div style={{ display: 'block' }}>
+        <ForecastList />
+        {minDate && maxDate && (
+          <DateSlider minDate={dateFormat(minDate)} maxDate={dateFormat(maxDate)} />
+        )}
       </div>
+      <List />
     </div>
   );
 };
