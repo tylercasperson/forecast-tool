@@ -9,7 +9,6 @@ const dataTypesRoute = require('./routes/dataTypesRoute.js');
 const timePeriodTypesRoute = require('./routes/timePeriodTypesRoute.js');
 const timePeriodsRoute = require('./routes/timePeriodsRoute.js');
 const salesDataRoute = require('./routes/salesDataRoute.js');
-const forecastDataRoute = require('./routes/forecastDataRoute.js');
 const groupedDataRoute = require('./routes/groupedDataRoute.js');
 
 const { notFound, errorHandler } = require('./middleware/errorMiddleware.js');
@@ -25,7 +24,6 @@ app.use('/api/dataTypes', dataTypesRoute);
 app.use('/api/timePeriodTypes', timePeriodTypesRoute);
 app.use('/api/timePeriods', timePeriodsRoute);
 app.use('/api/salesData', salesDataRoute);
-app.use('/api/forecastData', forecastDataRoute);
 app.use('/api/groupedData', groupedDataRoute);
 
 app.use(notFound);
@@ -33,6 +31,4 @@ app.use(errorHandler);
 
 db.sequelize
   .sync({ force: false })
-  .then(
-    app.listen(PORT, console.log(`Server running on ${PORT}.`.yellow.bold))
-  );
+  .then(app.listen(PORT, console.log(`Server running on ${PORT}.`.yellow.bold)));

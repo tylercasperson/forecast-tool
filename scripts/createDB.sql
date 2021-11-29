@@ -38,18 +38,6 @@ CREATE TABLE salesData (
     updatedAt datetime,
     PRIMARY KEY (id)
 );
-  CREATE TABLE forecastData (
-      id int auto_increment,
-      timePeriodID integer,
-      forecast integer,
-      lastYear integer,
-      m3ma integer,
-      m3wa integer,
-      linearRegression integer,
-      createdAt datetime,
-      updatedAt datetime,
-      PRIMARY KEY (id)
-  );
 CREATE TABLE groupedData (
     id int auto_increment,
     timePeriodID integer,

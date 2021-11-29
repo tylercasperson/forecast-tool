@@ -18,12 +18,9 @@ module.exports = function (sequelize, DataTypes) {
   });
 
   timePeriods.associate = (models) => {
-    timePeriods.hasMany(models.forecastData, {
+    timePeriods.belongsTo(models.timePeriodTypes, {
       onDelete: 'cascade',
     }),
-      timePeriods.belongsTo(models.timePeriodTypes, {
-        onDelete: 'cascade',
-      }),
       timePeriods.hasMany(models.groupedData, {
         onDelete: 'cascade',
       });

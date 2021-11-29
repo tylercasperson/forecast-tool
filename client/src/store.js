@@ -2,7 +2,6 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import { forecastDataListReducer } from './components/data/reducers/forecastDataReducers.js';
 import {
   salesDataListReducer,
   salesDateMinMaxReducer,
@@ -15,7 +14,6 @@ import {
 import { timePeriodTypeListReducer } from './components/data/reducers/timePeriodTypeReducers.js';
 
 const reducer = combineReducers({
-  forecastData: forecastDataListReducer,
   salesData: salesDataListReducer,
   salesDateMinMax: salesDateMinMaxReducer,
   groupedData: groupedDataListReducer,
