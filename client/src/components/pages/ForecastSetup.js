@@ -7,12 +7,17 @@ import { dateFormat } from '../data/formulas/dateFormulas.js';
 import List from '../layout/List';
 import DateSlider from '../layout/calendar/DateSlider';
 import ForecastList from '../layout/ForecastList';
+import ButtonHover from '../layout/ButtonHover';
 
 const ForecastSetup = () => {
   const dispatch = useDispatch();
 
   const salesDatesMinMax = useSelector((state) => state.salesDateMinMax);
   const { minDate, maxDate } = salesDatesMinMax.salesData;
+
+  const onClick = () => {
+    console.log('click');
+  };
 
   useEffect(() => {
     dispatch(minMaxSalesDates());
@@ -27,6 +32,7 @@ const ForecastSetup = () => {
         )}
       </div>
       <List />
+      <ButtonHover name={'Calculate'} onClick={() => onClick()} />
     </div>
   );
 };
