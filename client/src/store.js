@@ -17,6 +17,7 @@ import { timePeriodTypeListReducer } from './components/data/reducers/timePeriod
 import {
   timePeriodListReducer,
   timePeriodCreateReducer,
+  timePeriodDeleteReducer,
 } from './components/data/reducers/timePeriodReducers.js';
 
 const reducer = combineReducers({
@@ -30,6 +31,7 @@ const reducer = combineReducers({
   timePeriodTypes: timePeriodTypeListReducer,
   timePeriods: timePeriodListReducer,
   timePeriodCreate: timePeriodCreateReducer,
+  timePeriodsDelete: timePeriodDeleteReducer,
 });
 
 const initialState = {};
