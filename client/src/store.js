@@ -2,6 +2,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
+import { dataTypesListReducer } from './components/data/reducers/dataTypeReducers.js';
 import {
   salesDataListReducer,
   salesDataRangeReducer,
@@ -15,6 +16,7 @@ import {
 import { timePeriodTypeListReducer } from './components/data/reducers/timePeriodTypeReducers.js';
 
 const reducer = combineReducers({
+  dataTypes: dataTypesListReducer,
   salesData: salesDataListReducer,
   salesDataRange: salesDataRangeReducer,
   salesDateMinMax: salesDateMinMaxReducer,
