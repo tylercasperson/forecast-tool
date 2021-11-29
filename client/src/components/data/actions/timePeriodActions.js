@@ -3,6 +3,9 @@ import {
   TIME_PERIOD_LIST_REQUEST,
   TIME_PERIOD_LIST_SUCCESS,
   TIME_PERIOD_LIST_FAIL,
+  TIME_PERIOD_CREATE_REQUEST,
+  TIME_PERIOD_CREATE_SUCCESS,
+  TIME_PERIOD_CREATE_FAIL,
 } from '../constants/timePeriodConstants.js';
 
 export const listTimePeriod =
@@ -27,3 +30,22 @@ export const listTimePeriod =
       });
     }
   };
+
+export const createTimePeriod = () => async (dispatch) => {
+  try {
+    dispatch({ type: TIME_PERIOD_CREATE_REQUEST });
+
+    const { data } = await axios.post(`/api/timePeriod`);
+
+    dispatch({
+      type: TIME_PERIOD_CREATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: TIME_PERIOD_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.message ? error.response.data.message : error.message,
+    });
+  }
+};
