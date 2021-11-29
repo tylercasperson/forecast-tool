@@ -26,7 +26,9 @@ const getSalesDataRange = asyncHandler(async (req, res) => {
         ],
       },
     },
+    order: [['date', 'ASC']],
   });
+
   res.json({ salesData });
 });
 

@@ -5,6 +5,9 @@ import {
   SALES_DATE_MIN_MAX_REQUEST,
   SALES_DATE_MIN_MAX_SUCCESS,
   SALES_DATE_MIN_MAX_FAIL,
+  SALES_DATA_RANGE_REQUEST,
+  SALES_DATA_RANGE_SUCCESS,
+  SALES_DATA_RANGE_FAIL,
 } from '../constants/salesDataConstants.js';
 
 export const salesDataListReducer = (state = { salesData: [] }, action) => {
@@ -27,6 +30,19 @@ export const salesDateMinMaxReducer = (state = { salesData: [] }, action) => {
     case SALES_DATE_MIN_MAX_SUCCESS:
       return { salesData: action.payload, success: true };
     case SALES_DATE_MIN_MAX_FAIL:
+      return { error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const salesDataRangeReducer = (state = { salesData: [] }, action) => {
+  switch (action.type) {
+    case SALES_DATA_RANGE_REQUEST:
+      return { salesData: [] };
+    case SALES_DATA_RANGE_SUCCESS:
+      return { salesData: action.payload };
+    case SALES_DATA_RANGE_FAIL:
       return { error: action.payload };
     default:
       return state;

@@ -4,6 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 import {
   salesDataListReducer,
+  salesDataRangeReducer,
   salesDateMinMaxReducer,
 } from './components/data/reducers/salesDataReducers.js';
 import {
@@ -15,6 +16,7 @@ import { timePeriodTypeListReducer } from './components/data/reducers/timePeriod
 
 const reducer = combineReducers({
   salesData: salesDataListReducer,
+  salesDataRange: salesDataRangeReducer,
   salesDateMinMax: salesDateMinMaxReducer,
   groupedData: groupedDataListReducer,
   groupedDataUpdate: groupedDataUpdateReducer,
