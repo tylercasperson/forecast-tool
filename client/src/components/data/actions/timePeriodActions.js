@@ -82,7 +82,7 @@ export const deleteAllTimePeriod = () => async (dispatch) => {
   try {
     dispatch({ type: TIME_PERIOD_DELETE_ALL_REQUEST });
 
-    const { data } = await axios.delete(`/api/timePeriod`);
+    const { data } = await axios.delete(`/api/timePeriod/delete/all`);
 
     dispatch({
       type: TIME_PERIOD_DELETE_ALL_SUCCESS,

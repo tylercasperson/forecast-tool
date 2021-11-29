@@ -39,10 +39,20 @@ const deleteTimePeriods = asyncHandler(async (req, res) => {
   res.json({ timePeriods });
 });
 
+const deleteAllTimePeriods = asyncHandler(async (req, res) => {
+  const timePeriods = await db.timePeriods.destroy({
+    where: {
+      id: { [Op.gte]: 0 },
+    },
+  });
+  res.json({ timePeriods });
+});
+
 module.exports = {
   getTimePeriods,
   getOneTimePeriods,
   updateTimePeriods,
   addTimePeriods,
   deleteTimePeriods,
+  deleteAllTimePeriods,
 };
