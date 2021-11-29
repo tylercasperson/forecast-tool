@@ -9,6 +9,9 @@ import {
   TIME_PERIOD_DELETE_REQUEST,
   TIME_PERIOD_DELETE_SUCCESS,
   TIME_PERIOD_DELETE_FAIL,
+  TIME_PERIOD_DELETE_ALL_REQUEST,
+  TIME_PERIOD_DELETE_ALL_SUCCESS,
+  TIME_PERIOD_DELETE_ALL_FAIL,
 } from '../constants/timePeriodConstants.js';
 
 export const listTimePeriod =
@@ -66,6 +69,25 @@ export const deleteTimePeriod = (timePeriodId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: TIME_PERIOD_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.message ? error.response.data.message : error.message,
+    });
+  }
+};
+
+export const deleteAllTimePeriod = () => async (dispatch) => {
+  try {
+    dispatch({ type: TIME_PERIOD_DELETE_ALL_REQUEST });
+
+    const { data } = await axios.delete(`/api/timePeriod`);
+
+    dispatch({
+      type: TIME_PERIOD_DELETE_ALL_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: TIME_PERIOD_DELETE_ALL_FAIL,
       payload:
         error.response && error.response.data.message ? error.response.data.message : error.message,
     });
