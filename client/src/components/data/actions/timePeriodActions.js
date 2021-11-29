@@ -12,6 +12,9 @@ import {
   TIME_PERIOD_DELETE_ALL_REQUEST,
   TIME_PERIOD_DELETE_ALL_SUCCESS,
   TIME_PERIOD_DELETE_ALL_FAIL,
+  TIME_PERIOD_UPDATE_REQUEST,
+  TIME_PERIOD_UPDATE_SUCCESS,
+  TIME_PERIOD_UPDATE_FAIL,
 } from '../constants/timePeriodConstants.js';
 
 export const listTimePeriod =
@@ -88,6 +91,27 @@ export const deleteAllTimePeriod = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: TIME_PERIOD_DELETE_ALL_FAIL,
+      payload:
+        error.response && error.response.data.message ? error.response.data.message : error.message,
+    });
+  }
+};
+
+export const updateTimePeriod = (timePeriodId, dataRecord) => async (dispatch) => {
+  try {
+    dispatch({ type: TIME_PERIOD_UPDATE_REQUEST });
+
+    const { data } = await axios.put(`/api/timePeriod/${timePeriodId}`, {
+      data: dataRecord,
+    });
+
+    dispatch({
+      type: TIME_PERIOD_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: TIME_PERIOD_UPDATE_FAIL,
       payload:
         error.response && error.response.data.message ? error.response.data.message : error.message,
     });

@@ -12,6 +12,10 @@ import {
   TIME_PERIOD_DELETE_ALL_REQUEST,
   TIME_PERIOD_DELETE_ALL_SUCCESS,
   TIME_PERIOD_DELETE_ALL_FAIL,
+  TIME_PERIOD_UPDATE_REQUEST,
+  TIME_PERIOD_UPDATE_SUCCESS,
+  TIME_PERIOD_UPDATE_FAIL,
+  TIME_PERIOD_UPDATE_RESET,
 } from '../constants/timePeriodConstants.js';
 
 export const timePeriodListReducer = (state = { timePeriod: [] }, action) => {
@@ -73,6 +77,25 @@ export const timePeriodDeleteAllReducer = (state = {}, action) => {
       };
     case TIME_PERIOD_DELETE_ALL_FAIL:
       return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const timePeriodUpdateReducer = (state = { timePeriod: [] }, action) => {
+  switch (action.type) {
+    case TIME_PERIOD_UPDATE_REQUEST:
+      return { loading: true };
+    case TIME_PERIOD_UPDATE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        timePeriod: action.payload,
+      };
+    case TIME_PERIOD_UPDATE_FAIL:
+      return { loading: false, error: action.payload };
+    case TIME_PERIOD_UPDATE_RESET:
+      return {};
     default:
       return state;
   }
