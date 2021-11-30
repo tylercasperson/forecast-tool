@@ -84,7 +84,7 @@ const DateSlider = (props) => {
   }, [startDate, endDate, success, props.minDate, props.maxDate]);
 
   return (
-    <div className='dateSlider'>
+    <div className='dateSection'>
       <div
         style={{
           display: 'flex',
@@ -126,6 +126,7 @@ const DateSlider = (props) => {
 
       <input
         type='range'
+        className='dateSlider'
         name='sliderOne'
         value={sliderOne}
         onChange={(e) => sliderChange(e)}
@@ -134,6 +135,7 @@ const DateSlider = (props) => {
       />
       <input
         type='range'
+        className='dateSlider'
         name='sliderTwo'
         value={sliderTwo}
         onChange={(e) => sliderChange(e)}

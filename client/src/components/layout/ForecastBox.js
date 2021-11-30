@@ -5,7 +5,6 @@ const ForecastBox = (props) => {
   const [numberWidth, setNumberWidth] = useState('1vw');
 
   const onChange = (e) => {
-    console.log(e);
     setValue(e.target.value);
     if (e.target.value.length === 2) {
       setNumberWidth('1.8vw');
@@ -21,7 +20,6 @@ const ForecastBox = (props) => {
           display: 'inline-block',
           textAlign: 'center',
           width: '17vw',
-          border: '1pt solid black',
         }}
       >
         <input
