@@ -1,0 +1,3 @@
+export const GDP_LIST_REQUEST = 'GDP_LIST_REQUEST';
+export const GDP_LIST_SUCCESS = 'GDP_LIST_SUCCESS';
+export const GDP_LIST_FAIL = 'GDP_LIST_FAIL';

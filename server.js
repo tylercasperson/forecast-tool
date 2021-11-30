@@ -10,6 +10,7 @@ const timePeriodTypesRoute = require('./routes/timePeriodTypesRoute.js');
 const timePeriodsRoute = require('./routes/timePeriodsRoute.js');
 const salesDataRoute = require('./routes/salesDataRoute.js');
 const groupedDataRoute = require('./routes/groupedDataRoute.js');
+const gdpRoute = require('./routes/gdpRoute.js');
 
 const { notFound, errorHandler } = require('./middleware/errorMiddleware.js');
 
@@ -25,6 +26,7 @@ app.use('/api/timePeriodTypes', timePeriodTypesRoute);
 app.use('/api/timePeriods', timePeriodsRoute);
 app.use('/api/salesData', salesDataRoute);
 app.use('/api/groupedData', groupedDataRoute);
+app.use('/api/gdp', gdpRoute);
 
 app.use(notFound);
 app.use(errorHandler);
