@@ -12,6 +12,9 @@ import {
   GROUPED_DATA_DELETE_ALL_REQUEST,
   GROUPED_DATA_DELETE_ALL_SUCCESS,
   GROUPED_DATA_DELETE_ALL_FAIL,
+  GROUPED_DATA_CREATE_REQUEST,
+  GROUPED_DATA_CREATE_SUCCESS,
+  GROUPED_DATA_CREATE_FAIL,
 } from '../constants/groupedDataConstants.js';
 
 export const listGroupedData =
@@ -92,6 +95,25 @@ export const deleteAllGroupedData = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GROUPED_DATA_DELETE_ALL_FAIL,
+      payload:
+        error.response && error.response.data.message ? error.response.data.message : error.message,
+    });
+  }
+};
+
+export const createGroupedData = () => async (dispatch) => {
+  try {
+    dispatch({ type: GROUPED_DATA_CREATE_REQUEST });
+
+    const { data } = await axios.post(`/api/groupedData`);
+
+    dispatch({
+      type: GROUPED_DATA_CREATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GROUPED_DATA_CREATE_FAIL,
       payload:
         error.response && error.response.data.message ? error.response.data.message : error.message,
     });

@@ -12,6 +12,10 @@ import {
   GROUPED_DATA_DELETE_ALL_REQUEST,
   GROUPED_DATA_DELETE_ALL_SUCCESS,
   GROUPED_DATA_DELETE_ALL_FAIL,
+  GROUPED_DATA_CREATE_REQUEST,
+  GROUPED_DATA_CREATE_SUCCESS,
+  GROUPED_DATA_CREATE_FAIL,
+  GROUPED_DATA_CREATE_RESET,
 } from '../constants/groupedDataConstants.js';
 
 export const groupedDataListReducer = (state = { groupedData: [] }, action) => {
@@ -73,6 +77,25 @@ export const groupedDataDeleteAllReducer = (state = {}, action) => {
       };
     case GROUPED_DATA_DELETE_ALL_FAIL:
       return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const groupedDataCreateReducer = (state = { groupedData: [] }, action) => {
+  switch (action.type) {
+    case GROUPED_DATA_CREATE_REQUEST:
+      return { loading: true };
+    case GROUPED_DATA_CREATE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        groupedData: action.payload.groupedData,
+      };
+    case GROUPED_DATA_CREATE_FAIL:
+      return { loading: false, error: action.payload };
+    case GROUPED_DATA_CREATE_RESET:
+      return {};
     default:
       return state;
   }
