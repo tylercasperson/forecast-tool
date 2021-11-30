@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { minMaxSalesDates } from '../data/actions/salesDataActions.js';
 import { dateFormat } from '../data/formulas/dateFormulas.js';
 
-import List from '../layout/List';
+import TimePeriodTypesList from '../layout/TimePeriodTypesList';
 import DateSlider from '../layout/calendar/DateSlider';
 import ForecastList from '../layout/ForecastList';
 import ButtonHover from '../layout/ButtonHover';
@@ -45,7 +45,7 @@ const ForecastSetup = () => {
           <DateSlider minDate={dateFormat(minDate)} maxDate={dateFormat(maxDate)} />
         )}
       </div>
-      <List />
+      <TimePeriodTypesList />
       <ButtonHover name={'Calculate'} onClick={() => onClick()} />
     </div>
   );
