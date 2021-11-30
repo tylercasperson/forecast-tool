@@ -23,6 +23,7 @@ import {
   timePeriodDeleteAllReducer,
   timePeriodUpdateReducer,
 } from './components/data/reducers/timePeriodReducers.js';
+import { gdpListReducer } from './components/data/reducers/gdpReducers.js';
 
 const reducer = combineReducers({
   dataTypes: dataTypesListReducer,
@@ -40,6 +41,7 @@ const reducer = combineReducers({
   timePeriodsDelete: timePeriodDeleteReducer,
   timePeriodsDeleteAll: timePeriodDeleteAllReducer,
   timePeriodsUpdate: timePeriodUpdateReducer,
+  gdp: gdpListReducer,
 });
 
 const initialState = {};
