@@ -9,6 +9,9 @@ import {
   GROUPED_DATA_DELETE_REQUEST,
   GROUPED_DATA_DELETE_SUCCESS,
   GROUPED_DATA_DELETE_FAIL,
+  GROUPED_DATA_DELETE_ALL_REQUEST,
+  GROUPED_DATA_DELETE_ALL_SUCCESS,
+  GROUPED_DATA_DELETE_ALL_FAIL,
 } from '../constants/groupedDataConstants.js';
 
 export const groupedDataListReducer = (state = { groupedData: [] }, action) => {
@@ -24,10 +27,7 @@ export const groupedDataListReducer = (state = { groupedData: [] }, action) => {
   }
 };
 
-export const groupedDataUpdateReducer = (
-  state = { groupedData: [] },
-  action
-) => {
+export const groupedDataUpdateReducer = (state = { groupedData: [] }, action) => {
   switch (action.type) {
     case GROUPED_DATA_UPDATE_REQUEST:
       return { loading: true };
@@ -56,6 +56,22 @@ export const groupedDataDeleteReducer = (state = {}, action) => {
         success: true,
       };
     case GROUPED_DATA_DELETE_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const groupedDataDeleteAllReducer = (state = {}, action) => {
+  switch (action.type) {
+    case GROUPED_DATA_DELETE_ALL_REQUEST:
+      return { loading: true };
+    case GROUPED_DATA_DELETE_ALL_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+    case GROUPED_DATA_DELETE_ALL_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

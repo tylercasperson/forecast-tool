@@ -56,10 +56,20 @@ const deleteGroupedData = asyncHandler(async (req, res) => {
   res.json({ groupedData });
 });
 
+const deleteAllGroupedData = asyncHandler(async (req, res) => {
+  const groupedData = await db.groupedData.destroy({
+    where: {
+      id: { [Op.gte]: 0 },
+    },
+  });
+  res.json({ groupedData });
+});
+
 module.exports = {
   getGroupedData,
   getOneGroupedData,
   updateGroupedData,
   addGroupedData,
   deleteGroupedData,
+  deleteAllGroupedData,
 };

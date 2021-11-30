@@ -12,6 +12,7 @@ import {
   groupedDataListReducer,
   groupedDataUpdateReducer,
   groupedDataDeleteReducer,
+  groupedDataDeleteAllReducer,
 } from './components/data/reducers/groupedDataReducers.js';
 import { timePeriodTypeListReducer } from './components/data/reducers/timePeriodTypeReducers.js';
 import {
@@ -30,6 +31,7 @@ const reducer = combineReducers({
   groupedData: groupedDataListReducer,
   groupedDataUpdate: groupedDataUpdateReducer,
   groupedDataDelete: groupedDataDeleteReducer,
+  groupedDataDeleteAll: groupedDataDeleteAllReducer,
   timePeriodTypes: timePeriodTypeListReducer,
   timePeriods: timePeriodListReducer,
   timePeriodCreate: timePeriodCreateReducer,

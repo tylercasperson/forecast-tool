@@ -9,6 +9,9 @@ import {
   GROUPED_DATA_DELETE_REQUEST,
   GROUPED_DATA_DELETE_SUCCESS,
   GROUPED_DATA_DELETE_FAIL,
+  GROUPED_DATA_DELETE_ALL_REQUEST,
+  GROUPED_DATA_DELETE_ALL_SUCCESS,
+  GROUPED_DATA_DELETE_ALL_FAIL,
 } from '../constants/groupedDataConstants.js';
 
 export const listGroupedData =
@@ -36,29 +39,26 @@ export const listGroupedData =
     }
   };
 
-export const updateGroupedData =
-  (groupedDataId, dataRecord) => async (dispatch) => {
-    try {
-      dispatch({ type: GROUPED_DATA_UPDATE_REQUEST });
+export const updateGroupedData = (groupedDataId, dataRecord) => async (dispatch) => {
+  try {
+    dispatch({ type: GROUPED_DATA_UPDATE_REQUEST });
 
-      const { data } = await axios.put(`/api/groupedData/${groupedDataId}`, {
-        data: dataRecord,
-      });
+    const { data } = await axios.put(`/api/groupedData/${groupedDataId}`, {
+      data: dataRecord,
+    });
 
-      dispatch({
-        type: GROUPED_DATA_UPDATE_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      dispatch({
-        type: GROUPED_DATA_UPDATE_FAIL,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-      });
-    }
-  };
+    dispatch({
+      type: GROUPED_DATA_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GROUPED_DATA_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message ? error.response.data.message : error.message,
+    });
+  }
+};
 
 export const deleteGroupedData = (groupedDataId) => async (dispatch) => {
   try {
@@ -74,9 +74,26 @@ export const deleteGroupedData = (groupedDataId) => async (dispatch) => {
     dispatch({
       type: GROUPED_DATA_DELETE_FAIL,
       payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+        error.response && error.response.data.message ? error.response.data.message : error.message,
+    });
+  }
+};
+
+export const deleteAllGroupedData = () => async (dispatch) => {
+  try {
+    dispatch({ type: GROUPED_DATA_DELETE_ALL_REQUEST });
+
+    const { data } = await axios.delete(`/api/groupedData`);
+
+    dispatch({
+      type: GROUPED_DATA_DELETE_ALL_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GROUPED_DATA_DELETE_ALL_FAIL,
+      payload:
+        error.response && error.response.data.message ? error.response.data.message : error.message,
     });
   }
 };
