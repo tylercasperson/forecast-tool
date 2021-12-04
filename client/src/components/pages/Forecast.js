@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { format } from 'date-fns';
 
 import { listGroupedData } from '../data/actions/groupedDataActions.js';
 import {
@@ -135,8 +136,13 @@ const Forecast = () => {
   };
 
   useEffect(() => {
-    dispatch(listGroupedData(startDate, endDate));
-  }, [dispatch, startDate, endDate, color]);
+    dispatch(
+      listGroupedData(
+        format(new Date(startDate), 'yyyy-M-d'),
+        format(new Date(endDate), 'yyyy-M-d')
+      )
+    );
+  }, [dispatch, startDate, endDate]);
 
   return (
     <div>

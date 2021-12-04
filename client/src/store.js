@@ -31,6 +31,7 @@ import { gdpListReducer } from './components/data/reducers/gdpReducers.js';
 const reducer = combineReducers({
   dates: settingsReducer,
   showForecast: settingsReducer,
+  periods: settingsReducer,
   dataTypes: dataTypesListReducer,
   salesData: salesDataListReducer,
   salesDataRange: salesDataRangeReducer,
@@ -69,9 +70,17 @@ const showForecastFromStorage = localStorage.getItem('showForecast')
       showLinearRegression: true,
     };
 
+const periodsFromStorage = localStorage.getItem('periods')
+  ? JSON.parse(localStorage.getItem('periods'))
+  : {
+      movingPeriods: 3,
+      weightedPeriods: 3,
+    };
+
 const initialState = {
   dates: { startDate: startDateFromStorage, endDate: endDateFromStorage },
   showForecast: showForecastFromStorage,
+  periods: periodsFromStorage,
 };
 
 const middleware = [thunk];
