@@ -2,6 +2,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
+import { settingsReducer } from './components/data/reducers/settingsReducers.js';
 import { dataTypesListReducer } from './components/data/reducers/dataTypeReducers.js';
 import {
   salesDataListReducer,
@@ -28,6 +29,7 @@ import {
 import { gdpListReducer } from './components/data/reducers/gdpReducers.js';
 
 const reducer = combineReducers({
+  dates: settingsReducer,
   dataTypes: dataTypesListReducer,
   salesData: salesDataListReducer,
   salesDataRange: salesDataRangeReducer,
