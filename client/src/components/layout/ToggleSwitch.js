@@ -23,6 +23,7 @@ const ToggleSwitch = (props) => {
             type='checkbox'
             name={props.name}
             onChange={props.onChange}
+            checked={props.checked ? '' : 'checked'}
           />
           <span className='check'></span>
         </label>

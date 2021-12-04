@@ -8,26 +8,31 @@ const ShowHide = (props) => {
       <ToggleSwitch
         label={'Sales History'}
         onChange={props.onChange}
+        checked={props.showSalesHistory}
         name={'salesHistory'}
       />
       <ToggleSwitch
         label={'Last Year'}
         onChange={props.onChange}
+        checked={props.showLastYear}
         name={'lastYear'}
       />
       <ToggleSwitch
         label={'Moving Average'}
         onChange={props.onChange}
+        checked={props.showMovingAverage}
         name={'movingAverage'}
       />
       <ToggleSwitch
         label={'Weighted Average'}
         onChange={props.onChange}
+        checked={props.showWeightedAverage}
         name={'weightedAverage'}
       />
       <ToggleSwitch
         label={'Linear Regression'}
         onChange={props.onChange}
+        checked={props.showLinearRegression}
         name={'linearRegression'}
       />
     </div>
