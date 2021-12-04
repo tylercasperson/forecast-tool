@@ -9,6 +9,10 @@ module.exports = function (sequelize, DataTypes) {
     data: {
       type: DataTypes.INTEGER,
     },
+    timePeriodId: {
+      type: DataTypes.INTEGER,
+    },
+    dataTypeId: { type: DataTypes.INTEGER },
   });
 
   groupedData.associate = (models) => {

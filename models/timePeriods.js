@@ -1,3 +1,5 @@
+const timePeriodTypes = require('./timePeriodTypes');
+
 module.exports = function (sequelize, DataTypes) {
   const timePeriods = sequelize.define('timePeriods', {
     id: {
@@ -14,6 +16,9 @@ module.exports = function (sequelize, DataTypes) {
     },
     endDate: {
       type: DataTypes.DATE,
+    },
+    timePeriodTypeID: {
+      type: DataTypes.INTEGER,
     },
   });
 
