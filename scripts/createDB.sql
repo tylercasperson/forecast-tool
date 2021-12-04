@@ -15,7 +15,6 @@ CREATE TABLE dataTypes (
 CREATE TABLE timePeriodTypes (
     id int auto_increment,
     type varChar(255),
-    dayEquivalent integer,
     createdAt datetime,
     updatedAt datetime,
     PRIMARY KEY (id)

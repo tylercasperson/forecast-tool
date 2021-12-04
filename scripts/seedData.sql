@@ -5,16 +5,14 @@ INSERT INTO dataTypes (id, name, description, abbreviation, bestToUseWhen, creat
 VALUES (1,'User Input','User input based on data provided','ui','No forecast is absolutly correct, the input helps to figure out what amount should be used.',@createdAt,@updatedAt),
 (2,'salesHistory','Sales History','sh','Actual data',@createdAt,@updatedAt),
 (3, 'Last Year', "Last year's data.", 'ly', 'Great way to compare current forecast to last years trends.',@createdAt,@updatedAt),
-(4,'3 month moving average','Average of the past 3 months.','m3ma', 'To show recent trends',@createdAt,@updatedAt),
-(5,'weighted 3 month moving average', 'Provides more weight to recent trends while still using an average of recent months.','w3ma', 'To show recent trends with an emphasis on recent months',@createdAt,@updatedAt),
+(4,'3 month moving average','Average of the past 3 months.','ma', 'To show recent trends',@createdAt,@updatedAt),
+(5,'weighted 3 month moving average', 'Provides more weight to recent trends while still using an average of recent months.','wa', 'To show recent trends with an emphasis on recent months',@createdAt,@updatedAt),
 (6, 'Linear Regression', 'Shows the relationship between two or more data points.', 'lr', 'To show a correlation between data points to show increase/decrease in future trends.',@createdAt,@updatedAt);
 
 INSERT INTO timePeriodTypes (id, type, dayEquivalent, createdAt, updatedAt)
-VALUES (1,'Yeary', 365,@createdAt,@updatedAt),
-(2,'Monthly', 30,@createdAt,@updatedAt),
-(3,'Weekly', 7,@createdAt,@updatedAt),
-(4,'Quarter', 90,@createdAt,@updatedAt),
-(5,'Seasonal', 0,@createdAt,@updatedAt);
+VALUES (1,'Quarter',@createdAt,@updatedAt),
+(2,'Month',@createdAt,@updatedAt),
+(3,'Week',@createdAt,@updatedAt);
 
 INSERT INTO timePeriods (id, timePeriodTypeID, groupName, startDate, endDate, createdAt, updatedAt)
 VALUES (1, 1, 'full year', '2022-01-01 00:00:00', '2022-12-31 00:00:00', @createdAt, @updatedAt),
