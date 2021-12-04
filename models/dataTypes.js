@@ -20,5 +20,11 @@ module.exports = function (sequelize, DataTypes) {
     },
   });
 
+  dataTypes.associate = (models) => {
+    dataTypes.hasMany(models.groupedData, {
+      onDelete: 'cascade',
+    });
+  };
+
   return dataTypes;
 };

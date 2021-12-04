@@ -10,12 +10,13 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
     dayEquivalent: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
     },
   });
 
   timePeriodTypes.associate = (models) => {
     timePeriodTypes.hasMany(models.timePeriods, {
+      target: 'timePeriodTypeID',
       onDelete: 'cascade',
     });
   };
