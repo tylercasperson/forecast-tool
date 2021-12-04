@@ -9,6 +9,7 @@ const CheckItem = (props) => {
           style={{ display: 'none' }}
           name={props.name}
           onChange={props.onChange}
+          checked={props.checked ? 'checked' : ''}
         />
         <span>{props.item}</span>
       </label>
