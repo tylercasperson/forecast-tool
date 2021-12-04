@@ -26,7 +26,27 @@ const updateTimePeriods = asyncHandler(async (req, res) => {
 });
 
 const addTimePeriods = asyncHandler(async (req, res) => {
-  const timePeriods = await db.timePeriods.create({});
+  const timePeriods = await db.timePeriods.create({
+    timePeriodTypeID: req.body.timePeriodTypeID,
+    groupName: req.body.groupName,
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
+  });
+  res.json({ timePeriods });
+});
+
+const addAlotOfTimePeriods = asyncHandler(async (req, res) => {
+  const timePeriods = await db.timePeriods.bulkCreate(
+    req.body.map((i) => {
+      return {
+        groupName: i.groupName,
+        startDate: i.startDate,
+        endDate: i.endDate,
+        timePeriodTypeID: i.timePeriodTypeID,
+      };
+    })
+  );
+
   res.json({ timePeriods });
 });
 
@@ -55,4 +75,5 @@ module.exports = {
   addTimePeriods,
   deleteTimePeriods,
   deleteAllTimePeriods,
+  addAlotOfTimePeriods,
 };

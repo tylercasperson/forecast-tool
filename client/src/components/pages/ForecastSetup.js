@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { dateFormat } from '../data/formulas/dateFormulas.js';
+import { createBulkTimePeriod } from '../data/actions/timePeriodActions.js';
 import { createBulkGroupedData } from '../data/actions/groupedDataActions.js';
 import { minMaxSalesDates } from '../data/actions/salesDataActions.js';
-import { dateFormat } from '../data/formulas/dateFormulas.js';
 
 import TimePeriodTypesList from '../layout/TimePeriodTypesList';
 import DateSlider from '../layout/calendar/DateSlider';
@@ -27,7 +28,10 @@ const ForecastSetup = () => {
 
     setData([]);
 
+    let timePeriodArr = [];
+
     dispatch(createBulkGroupedData(data));
+    dispatch(createBulkTimePeriod(timePeriodArr));
   };
 
   useEffect(() => {

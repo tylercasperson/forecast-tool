@@ -20,6 +20,7 @@ import { timePeriodTypeListReducer } from './components/data/reducers/timePeriod
 import {
   timePeriodListReducer,
   timePeriodCreateReducer,
+  timePeriodBulkCreateReducer,
   timePeriodDeleteReducer,
   timePeriodDeleteAllReducer,
   timePeriodUpdateReducer,
@@ -40,6 +41,7 @@ const reducer = combineReducers({
   timePeriodTypes: timePeriodTypeListReducer,
   timePeriods: timePeriodListReducer,
   timePeriodCreate: timePeriodCreateReducer,
+  timePeriodBulkCreate: timePeriodBulkCreateReducer,
   timePeriodsDelete: timePeriodDeleteReducer,
   timePeriodsDeleteAll: timePeriodDeleteAllReducer,
   timePeriodsUpdate: timePeriodUpdateReducer,
