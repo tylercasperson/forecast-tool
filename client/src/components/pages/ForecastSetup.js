@@ -39,9 +39,7 @@ const ForecastSetup = () => {
     <div>
       <div style={{ display: 'block' }}>
         <ForecastList />
-        {minDate && maxDate && (
-          <DateSlider minDate={dateFormat(minDate)} maxDate={dateFormat(maxDate)} />
-        )}
+        {minDate && maxDate && <DateSlider />}
       </div>
       <TimePeriodTypesList />
       <ButtonHover name={'Calculate'} onClick={() => onClick()} />

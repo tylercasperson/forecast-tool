@@ -1,17 +1,81 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { add, differenceInDays, format } from 'date-fns';
+
+import { dateFormat, monthList, daysPerMonth } from '../../data/formulas/dateFormulas.js';
+import { saveStartDate, saveEndDate } from '../../data/actions/settingsActions.js';
 
 import DateInput from './DateInput';
 
-const DateSlider = (props) => {
-  const [startDate, setStartDate] = useState('1/1/2020');
-  const [endDate, setEndDate] = useState('12/31/2020');
+const DateSlider = () => {
+  const dispatch = useDispatch();
+
+  const getFromState = useSelector((state) => state);
+  const { startDate, endDate } = getFromState.dates;
+  const { minDate, maxDate } = getFromState.salesDateMinMax.salesData;
+
+  const [tempStartDate, setTempStartDate] = useState(startDate);
+  const [tempEndDate, setTempEndDate] = useState(endDate);
   const [showHide, setShowHide] = useState('hide');
   const [sliderOne, setSliderOne] = useState(0);
   const [sliderTwo, setSliderTwo] = useState(100);
   const [sliderMin] = useState(0);
   const [sliderMax, setSliderMax] = useState(100);
-  const [success, setSuccess] = useState(true);
+  const [load, setLoad] = useState(true);
+
+  const dateCapture = (e) => {
+    console.log('dateCapture');
+    if (e.target.name === 'startDate') {
+      setTempStartDate(e.target.value);
+    } else if (e.target.name === 'endDate') {
+      setTempEndDate(e.target.value);
+    }
+
+    const saveDate = () => {
+      console.log('saveDate');
+      if (e.target.name === 'startDate') {
+        dispatch(saveStartDate(e.target.value));
+      } else if (e.target.name === 'endDate') {
+        dispatch(saveEndDate(e.target.value));
+      }
+    };
+
+    const dateValidation = (date) => {
+      console.log('dateValidation');
+      let dateParts = date.split('/');
+      console.log(dateParts);
+
+      if (dateParts.length === 3) {
+        if (parseInt(dateParts[2]) > 0 && parseInt(dateParts[2]) < 9999) {
+          if (parseInt(dateParts[0]) > 0 && parseInt(dateParts[0]) < 13) {
+            let yearParts = dateParts[2];
+            let century = yearParts[0] + yearParts[1] + 0 + 0;
+            let yearDigit = yearParts[2] + yearParts[3];
+            let leapYearCheck = yearDigit % 4 === 0;
+            let centenialCheck = yearDigit === '00' && century % 400 === 0;
+            let leapYear = leapYearCheck || centenialCheck ? true : false;
+            if (leapYear && dateParts[0] === '2') {
+              if (
+                parseInt(dateParts[1]) > 0 &&
+                dateParts[1] < daysPerMonth[monthList[parseInt(dateParts[0]) - 1]].length + 2
+              ) {
+                saveDate();
+              }
+            } else {
+              if (
+                parseInt(dateParts[1]) > 0 &&
+                dateParts[1] < daysPerMonth[monthList[parseInt(dateParts[0]) - 1]].length + 1
+              ) {
+                saveDate();
+              }
+            }
+          }
+        }
+      }
+    };
+
+    dateValidation(e.target.value);
+  };
 
   const onFocus = () => {
     setShowHide('show');
@@ -23,45 +87,71 @@ const DateSlider = (props) => {
 
   const onClick = (e, type) => {
     if (type === 'start') {
-      setStartDate(e.target.attributes.date.value);
+      dispatch(saveStartDate(e.target.attributes.date.value));
+      setTempStartDate(e.target.attributes.date.value);
     } else {
-      setEndDate(e.target.attributes.date.value);
+      dispatch(saveEndDate(e.target.attributes.date.value));
+      setTempEndDate(e.target.attributes.date.value);
     }
   };
 
   const nextMonth = (type) => {
     if (type === 'start') {
-      setStartDate(format(add(new Date(startDate), { months: 1 }), 'M/d/yyyy'));
+      let nextMonth = format(add(new Date(startDate), { months: 1 }), 'M/d/yyyy');
+      dispatch(saveStartDate(nextMonth));
+      setTempStartDate(nextMonth);
     } else {
-      setEndDate(format(add(new Date(startDate), { months: 1 }), 'M/d/yyyy'));
+      let nextMonth = format(add(new Date(endDate), { months: 1 }), 'M/d/yyyy');
+      dispatch(saveEndDate(nextMonth));
+      setTempEndDate(nextMonth);
     }
   };
   const previousMonth = (type) => {
     if (type === 'start') {
-      setStartDate(format(add(new Date(startDate), { months: -1 }), 'M/d/yyyy'));
+      let previousMonth = format(add(new Date(startDate), { months: -1 }), 'M/d/yyyy');
+      dispatch(saveStartDate(previousMonth));
+      setTempStartDate(previousMonth);
     } else {
-      setEndDate(format(add(new Date(startDate), { months: -1 }), 'M/d/yyyy'));
+      let previousMonth = format(add(new Date(endDate), { months: -1 }), 'M/d/yyyy');
+      dispatch(saveEndDate(previousMonth));
+      setTempEndDate(previousMonth);
     }
   };
 
   const sliderChange = (e) => {
     const sliderToDates = (value) => {
-      setStartDate(
-        format(
-          add(new Date(props.minDate), {
-            days: Math.min(value, sliderOne, sliderTwo),
-          }),
-          'M/d/yyyy'
-        )
+      let addValueOne;
+      let addValueTwo;
+
+      if ((sliderOne === sliderMin || sliderTwo === sliderMin) && value === sliderMin) {
+        addValueOne = sliderMin;
+        addValueTwo = sliderMin;
+      } else if ((sliderOne === sliderMax || sliderTwo === sliderMax) && value === sliderMax) {
+        addValueOne = sliderMax;
+        addValueTwo = sliderMax;
+      } else {
+        addValueOne = Math.min(value, sliderOne, sliderTwo);
+        addValueTwo = Math.max(value, sliderOne, sliderTwo);
+      }
+
+      let dateStart = format(
+        add(new Date(dateFormat(minDate)), {
+          days: addValueOne,
+        }),
+        'M/d/yyyy'
       );
-      setEndDate(
-        format(
-          add(new Date(props.minDate), {
-            days: Math.max(value, sliderOne, sliderTwo),
-          }),
-          'M/d/yyyy'
-        )
+
+      let dateEnd = format(
+        add(new Date(dateFormat(minDate)), {
+          days: addValueTwo,
+        }),
+        'M/d/yyyy'
       );
+
+      dispatch(saveStartDate(dateStart));
+      setTempStartDate(dateStart);
+      dispatch(saveEndDate(dateEnd));
+      setTempEndDate(dateEnd);
     };
 
     if (e.target.name === 'sliderOne') {
@@ -75,13 +165,13 @@ const DateSlider = (props) => {
   };
 
   useEffect(() => {
-    if (success) {
-      setSliderMax(differenceInDays(new Date(props.maxDate), new Date(props.minDate)));
-      setSliderOne(differenceInDays(new Date(startDate), new Date(props.minDate)));
-      setSliderTwo(differenceInDays(new Date(endDate), new Date(props.minDate)));
-      setSuccess(false);
+    setSliderOne(differenceInDays(new Date(startDate), new Date(dateFormat(minDate))));
+    setSliderTwo(differenceInDays(new Date(endDate), new Date(dateFormat(minDate))));
+    if (load) {
+      setSliderMax(differenceInDays(new Date(dateFormat(maxDate)), new Date(dateFormat(minDate))));
+      setLoad(false);
     }
-  }, [startDate, endDate, success, props.minDate, props.maxDate]);
+  }, [dispatch, startDate, endDate, minDate, maxDate, load]);
 
   return (
     <div className='dateSection'>
@@ -99,10 +189,10 @@ const DateSlider = (props) => {
         <DateInput
           text={new Date(startDate) < new Date(endDate) ? 'Start Date' : 'EndDate'}
           name='startDate'
-          value={startDate}
+          value={tempStartDate}
           showHide={showHide}
           onClick={(e) => onClick(e, 'start')}
-          onChange={(e) => setStartDate(e.target.value)}
+          onChange={(e) => dateCapture(e)}
           dateSelected={startDate}
           startDate={startDate}
           endDate={endDate}
@@ -112,10 +202,10 @@ const DateSlider = (props) => {
         <DateInput
           text={new Date(startDate) < new Date(endDate) ? 'EndDate' : 'Start Date'}
           name='endDate'
-          value={endDate}
+          value={tempEndDate}
           showHide={showHide}
           onClick={(e) => onClick(e, 'end')}
-          onChange={(e) => setEndDate(e.target.value)}
+          onChange={(e) => dateCapture(e)}
           dateSelected={endDate}
           startDate={startDate}
           endDate={endDate}
