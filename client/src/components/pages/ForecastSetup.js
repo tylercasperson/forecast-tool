@@ -14,14 +14,11 @@ import ButtonHover from '../layout/ButtonHover';
 const ForecastSetup = () => {
   const dispatch = useDispatch();
 
-  const salesDatesMinMax = useSelector((state) => state.salesDateMinMax);
-  const { minDate, maxDate } = salesDatesMinMax.salesData;
+  const pullFromState = useSelector((state) => state);
+  const { minDate, maxDate } = pullFromState.salesDateMinMax.salesData;
+  const { startDate, endDate } = pullFromState.dates;
 
   const [data, setData] = useState([]);
-  const [lastYear, setLastYear] = useState(false);
-  const [movingAverage, setMovingAverage] = useState(false);
-  const [weightedAverage, setWeightedAverage] = useState(false);
-  const [linearRegression, setLinearRegression] = useState(false);
 
   const onClick = () => {
     console.log('click');
@@ -41,16 +38,7 @@ const ForecastSetup = () => {
   return (
     <div>
       <div style={{ display: 'block' }}>
-        <ForecastList
-          lastYear={() => (lastYear ? setLastYear(false) : setLastYear(true))}
-          movingAverage={() => (movingAverage ? setMovingAverage(false) : setMovingAverage(true))}
-          weightedAverage={() =>
-            weightedAverage ? setWeightedAverage(false) : setWeightedAverage(true)
-          }
-          linearRegression={() =>
-            linearRegression ? setLinearRegression(false) : setLinearRegression(true)
-          }
-        />
+        <ForecastList />
         {minDate && maxDate && (
           <DateSlider minDate={dateFormat(minDate)} maxDate={dateFormat(maxDate)} />
         )}

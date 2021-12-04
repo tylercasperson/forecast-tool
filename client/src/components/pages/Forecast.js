@@ -2,6 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { listGroupedData } from '../data/actions/groupedDataActions.js';
+import {
+  saveStartDate,
+  saveEndDate,
+  saveShowSalesHistory,
+  saveShowLastYear,
+  saveShowMovingAverage,
+  saveShowWeightedAverage,
+  saveShowLinearRegression,
+} from '../data/actions/settingsActions.js';
 
 import LineGraph from '../layout/LineGraph';
 import TableData from '../layout/TableData';
@@ -10,8 +19,16 @@ import ShowHide from '../layout/ShowHide';
 const Forecast = () => {
   const dispatch = useDispatch();
 
-  const groupedDataList = useSelector((state) => state.groupedData);
-  const { groupedData } = groupedDataList;
+  const getFromState = useSelector((state) => state);
+  const { groupedData } = getFromState.groupedData;
+  const { startDate, endDate } = getFromState.dates;
+  const {
+    showSalesHistory,
+    showLastYear,
+    showMovingAverage,
+    showWeightedAverage,
+    showLinearRegression,
+  } = getFromState.showForecast;
 
   const [startDay, setStartDay] = useState(1);
   const [startMonth, setStartMonth] = useState(1);
@@ -19,14 +36,6 @@ const Forecast = () => {
   const [endDay, setEndDay] = useState(31);
   const [endMonth, setEndMonth] = useState(12);
   const [endYear, setEndYear] = useState(2022);
-  const [startDate, setStartDate] = useState('2022-1-1');
-  const [endDate, setEndDate] = useState('2022-12-31');
-
-  const [salesHistoryLock, setSalesHistoryLock] = useState(false);
-  const [lastYearLock, setLastYearLock] = useState(false);
-  const [movingAverageLock, setMovingAverageLock] = useState(false);
-  const [weightedAverageLock, setWeightedAverageLock] = useState(false);
-  const [linearRegressionLock, setLinearRegressionLock] = useState(false);
 
   const [color, setColor] = useState([
     '#e41a1c',
@@ -53,7 +62,7 @@ const Forecast = () => {
         if (month > 0 && month < 13) {
           if (day > 0 && day < 32) {
             if (year > 0 && year < 9999) {
-              setStartDate(year + '-' + month + '-' + day);
+              dispatch(saveStartDate(e.target.value));
             }
           }
         }
@@ -65,25 +74,25 @@ const Forecast = () => {
         if (month > 0 && month < 13) {
           if (day > 0 && day < 32) {
             if (year > 0 && year < 9999) {
-              setEndDate(year + '-' + month + '-' + day);
+              dispatch(saveEndDate(e.target.value));
             }
           }
         }
         break;
       case 'salesHistory':
-        setSalesHistoryLock(salesHistoryLock ? false : true);
+        dispatch(saveShowSalesHistory(showSalesHistory ? false : true));
         break;
       case 'lastYear':
-        setLastYearLock(lastYearLock ? false : true);
+        dispatch(saveShowLastYear(showLastYear ? false : true));
         break;
       case 'movingAverage':
-        setMovingAverageLock(movingAverageLock ? false : true);
+        dispatch(saveShowMovingAverage(showMovingAverage ? false : true));
         break;
       case 'weightedAverage':
-        setWeightedAverageLock(weightedAverageLock ? false : true);
+        dispatch(saveShowWeightedAverage(showWeightedAverage ? false : true));
         break;
       case 'linearRegression':
-        setLinearRegressionLock(linearRegressionLock ? false : true);
+        dispatch(saveShowLinearRegression(showLinearRegression ? false : true));
         break;
       default:
         return;
@@ -92,11 +101,11 @@ const Forecast = () => {
   };
 
   const filteredData = () => {
-    let removeSalesHistory = salesHistoryLock ? 2 : 0;
-    let removeLastYear = lastYearLock ? 3 : 0;
-    let removeMovingAverage = movingAverageLock ? 4 : 0;
-    let removeWeightedAverage = weightedAverageLock ? 5 : 0;
-    let removeLinearRegression = linearRegressionLock ? 6 : 0;
+    let removeSalesHistory = showSalesHistory ? 0 : 2;
+    let removeLastYear = showLastYear ? 0 : 3;
+    let removeMovingAverage = showMovingAverage ? 0 : 4;
+    let removeWeightedAverage = showWeightedAverage ? 0 : 5;
+    let removeLinearRegression = showLinearRegression ? 0 : 6;
 
     return groupedData.filter(
       (data) =>
@@ -109,11 +118,11 @@ const Forecast = () => {
   };
 
   const filteredColor = () => {
-    let removeSalesHistory = salesHistoryLock ? color[1] : 0;
-    let removeLastYear = lastYearLock ? color[2] : 0;
-    let removeMovingAverage = movingAverageLock ? color[3] : 0;
-    let removeWeightedAverage = weightedAverageLock ? color[4] : 0;
-    let removeLinearRegression = linearRegressionLock ? color[5] : 0;
+    let removeSalesHistory = showSalesHistory ? 0 : color[1];
+    let removeLastYear = showLastYear ? 0 : color[2];
+    let removeMovingAverage = showMovingAverage ? 0 : color[3];
+    let removeWeightedAverage = showWeightedAverage ? 0 : color[4];
+    let removeLinearRegression = showLinearRegression ? 0 : color[5];
 
     return color.filter(
       (i) =>
@@ -132,7 +141,14 @@ const Forecast = () => {
   return (
     <div>
       <LineGraph data={filteredData()} color={filteredColor()} />
-      <ShowHide onChange={(e) => onChange(e)} />
+      <ShowHide
+        onChange={(e) => onChange(e)}
+        showSalesHistory={showSalesHistory}
+        showLastYear={showLastYear}
+        showMovingAverage={showMovingAverage}
+        showWeightedAverage={showWeightedAverage}
+        showLinearRegression={showLinearRegression}
+      />
       <TableData
         startDay={startDay}
         startMonth={startMonth}
@@ -145,11 +161,11 @@ const Forecast = () => {
         data={groupedData}
         color={color}
         onChange={(e) => onChange(e)}
-        showSalesHistory={salesHistoryLock ? 'none' : ''}
-        showLastYear={lastYearLock ? 'none' : ''}
-        showMovingAverage={movingAverageLock ? 'none' : ''}
-        showWeightedAverage={weightedAverageLock ? 'none' : ''}
-        showLinearRegression={linearRegressionLock ? 'none' : ''}
+        showSalesHistory={showSalesHistory ? '' : 'none'}
+        showLastYear={showLastYear ? '' : 'none'}
+        showMovingAverage={showMovingAverage ? '' : 'none'}
+        showWeightedAverage={showWeightedAverage ? '' : 'none'}
+        showLinearRegression={showLinearRegression ? '' : 'none'}
       />
     </div>
   );

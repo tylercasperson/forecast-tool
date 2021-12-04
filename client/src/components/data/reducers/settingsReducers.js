@@ -1,6 +1,14 @@
-import { START_DATE_SAVE_REQUEST, END_DATE_SAVE_REQUEST } from '../constants/settingsConstants.js';
+import {
+  START_DATE_SAVE_REQUEST,
+  END_DATE_SAVE_REQUEST,
+  SHOW_SALES_HISTORY_REQUEST,
+  SHOW_LAST_YEAR_REQUEST,
+  SHOW_MOVING_AVERAGE_REQUEST,
+  SHOW_WEIGHTED_AVERAGE_REQUEST,
+  SHOW_LINEAR_REGRESSION_REQUEST,
+} from '../constants/settingsConstants.js';
 
-export const settingsReducer = (state = { dates: [], colors: [], showForecast: [] }, action) => {
+export const settingsReducer = (state = { dates: [], showForecast: [] }, action) => {
   switch (action.type) {
     case START_DATE_SAVE_REQUEST:
       return {
@@ -11,6 +19,31 @@ export const settingsReducer = (state = { dates: [], colors: [], showForecast: [
       return {
         ...state,
         endDate: action.payload,
+      };
+    case SHOW_SALES_HISTORY_REQUEST:
+      return {
+        ...state,
+        showSalesHistory: action.payload,
+      };
+    case SHOW_LAST_YEAR_REQUEST:
+      return {
+        ...state,
+        showLastYear: action.payload,
+      };
+    case SHOW_MOVING_AVERAGE_REQUEST:
+      return {
+        ...state,
+        showMovingAverage: action.payload,
+      };
+    case SHOW_WEIGHTED_AVERAGE_REQUEST:
+      return {
+        ...state,
+        showWeightedAverage: action.payload,
+      };
+    case SHOW_LINEAR_REGRESSION_REQUEST:
+      return {
+        ...state,
+        showLinearRegression: action.payload,
       };
     default:
       return state;

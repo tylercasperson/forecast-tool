@@ -30,6 +30,7 @@ import { gdpListReducer } from './components/data/reducers/gdpReducers.js';
 
 const reducer = combineReducers({
   dates: settingsReducer,
+  showForecast: settingsReducer,
   dataTypes: dataTypesListReducer,
   salesData: salesDataListReducer,
   salesDataRange: salesDataRangeReducer,
@@ -50,7 +51,28 @@ const reducer = combineReducers({
   gdp: gdpListReducer,
 });
 
-const initialState = {};
+const startDateFromStorage = localStorage.getItem('startDate')
+  ? JSON.parse(localStorage.getItem('startDate'))
+  : '1/1/2020';
+
+const endDateFromStorage = localStorage.getItem('endDate')
+  ? JSON.parse(localStorage.getItem('endDate'))
+  : '12/31/2020';
+
+const showForecastFromStorage = localStorage.getItem('showForecast')
+  ? JSON.parse(localStorage.getItem('showForecast'))
+  : {
+      showSalesHistory: true,
+      showLastYear: true,
+      showMovingAverage: true,
+      showWeightedAverage: true,
+      showLinearRegression: true,
+    };
+
+const initialState = {
+  dates: { startDate: startDateFromStorage, endDate: endDateFromStorage },
+  showForecast: showForecastFromStorage,
+};
 
 const middleware = [thunk];
 

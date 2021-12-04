@@ -1,19 +1,62 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import {
+  saveShowSalesHistory,
+  saveShowLastYear,
+  saveShowMovingAverage,
+  saveShowWeightedAverage,
+  saveShowLinearRegression,
+  saveMovingPeriods,
+  saveWeightedPeriods,
+} from '../data/actions/settingsActions.js';
+
 import CheckItem from './CheckItem';
 import ForecastBox from './ForecastBox';
 
-const ForecastList = (props) => {
-  const forecastList = useRef();
+const ForecastList = () => {
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (forecastList.current !== undefined) {
-      if (forecastList.current.children[1].children[0].children[0].checked) {
-      }
+  const getFromState = useSelector((state) => state);
+  const {
+    showSalesHistory,
+    showLastYear,
+    showMovingAverage,
+    showWeightedAverage,
+    showLinearRegression,
+  } = getFromState.showForecast;
+  const { movingPeriods, weightedPeriods } = getFromState.periods;
+
+  const onChange = (e) => {
+    switch (e.target.name) {
+      case 'salesHistory':
+        dispatch(saveShowSalesHistory(showSalesHistory ? false : true));
+        break;
+      case 'lastYear':
+        dispatch(saveShowLastYear(showLastYear ? false : true));
+        break;
+      case 'movingAverage':
+        dispatch(saveShowMovingAverage(showMovingAverage ? false : true));
+        break;
+      case 'weightedAverage':
+        dispatch(saveShowWeightedAverage(showWeightedAverage ? false : true));
+        break;
+      case 'linearRegression':
+        dispatch(saveShowLinearRegression(showLinearRegression ? false : true));
+        break;
+      case 'movingPeriods':
+        dispatch(saveMovingPeriods(parseInt(e.target.value)));
+        break;
+      case 'weightedPeriods':
+        dispatch(saveWeightedPeriods(parseInt(e.target.value)));
+        break;
+      default:
+        return;
     }
-  }, []);
+  };
+
   return (
     <div
-      ref={forecastList}
       className='container'
       style={{
         maxWidth: '90vw',
@@ -24,34 +67,59 @@ const ForecastList = (props) => {
       }}
     >
       <div style={{ marginTop: 'auto', marginBottom: 'auto' }}>
-        <CheckItem item='Last Year' name='lastYear' onChange={props.lastYear} />
+        <CheckItem
+          item='Sales History'
+          name='salesHistory'
+          onChange={(e) => onChange(e)}
+          checked={showSalesHistory}
+        />
       </div>
-      <div>
-        <CheckItem item='Moving Average' name='movingAverage' onChange={props.movingAverage} />
-        {forecastList.current === undefined
-          ? ''
-          : forecastList.current.children[1].children[0].children[0].children[0].checked && (
-              <ForecastBox type={'averaged'} />
-            )}
+      <div style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+        <CheckItem
+          item='Last Year'
+          name='lastYear'
+          onChange={(e) => onChange(e)}
+          checked={showLastYear}
+        />
       </div>
-
-      <div>
+      <div style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+        <CheckItem
+          item='Moving Average'
+          name='movingAverage'
+          onChange={(e) => onChange(e)}
+          checked={showMovingAverage}
+        />
+        {showMovingAverage && (
+          <ForecastBox
+            type={'averaged'}
+            name={'movingPeriods'}
+            value={movingPeriods}
+            onChange={(e) => onChange(e)}
+          />
+        )}
+      </div>
+      <div style={{ marginTop: 'auto', marginBottom: 'auto' }}>
         <CheckItem
           item='Weighted Average'
           name='weightedAverage'
-          onChange={props.weightedAverage}
+          onChange={(e) => onChange(e)}
+          checked={showWeightedAverage}
         />
-        {forecastList.current === undefined
-          ? ''
-          : forecastList.current.children[2].children[0].children[0].children[0].checked && (
-              <ForecastBox type={'weighted and averaged'} />
-            )}
+        {showWeightedAverage && (
+          <ForecastBox
+            type={'weighted and averaged'}
+            name={'weightedPeriods'}
+            value={weightedPeriods}
+            onChange={(e) => onChange(e)}
+          />
+        )}
       </div>
-      <div>
+      <div style={{ marginTop: 'auto', marginBottom: 'auto' }}>
         <CheckItem
           item='Linear Regression'
           name='linearRegression'
-          onChange={props.linearRegression}
+          onChange={(e) => onChange(e)}
+          checked={showLinearRegression}
         />
       </div>
     </div>
