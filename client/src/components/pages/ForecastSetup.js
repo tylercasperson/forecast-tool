@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { createBulkGroupedData } from '../data/actions/groupedDataActions.js';
 import { minMaxSalesDates } from '../data/actions/salesDataActions.js';
 import { dateFormat } from '../data/formulas/dateFormulas.js';
 
@@ -15,6 +16,7 @@ const ForecastSetup = () => {
   const salesDatesMinMax = useSelector((state) => state.salesDateMinMax);
   const { minDate, maxDate } = salesDatesMinMax.salesData;
 
+  const [data, setData] = useState([]);
   const [lastYear, setLastYear] = useState(false);
   const [movingAverage, setMovingAverage] = useState(false);
   const [weightedAverage, setWeightedAverage] = useState(false);
@@ -22,6 +24,10 @@ const ForecastSetup = () => {
 
   const onClick = () => {
     console.log('click');
+
+    setData([]);
+
+    dispatch(createBulkGroupedData(data));
   };
 
   useEffect(() => {

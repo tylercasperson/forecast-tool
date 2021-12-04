@@ -43,7 +43,25 @@ const updateGroupedData = asyncHandler(async (req, res) => {
 });
 
 const addGroupedData = asyncHandler(async (req, res) => {
-  const groupedData = await db.groupedData.create({});
+  const groupedData = await db.groupedData.create({
+    timePeriodId: req.body.timePeriodId,
+    dataTypeId: req.body.dataTypeId,
+    data: req.body.data,
+  });
+  res.json({ groupedData });
+});
+
+const addAlotOfGroupedData = asyncHandler(async (req, res) => {
+  const groupedData = await db.groupedData.bulkCreate(
+    req.body.map((i) => {
+      return {
+        timePeriodId: i.timePeriodId,
+        dataTypeId: i.dataTypeId,
+        data: i.data,
+      };
+    })
+  );
+
   res.json({ groupedData });
 });
 
@@ -70,6 +88,7 @@ module.exports = {
   getOneGroupedData,
   updateGroupedData,
   addGroupedData,
+  addAlotOfGroupedData,
   deleteGroupedData,
   deleteAllGroupedData,
 };

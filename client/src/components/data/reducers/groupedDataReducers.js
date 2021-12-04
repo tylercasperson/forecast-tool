@@ -16,6 +16,10 @@ import {
   GROUPED_DATA_CREATE_SUCCESS,
   GROUPED_DATA_CREATE_FAIL,
   GROUPED_DATA_CREATE_RESET,
+  GROUPED_DATA_BULK_CREATE_REQUEST,
+  GROUPED_DATA_BULK_CREATE_SUCCESS,
+  GROUPED_DATA_BULK_CREATE_FAIL,
+  GROUPED_DATA_BULK_CREATE_RESET,
 } from '../constants/groupedDataConstants.js';
 
 export const groupedDataListReducer = (state = { groupedData: [] }, action) => {
@@ -95,6 +99,25 @@ export const groupedDataCreateReducer = (state = { groupedData: [] }, action) =>
     case GROUPED_DATA_CREATE_FAIL:
       return { loading: false, error: action.payload };
     case GROUPED_DATA_CREATE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const groupedDataBulkCreateReducer = (state = { groupedData: [] }, action) => {
+  switch (action.type) {
+    case GROUPED_DATA_BULK_CREATE_REQUEST:
+      return { loading: true };
+    case GROUPED_DATA_BULK_CREATE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        groupedData: action.payload.groupedData,
+      };
+    case GROUPED_DATA_BULK_CREATE_FAIL:
+      return { loading: false, error: action.payload };
+    case GROUPED_DATA_BULK_CREATE_RESET:
       return {};
     default:
       return state;
