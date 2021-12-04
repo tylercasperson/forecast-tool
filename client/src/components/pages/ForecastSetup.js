@@ -17,6 +17,7 @@ const ForecastSetup = () => {
   const pullFromState = useSelector((state) => state);
   const { minDate, maxDate } = pullFromState.salesDateMinMax.salesData;
   const { startDate, endDate } = pullFromState.dates;
+  const { movingPeriods, weightedPeriods } = pullFromState.periods;
 
   const [data, setData] = useState([]);
 

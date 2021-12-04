@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 
 const ForecastBox = (props) => {
-  const [value, setValue] = useState(3);
   const [numberWidth, setNumberWidth] = useState('1vw');
 
   const onChange = (e) => {
-    setValue(e.target.value);
     if (e.target.value.length === 2) {
       setNumberWidth('1.8vw');
     } else {
@@ -29,8 +27,9 @@ const ForecastBox = (props) => {
             width: numberWidth,
           }}
           name='numberInput'
-          value={value}
-          onChange={(e) => onChange(e)}
+          value={props.value}
+          onChange={props.onChange}
+          onChangeCapture={(e) => onChange(e)}
         />
         <label style={{ fontSize: '1.5vw', marginLeft: '0.2vw' }} htmlFor='numberInput'>
           time periods will be {props.type} together.
@@ -39,11 +38,13 @@ const ForecastBox = (props) => {
       <input
         type='range'
         style={{ width: '80%', alignSelf: 'center', marginTop: '2vh' }}
-        value={value}
+        value={props.value}
+        name={props.name}
         step={1}
         min={2}
         max={10}
-        onChange={(e) => onChange(e)}
+        onChange={props.onChange}
+        onChangeCapture={(e) => onChange(e)}
       />
     </div>
   );

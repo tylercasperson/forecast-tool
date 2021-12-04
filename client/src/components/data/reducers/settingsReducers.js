@@ -6,6 +6,8 @@ import {
   SHOW_MOVING_AVERAGE_REQUEST,
   SHOW_WEIGHTED_AVERAGE_REQUEST,
   SHOW_LINEAR_REGRESSION_REQUEST,
+  MOVING_PERIOD_SAVE_REQUEST,
+  WEIGHTED_PERIOD_SAVE_REQUEST,
 } from '../constants/settingsConstants.js';
 
 export const settingsReducer = (state = { dates: [], showForecast: [] }, action) => {
@@ -44,6 +46,16 @@ export const settingsReducer = (state = { dates: [], showForecast: [] }, action)
       return {
         ...state,
         showLinearRegression: action.payload,
+      };
+    case MOVING_PERIOD_SAVE_REQUEST:
+      return {
+        ...state,
+        movingPeriods: action.payload,
+      };
+    case WEIGHTED_PERIOD_SAVE_REQUEST:
+      return {
+        ...state,
+        weightedPeriods: action.payload,
       };
     default:
       return state;

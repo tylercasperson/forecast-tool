@@ -6,6 +6,8 @@ import {
   SHOW_MOVING_AVERAGE_REQUEST,
   SHOW_WEIGHTED_AVERAGE_REQUEST,
   SHOW_LINEAR_REGRESSION_REQUEST,
+  MOVING_PERIOD_SAVE_REQUEST,
+  WEIGHTED_PERIOD_SAVE_REQUEST,
 } from '../constants/settingsConstants.js';
 
 export const saveStartDate = (date) => (dispatch) => {
@@ -109,4 +111,32 @@ export const saveShowLinearRegression = (show) => (dispatch, getState) => {
   });
 
   localStorage.setItem('showForecast', JSON.stringify(showForecast));
+};
+
+export const saveMovingPeriods = (periods) => (dispatch, getState) => {
+  const values = {
+    movingPeriods: periods,
+    weightedPeriods: getState().periods.weightedPeriods,
+  };
+
+  dispatch({
+    type: MOVING_PERIOD_SAVE_REQUEST,
+    payload: periods,
+  });
+
+  localStorage.setItem('periods', JSON.stringify(values));
+};
+
+export const saveWeightedPeriods = (periods) => (dispatch, getState) => {
+  const values = {
+    movingPeriods: getState().periods.movingPeriods,
+    weightedPeriods: periods,
+  };
+
+  dispatch({
+    type: WEIGHTED_PERIOD_SAVE_REQUEST,
+    payload: periods,
+  });
+
+  localStorage.setItem('periods', JSON.stringify(values));
 };
