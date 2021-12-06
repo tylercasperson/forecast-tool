@@ -137,7 +137,7 @@ const Forecast = () => {
 
   return (
     <div>
-      <LineGraph data={filteredData()} color={filteredColor()} />
+      {groupedData && <LineGraph data={filteredData()} colors={filteredColor()} />}
       <ShowHide
         onChange={(e) => onChange(e)}
         showSalesHistory={showSalesHistory}

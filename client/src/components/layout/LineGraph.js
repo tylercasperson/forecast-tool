@@ -14,6 +14,11 @@ const LineGraph = (props) => {
   const [width, setWidth] = useState(0.8 * documentWidth);
   const [height, setHeight] = useState(0.3 * documentHeight);
 
+  const [scrollXlabel, setScrollXlabel] = useState('w1');
+  const [hoverInfo, setHoverInfo] = useState(' ');
+  const [widthRatio, setWidthRatio] = useState(0);
+  const [textPosition, setTextPosition] = useState(0);
+
   useEffect(() => {
     if (lineChart.current.childNodes.length > 0) {
       d3.select(lineChart.current).select('svg').remove();
@@ -24,7 +29,7 @@ const LineGraph = (props) => {
       setHeight(0.3 * document.documentElement.clientHeight);
     });
 
-    const margin = { top: 0, right: 30, bottom: 50, left: 30 };
+    const margin = { top: 0, right: 45, bottom: 50, left: 30 };
     const graphWidth = width - margin.left - margin.right;
     const graphHeight = height - margin.top - margin.bottom;
 
@@ -56,10 +61,11 @@ const LineGraph = (props) => {
       .select(lineChart.current)
       .append('svg')
       .style('background-color', 'lightgrey')
+      .style('padding-left', '5vw')
       .attr('width', graphWidth + margin.left + margin.right)
       .attr('height', graphHeight + margin.top + margin.bottom);
 
-    let color = d3.scaleOrdinal().range(props.color);
+    let color = d3.scaleOrdinal().range(props.colors);
     let colorArr = [];
 
     svg
@@ -71,6 +77,7 @@ const LineGraph = (props) => {
       .attr('fill', 'none')
       .attr('stroke', (d) => color([d]))
       .attr('class', (d) => colorArr.push(color([d])))
+      .attr('name', (d) => d.key)
       .attr('stroke-width', 1.5);
 
     let widthPerTick = Math.round(width / 100) - 13;
@@ -93,23 +100,128 @@ const LineGraph = (props) => {
     const yAxis = d3
       .axisLeft(yScale)
       .tickFormat((interval, i) => {
-        return i % heightPerTick !== 0 ? ' ' : interval;
+        return i % heightPerTick !== 0 ? ' ' : d3.format(',')(interval);
       })
       .tickSize(8);
 
+    svg.append('g').attr('class', 'yAxis').attr('transform', `translate(45,0)`).call(yAxis);
+
     svg
-      .append('g')
-      .attr('class', 'yAxis')
-      .attr('transform', `translate(30,0)`)
-      .call(yAxis);
+      .append('rect')
+      .attr('class', 'invisibleRect')
+      .attr('width', d3.select('.xAxis').node().getBBox().width - 5)
+      .attr('height', d3.select('.yAxis').node().getBBox().height)
+      .attr('transform', 'translate(' + (margin.right - 0) + ',' + (margin.bottom - 7) + ')')
+      .attr('fill', 'none')
+      .attr('pointer-events', 'all')
+      .on('mousemove', (e) => {
+        let rect = e.target.getBoundingClientRect();
+        let x = e.clientX - rect.left;
+        let positionRatio = x / e.target.getBoundingClientRect().width;
+        setWidthRatio(positionRatio);
+        let indexToBeUsed =
+          Math.round(positionRatio * data[0].values.length) === data[0].values.length
+            ? Math.round(positionRatio * data[0].values.length - 1)
+            : Math.round(positionRatio * data[0].values.length);
+
+        setScrollXlabel(data[0].values[indexToBeUsed].timePeriod.groupName);
+
+        let sameGroupName = data.map((i) =>
+          i.values
+            .filter((j) => j.timePeriod.groupName === scrollXlabel)
+            .map((k) => k.dataType.name + ' ' + d3.format(',')(k.data) + ';'[0])
+        );
+
+        setHoverInfo(scrollXlabel + ';' + sameGroupName);
+      });
+
+    svg
+      .append('line')
+      .attr('class', 'hoverLine')
+      .attr('x1', xScale(scrollXlabel))
+      .attr('x2', xScale(scrollXlabel))
+      .attr('y1', margin.top + margin.bottom)
+      .attr('y2', d3.select('.yAxis').node().getBBox().height + margin.top + margin.bottom);
+
+    svg
+      .append('rect')
+      .attr('class', 'hoverInfo')
+      .attr('width', '100')
+      .attr('height', graphHeight - d3.select('.hoverLine').node().getBBox().height + 5)
+      .attr('x', data.length === 0 ? 0 : xScale(scrollXlabel) - 50)
+      .attr('y', 0);
+
+    const forecastWrap = (words) => {
+      let wordsArr = words.split(';');
+      wordsArr.pop();
+
+      let y = 5;
+      let j = 0;
+      let positionX = 1 - widthRatio * 220;
+
+      for (let i = 1; i < wordsArr.length; i++) {
+        let x = i > 3 ? 180 : 0;
+        j++;
+        let periodInfo = hoverInfo.split(';')[i];
+
+        let text =
+          hoverInfo.split(';')[i].charAt(0) === ','
+            ? hoverInfo.split(';')[i].slice(1, periodInfo.length)
+            : hoverInfo.split(';')[i];
+
+        setTextPosition(xScale(scrollXlabel) + x + positionX);
+
+        svg
+          .append('rect')
+          .attr('width', '1vw')
+          .attr('height', '1vh')
+          .attr('fill', props.colors[i - 1])
+          .attr(
+            'x',
+            data.length === 0
+              ? 0
+              : xScale(scrollXlabel) + x + positionX - text.length * 0.0037 * documentWidth
+          )
+          .attr('y', 0 + margin.bottom - y - 8);
+
+        svg
+          .append('text')
+          .attr('text-anchor', 'middle')
+          .attr('font-size', '1.3vh')
+          .attr('x', data.length === 0 ? 0 : xScale(scrollXlabel) + x + positionX)
+          .attr('y', 0 + margin.bottom - y)
+          .text(text);
+
+        if (j > 2) {
+          y = -10;
+          j = 0;
+        }
+        y += 15;
+      }
+    };
+
+    forecastWrap(hoverInfo);
+
+    svg
+      .append('text')
+      .attr('font-size', '2vh')
+      .attr('font-weight', 'bold')
+      .attr('x', data.length === 0 ? 0 : textPosition - 120)
+      .attr('y', 0 + margin.bottom - 20)
+      .attr('border', '1pt solid black')
+      .text(scrollXlabel);
   }, [
     props.data,
     height,
     width,
     documentWidth,
     documentHeight,
-    props.color,
+    props.colors,
     success,
+    scrollXlabel,
+    hoverInfo,
+    widthRatio,
+    textPosition,
   ]);
 
   return <div ref={lineChart}></div>;

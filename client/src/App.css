@@ -527,3 +527,12 @@ input[type='number'] {
   transition: transform 0.5s;
   transition-delay: 0.5s;
 }
+
+.hoverLine {
+  stroke: black;
+  stroke-width: 2;
+}
+
+.hoverInfo {
+  fill: none;
+}
