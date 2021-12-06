@@ -54,36 +54,31 @@ const MonthSetup = (props) => {
     let yearSelected =
       props.dateSelected.split('/')[2] === '' ? 2020 : parseInt(props.dateSelected.split('/')[2]);
     let lastMonth = monthSelected === 1 ? 11 : monthSelected - 1 - 1;
-    let lastMonthDays = daysPerMonth[monthList[lastMonth]];
     let startOfMonth = calculateDayOfWeek(monthSelected + '/' + 1 + '/' + yearSelected);
     let seperatedYear = yearSelected.toString().split('');
     let century = seperatedYear[0] + seperatedYear[1];
     let yearDigit = seperatedYear[2] + seperatedYear[3];
     let leapYearCheck = yearDigit % 4 === 0;
     let centenialCheck = yearDigit === '00' && century % 400 === 0;
-
-    if (leapYearCheck || centenialCheck) {
-      if (monthSelected === 3) {
-        lastMonthDays.push('29');
-      }
-    }
+    let lastMonthDays =
+      lastMonth === 1 && (leapYearCheck || centenialCheck)
+        ? daysPerMonth['FebruaryLeapYear']
+        : daysPerMonth[monthList[lastMonth]];
 
     for (let i = startOfMonth - 1; i > -1; i--) {
       daysArr.push(lastMonthDays[lastMonthDays.length - 1 - i]);
     }
 
-    let currentMonth = monthList[monthSelected - 1];
+    let currentMonth =
+      (leapYearCheck || centenialCheck) && monthSelected === 2
+        ? 'FebruaryLeapYear'
+        : monthList[monthSelected - 1];
+
     let currentMonthDays = daysPerMonth[currentMonth];
 
     currentMonthDays.forEach((i) => {
       return daysArr.push(i);
     });
-
-    if (leapYearCheck || centenialCheck) {
-      if (monthSelected === 2) {
-        daysArr.push(29);
-      }
-    }
 
     let daysInNextMonth = 42 - daysArr.length;
 
