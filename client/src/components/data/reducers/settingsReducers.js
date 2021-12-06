@@ -8,6 +8,7 @@ import {
   SHOW_LINEAR_REGRESSION_REQUEST,
   MOVING_PERIOD_SAVE_REQUEST,
   WEIGHTED_PERIOD_SAVE_REQUEST,
+  COLOR_SAVE_REQUEST,
 } from '../constants/settingsConstants.js';
 
 export const settingsReducer = (state = { dates: [], showForecast: [] }, action) => {
@@ -56,6 +57,11 @@ export const settingsReducer = (state = { dates: [], showForecast: [] }, action)
       return {
         ...state,
         weightedPeriods: action.payload,
+      };
+    case COLOR_SAVE_REQUEST:
+      return {
+        ...state,
+        colors: action.payload,
       };
     default:
       return state;

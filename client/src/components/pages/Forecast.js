@@ -16,6 +16,7 @@ import {
 import LineGraph from '../layout/LineGraph';
 import TableData from '../layout/TableData';
 import ShowHide from '../layout/ShowHide';
+import ChangeColors from '../layout/ChangeColors';
 
 const Forecast = () => {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ const Forecast = () => {
     showWeightedAverage,
     showLinearRegression,
   } = getFromState.showForecast;
+  const { colors } = getFromState.colors;
 
   const [startDay, setStartDay] = useState(1);
   const [startMonth, setStartMonth] = useState(1);
@@ -37,18 +39,7 @@ const Forecast = () => {
   const [endDay, setEndDay] = useState(31);
   const [endMonth, setEndMonth] = useState(12);
   const [endYear, setEndYear] = useState(2022);
-
-  const [color, setColor] = useState([
-    '#e41a1c',
-    '#377eb8',
-    '#4daf4a',
-    '#984ea3',
-    '#ff7f00',
-    '#ffff33',
-    '#a65628',
-    '#f781bf',
-    '#999999',
-  ]);
+  const [colorsDisplay, setColorsDisplay] = useState('none');
 
   const onChange = (e) => {
     let month = e.target.value.split('/')[0];
@@ -119,13 +110,13 @@ const Forecast = () => {
   };
 
   const filteredColor = () => {
-    let removeSalesHistory = showSalesHistory ? 0 : color[1];
-    let removeLastYear = showLastYear ? 0 : color[2];
-    let removeMovingAverage = showMovingAverage ? 0 : color[3];
-    let removeWeightedAverage = showWeightedAverage ? 0 : color[4];
-    let removeLinearRegression = showLinearRegression ? 0 : color[5];
+    let removeSalesHistory = showSalesHistory ? 0 : colors[0];
+    let removeLastYear = showLastYear ? 0 : colors[1];
+    let removeMovingAverage = showMovingAverage ? 0 : colors[2];
+    let removeWeightedAverage = showWeightedAverage ? 0 : colors[3];
+    let removeLinearRegression = showLinearRegression ? 0 : colors[4];
 
-    return color.filter(
+    return colors.filter(
       (i) =>
         i !== removeSalesHistory &&
         i !== removeLastYear &&
@@ -154,7 +145,14 @@ const Forecast = () => {
         showMovingAverage={showMovingAverage}
         showWeightedAverage={showWeightedAverage}
         showLinearRegression={showLinearRegression}
+        changeColors={() =>
+          colorsDisplay === 'none' ? setColorsDisplay('flex') : setColorsDisplay('none')
+        }
+        showChangeColors={colorsDisplay === 'none' ? 'checked' : ''}
       />
+      <div style={{ display: colorsDisplay }}>
+        <ChangeColors />
+      </div>
       <TableData
         startDay={startDay}
         startMonth={startMonth}
@@ -165,7 +163,7 @@ const Forecast = () => {
         startDate={startMonth + '/' + startDay + '/' + startYear}
         endDate={endMonth + '/' + endDay + '/' + endYear}
         data={groupedData}
-        color={color}
+        color={colors}
         onChange={(e) => onChange(e)}
         showSalesHistory={showSalesHistory ? '' : 'none'}
         showLastYear={showLastYear ? '' : 'none'}

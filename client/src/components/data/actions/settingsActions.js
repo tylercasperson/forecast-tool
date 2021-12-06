@@ -8,6 +8,7 @@ import {
   SHOW_LINEAR_REGRESSION_REQUEST,
   MOVING_PERIOD_SAVE_REQUEST,
   WEIGHTED_PERIOD_SAVE_REQUEST,
+  COLOR_SAVE_REQUEST,
 } from '../constants/settingsConstants.js';
 
 export const saveStartDate = (date) => (dispatch) => {
@@ -139,4 +140,13 @@ export const saveWeightedPeriods = (periods) => (dispatch, getState) => {
   });
 
   localStorage.setItem('periods', JSON.stringify(values));
+};
+
+export const saveColor = (color) => (dispatch) => {
+  dispatch({
+    type: COLOR_SAVE_REQUEST,
+    payload: color,
+  });
+
+  localStorage.setItem('colors', JSON.stringify(color));
 };
