@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { format } from 'date-fns';
 import { nest } from 'd3-collection';
 import {
   listGroupedData,
@@ -14,17 +15,18 @@ import TableRow from './TableRow';
 const TableData = (props) => {
   const dispatch = useDispatch();
 
-  const groupedDataList = useSelector((state) => state.groupedData);
-  const { groupedData } = groupedDataList;
-
   const groupedDataUpdate = useSelector((state) => state.groupedDataUpdate);
   const { success } = groupedDataUpdate;
 
-  const groupedDataDelete = useSelector((state) => state.groupedDataDelete);
+  const [lock, setLock] = useState();
 
-  let data = nest()
-    .key((d) => d.timePeriod.groupName)
-    .entries(props.data);
+  const tableData = useRef();
+
+  let data =
+    props.data &&
+    nest()
+      .key((d) => d.timePeriod.groupName)
+      .entries(props.data);
 
   const dateFormat = (date) => {
     let dateParts = date.split('T')[0].split('-');
@@ -39,14 +41,12 @@ const TableData = (props) => {
     userInput: 1,
     salesHistory: 2,
     lastYear: 3,
-    m3ma: 4,
-    m3wa: 5,
+    ma: 4,
+    wa: 5,
     linearRegression: 6,
   };
 
   const onChange = (e, arr) => {
-    console.log(arr);
-
     dispatch(
       updateGroupedData(
         arr[dataTypes[e.target.name] - 1].id,
@@ -59,22 +59,25 @@ const TableData = (props) => {
     arr[dataTypes[e.target.name] - 1].data = e.target.value;
   };
 
-  const onDelete = (arr) => {
+  const onDelete = (arr, tableRow) => {
     arr.forEach((i) => {
-      dispatch(deleteGroupedData(i.id));
+      dispatch(deleteGroupedData(i.timePeriodId));
     });
 
-    let startDay = props.startYear + '-' + props.startMonth + '-' + props.startDay;
-    let endDay = props.endYear + '-' + props.endMonth + '-' + props.endDay;
-
-    dispatch(listGroupedData(startDay, endDay));
+    dispatch(
+      listGroupedData(
+        format(new Date(props.startDate), 'yyyy-M-d'),
+        format(new Date(props.endDate), 'yyyy-M-d')
+      )
+    );
   };
 
   useEffect(() => {
     if (success) {
       dispatch({ type: GROUPED_DATA_UPDATE_RESET });
+      setLock(false);
     }
-  }, [dispatch, success]);
+  }, [dispatch, success, lock]);
 
   return (
     <div
@@ -87,7 +90,7 @@ const TableData = (props) => {
       }}
     >
       <TableHeader
-        color={props.color}
+        colors={props.colors}
         onChange={props.onChange}
         startDate={props.startDate}
         endDate={props.endDate}
@@ -96,37 +99,40 @@ const TableData = (props) => {
         showMovingAverage={props.showMovingAverage}
         showWeightedAverage={props.showWeightedAverage}
         showLinearRegression={props.showLinearRegression}
+        movingPeriod={props.movingPeriod}
+        weightedPeriod={props.weightedPeriod}
       />
-      <div style={{ height: '40vh', overflowY: 'auto' }}>
-        {data.map((i, index) => {
-          let findData = (something) => {
-            let exists = i.values.find((o) => o.dataType.abbreviation === something);
-            return exists === undefined ? 0 : exists.data;
-          };
-          let background = index % 2 !== 0 ? 'lightgrey' : 'none';
-          return (
-            <TableRow
-              key={index}
-              background={background}
-              timePeriod={i.key}
-              startDate={dateFormat(i.values[0].timePeriod.startDate)}
-              endDate={dateFormat(i.values[0].timePeriod.endDate)}
-              salesHistory={findData('sh')}
-              userInput={findData('ui')}
-              lastYear={findData('ly')}
-              m3wa={findData('w3ma')}
-              m3ma={findData('m3ma')}
-              linearRegression={findData('lr')}
-              onChange={(e) => onChange(e, i.values)}
-              delete={(e) => onDelete(i.values)}
-              showSalesHistory={props.showSalesHistory}
-              showLastYear={props.showLastYear}
-              showMovingAverage={props.showMovingAverage}
-              showWeightedAverage={props.showWeightedAverage}
-              showLinearRegression={props.showLinearRegression}
-            />
-          );
-        })}
+      <div style={{ height: '40vh', overflowY: 'auto' }} ref={tableData}>
+        {data &&
+          data.map((i, index) => {
+            let findData = (something) => {
+              let exists = i.values.find((o) => o.dataType.abbreviation === something);
+              return exists === undefined ? 0 : exists.data;
+            };
+            let background = index % 2 !== 0 ? 'lightgrey' : 'none';
+            return (
+              <TableRow
+                key={index}
+                background={background}
+                timePeriod={i.key}
+                startDate={dateFormat(i.values[0].timePeriod.startDate)}
+                endDate={dateFormat(i.values[0].timePeriod.endDate)}
+                salesHistory={findData('sh')}
+                userInput={findData('ui')}
+                lastYear={findData('ly')}
+                weightedAverage={findData('wa')}
+                movingAverage={findData('ma')}
+                linearRegression={findData('lr')}
+                onChange={(e) => onChange(e, i.values)}
+                delete={(e) => onDelete(i.values, index)}
+                showSalesHistory={props.showSalesHistory}
+                showLastYear={props.showLastYear}
+                showMovingAverage={props.showMovingAverage}
+                showWeightedAverage={props.showWeightedAverage}
+                showLinearRegression={props.showLinearRegression}
+              />
+            );
+          })}
       </div>
     </div>
   );

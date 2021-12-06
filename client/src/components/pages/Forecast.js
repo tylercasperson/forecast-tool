@@ -24,6 +24,9 @@ const Forecast = () => {
   const getFromState = useSelector((state) => state);
   const { groupedData } = getFromState.groupedData;
   const { startDate, endDate } = getFromState.dates;
+  const { movingPeriods, weightedPeriods } = getFromState.periods;
+
+  const { colors } = getFromState.colors;
   const {
     showSalesHistory,
     showLastYear,
@@ -31,14 +34,9 @@ const Forecast = () => {
     showWeightedAverage,
     showLinearRegression,
   } = getFromState.showForecast;
-  const { colors } = getFromState.colors;
 
-  const [startDay, setStartDay] = useState(1);
-  const [startMonth, setStartMonth] = useState(1);
-  const [startYear, setStartYear] = useState(2022);
-  const [endDay, setEndDay] = useState(31);
-  const [endMonth, setEndMonth] = useState(12);
-  const [endYear, setEndYear] = useState(2022);
+  const [tempStartDate, setTempStartDate] = useState(startDate);
+  const [tempEndDate, setTempEndDate] = useState(endDate);
   const [colorsDisplay, setColorsDisplay] = useState('none');
 
   const onChange = (e) => {
@@ -48,9 +46,7 @@ const Forecast = () => {
 
     switch (e.target.name) {
       case 'startDate':
-        setStartMonth(month);
-        setStartDay(day);
-        setStartYear(year);
+        setTempStartDate(e.target.value);
         if (month > 0 && month < 13) {
           if (day > 0 && day < 32) {
             if (year > 0 && year < 9999) {
@@ -60,9 +56,7 @@ const Forecast = () => {
         }
         break;
       case 'endDate':
-        setEndMonth(month);
-        setEndDay(day);
-        setEndYear(year);
+        setTempEndDate(e.target.value);
         if (month > 0 && month < 13) {
           if (day > 0 && day < 32) {
             if (year > 0 && year < 9999) {
@@ -153,24 +147,26 @@ const Forecast = () => {
       <div style={{ display: colorsDisplay }}>
         <ChangeColors />
       </div>
-      <TableData
-        startDay={startDay}
-        startMonth={startMonth}
-        startYear={startYear}
-        endDay={endDay}
-        endMonth={endMonth}
-        endYear={endYear}
-        startDate={startMonth + '/' + startDay + '/' + startYear}
-        endDate={endMonth + '/' + endDay + '/' + endYear}
-        data={groupedData}
-        color={colors}
-        onChange={(e) => onChange(e)}
-        showSalesHistory={showSalesHistory ? '' : 'none'}
-        showLastYear={showLastYear ? '' : 'none'}
-        showMovingAverage={showMovingAverage ? '' : 'none'}
-        showWeightedAverage={showWeightedAverage ? '' : 'none'}
-        showLinearRegression={showLinearRegression ? '' : 'none'}
-      />
+      {groupedData.length > 0 && (
+        <TableData
+          startDate={tempStartDate}
+          endDate={tempEndDate}
+          data={groupedData}
+          colors={colors}
+          onChange={(e) => onChange(e)}
+          showSalesHistory={showSalesHistory ? '' : 'none'}
+          showLastYear={showLastYear ? '' : 'none'}
+          showMovingAverage={showMovingAverage ? '' : 'none'}
+          showWeightedAverage={showWeightedAverage ? '' : 'none'}
+          showLinearRegression={showLinearRegression ? '' : 'none'}
+          movingPeriod={
+            movingPeriods + ' ' + groupedData[0].timePeriod.timePeriodType.type.toLowerCase()
+          }
+          weightedPeriod={
+            weightedPeriods + ' ' + groupedData[0].timePeriod.timePeriodType.type.toLowerCase()
+          }
+        />
+      )}
     </div>
   );
 };

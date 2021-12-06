@@ -7,6 +7,7 @@ const TableHeader = (props) => {
         display: 'flex',
         background: 'lightGrey',
         paddingBottom: '10px',
+        textAlign: 'center',
       }}
     >
       <div
@@ -68,7 +69,7 @@ const TableHeader = (props) => {
             width: '1vw',
             marginRight: 'auto',
             marginLeft: 'auto',
-            backgroundColor: props.color[0],
+            backgroundColor: props.colors[0],
           }}
         ></div>
         User Input
@@ -87,7 +88,7 @@ const TableHeader = (props) => {
             width: '1vw',
             marginRight: 'auto',
             marginLeft: 'auto',
-            backgroundColor: props.color[1],
+            backgroundColor: props.colors[1],
           }}
         ></div>
         Sales History
@@ -107,7 +108,7 @@ const TableHeader = (props) => {
             width: '1vw',
             marginRight: 'auto',
             marginLeft: 'auto',
-            backgroundColor: props.color[2],
+            backgroundColor: props.colors[2],
           }}
         ></div>
         Last Year
@@ -126,10 +127,10 @@ const TableHeader = (props) => {
             width: '1vw',
             marginRight: 'auto',
             marginLeft: 'auto',
-            backgroundColor: props.color[3],
+            backgroundColor: props.colors[3],
           }}
         ></div>
-        3 month moving average
+        {props.movingPeriod} moving average
       </div>
       <div
         style={{
@@ -145,10 +146,10 @@ const TableHeader = (props) => {
             width: '1vw',
             marginRight: 'auto',
             marginLeft: 'auto',
-            backgroundColor: props.color[4],
+            backgroundColor: props.colors[4],
           }}
         ></div>
-        3 month weight average
+        {props.weightedPeriod} weight average
       </div>
 
       <div
@@ -165,7 +166,7 @@ const TableHeader = (props) => {
             width: '1vw',
             marginRight: 'auto',
             marginLeft: 'auto',
-            backgroundColor: props.color[5],
+            backgroundColor: props.colors[5],
           }}
         ></div>
         Linear Regression

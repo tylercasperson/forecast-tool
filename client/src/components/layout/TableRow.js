@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { format, add } from 'date-fns';
 
 const TableRow = (props) => {
   const [timePeriod, setTimePeriod] = useState(props.timePeriod);
@@ -8,11 +7,9 @@ const TableRow = (props) => {
   const [salesHistory, setSalesHistory] = useState(props.salesHistory);
   const [userInput, setUserInput] = useState(props.userInput);
   const [lastYear, setLastYear] = useState(props.lastYear);
-  const [m3wa, setM3wa] = useState(props.m3wa);
-  const [m3ma, setm3ma] = useState(props.m3ma);
-  const [linearRegression, setLinearRegression] = useState(
-    props.linearRegression
-  );
+  const [movingAverage, setMovingAverage] = useState(props.movingAverage);
+  const [weightedAverage, setWeightedAverage] = useState(props.weightedAverage);
+  const [linearRegression, setLinearRegression] = useState(props.linearRegression);
 
   const onChange = (e) => {
     switch (e.target.name) {
@@ -28,10 +25,10 @@ const TableRow = (props) => {
         return setSalesHistory(e.target.value);
       case 'lastYear':
         return setLastYear(e.target.value);
-      case 'm3wa':
-        return setM3wa(e.target.value);
-      case 'm3ma':
-        return setm3ma(e.target.value);
+      case 'wightedAverage':
+        return setWeightedAverage(e.target.value);
+      case 'movingAverage':
+        return setMovingAverage(e.target.value);
       case 'linearRegression':
         return setLinearRegression(e.target.value);
       default:
@@ -105,10 +102,10 @@ const TableRow = (props) => {
           display: props.showMovingAverage,
         }}
         type='number'
-        name={'m3ma'}
+        name={'movingAverage'}
         onChange={(e) => onChange(e)}
         onChangeCapture={props.onChange}
-        value={m3ma}
+        value={movingAverage}
       />
       <input
         style={{
@@ -117,10 +114,10 @@ const TableRow = (props) => {
           display: props.showWeightedAverage,
         }}
         type='number'
-        name={'m3wa'}
+        name={'weightedAverage'}
         onChange={(e) => onChange(e)}
         onChangeCapture={props.onChange}
-        value={m3wa}
+        value={weightedAverage}
       />
       <input
         style={{
