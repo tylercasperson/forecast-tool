@@ -130,7 +130,7 @@ const Forecast = () => {
   }, [dispatch, startDate, endDate]);
 
   return (
-    <div>
+    <div style={{ height: '92vh' }}>
       {groupedData && <LineGraph data={filteredData()} colors={filteredColor()} />}
       <ShowHide
         onChange={(e) => onChange(e)}

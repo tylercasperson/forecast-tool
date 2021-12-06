@@ -2,7 +2,7 @@ import React from 'react';
 
 const Navbar = () => {
   return (
-    <div style={{ marginBottom: '20px' }}>
+    <div style={{ height: '8vh', marginBottom: '20px' }}>
       <ul
         style={{
           position: 'absolute',
