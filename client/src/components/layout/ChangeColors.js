@@ -5,7 +5,7 @@ import { saveColor } from '../data/actions/settingsActions.js';
 
 import ColorPicker from '../layout/ColorPicker';
 
-const ChangeColors = () => {
+const ChangeColors = (props) => {
   const dispatch = useDispatch();
 
   const getFromState = useSelector((state) => state);
@@ -24,8 +24,13 @@ const ChangeColors = () => {
         .join('')}`;
 
     for (let i = 0; i < colorsUsed.current.children.length; i++) {
+      let forecastType =
+        colorsUsed.current.children[i].children[0].children[0].innerText.split(' ');
+      let rootVariable = '--' + forecastType[0].toLowerCase() + forecastType[1];
+
       let rgb = colorsUsed.current.children[i].children[0].style['background-color'];
       color.push(rgb2hex(rgb));
+      document.documentElement.style.setProperty(rootVariable, rgb2hex(rgb));
     }
 
     dispatch(saveColor(color));
@@ -33,7 +38,12 @@ const ChangeColors = () => {
 
   return (
     <div
-      style={{ display: 'flex', flexWrap: 'wrap', width: '80vw', justifyContent: 'center' }}
+      style={{
+        display: props.colorsDisplay,
+        flexWrap: 'wrap',
+        width: '80vw',
+        justifyContent: 'center',
+      }}
       ref={colorsUsed}
     >
       <ColorPicker text={'User Input'} color={colors[0]} onChange={() => onChange()} />

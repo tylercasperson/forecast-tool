@@ -23,7 +23,7 @@ const ColorPicker = (props) => {
   const letterColor = () => {
     const hexToRgb = (hex) => {
       let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-      hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+      hex = hex.replace(shorthandRegex, (r, g, b) => {
         return r + r + g + g + b + b;
       });
 
@@ -40,7 +40,7 @@ const ColorPicker = (props) => {
     let colorRatio =
       hexToRgb(color).red * 0.299 + hexToRgb(color).green * 0.587 + hexToRgb(color).blue * 0.114;
 
-    return colorRatio > 130 ? '#000' : '#fff';
+    return colorRatio > 160 ? '#000' : '#fff';
   };
 
   return (

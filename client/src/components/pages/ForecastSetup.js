@@ -25,6 +25,7 @@ import TimePeriodTypesList from '../layout/TimePeriodTypesList';
 import DateSlider from '../layout/calendar/DateSlider';
 import ForecastList from '../layout/ForecastList';
 import ButtonHover from '../layout/ButtonHover';
+import ChangeColors from '../layout/ChangeColors.js';
 
 const ForecastSetup = () => {
   const dispatch = useDispatch();
@@ -331,6 +332,8 @@ const ForecastSetup = () => {
 
   return (
     <div ref={forecastForm} action={'./'}>
+      <ChangeColors colorsDisplay={'flex'} />
+
       <ForecastList />
       {minDate && maxDate && <DateSlider />}
       <TimePeriodTypesList />

@@ -26,6 +26,7 @@ const ForecastList = () => {
     showLinearRegression,
   } = getFromState.showForecast;
   const { movingPeriods, weightedPeriods } = getFromState.periods;
+  const { colors } = getFromState.colors;
 
   const onChange = (e) => {
     switch (e.target.name) {
@@ -55,6 +56,31 @@ const ForecastList = () => {
     }
   };
 
+  const letterColor = (color) => {
+    const hexToRgb = (hex) => {
+      let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+      hex = hex.replace(shorthandRegex, (r, g, b) => {
+        return r + r + g + g + b + b;
+      });
+
+      let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result
+        ? {
+            red: parseInt(result[1], 16),
+            green: parseInt(result[2], 16),
+            blue: parseInt(result[3], 16),
+          }
+        : null;
+    };
+
+    let colorRatio =
+      hexToRgb(color).red * 0.299 + hexToRgb(color).green * 0.587 + hexToRgb(color).blue * 0.114;
+
+    return colorRatio > 160 ? '#000' : '#fff';
+  };
+
+  console.log(colors);
+
   return (
     <div
       className='container'
@@ -71,6 +97,7 @@ const ForecastList = () => {
           item='Sales History'
           name='salesHistory'
           onChange={(e) => onChange(e)}
+          textColor={showSalesHistory && letterColor(colors[1])}
           checked={showSalesHistory}
         />
       </div>
@@ -79,6 +106,7 @@ const ForecastList = () => {
           item='Last Year'
           name='lastYear'
           onChange={(e) => onChange(e)}
+          textColor={showLastYear && letterColor(colors[2])}
           checked={showLastYear}
         />
       </div>
@@ -87,6 +115,7 @@ const ForecastList = () => {
           item='Moving Average'
           name='movingAverage'
           onChange={(e) => onChange(e)}
+          textColor={showMovingAverage && letterColor(colors[3])}
           checked={showMovingAverage}
         />
         {showMovingAverage && (
@@ -103,6 +132,7 @@ const ForecastList = () => {
           item='Weighted Average'
           name='weightedAverage'
           onChange={(e) => onChange(e)}
+          textColor={showWeightedAverage && letterColor(colors[4])}
           checked={showWeightedAverage}
         />
         {showWeightedAverage && (
@@ -119,6 +149,7 @@ const ForecastList = () => {
           item='Linear Regression'
           name='linearRegression'
           onChange={(e) => onChange(e)}
+          textColor={showLinearRegression && letterColor(colors[5])}
           checked={showLinearRegression}
         />
       </div>

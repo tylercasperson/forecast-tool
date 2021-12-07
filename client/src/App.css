@@ -1,3 +1,12 @@
+:root {
+  --userInput: #144fc6;
+  --salesHistory: #e41a1c;
+  --lastYear: #ffff33;
+  --movingAverage: #984ea3;
+  --weightedAverage: #ff7f00;
+  --linearRegression: #4daf4a;
+}
+
 .App {
   text-align: center;
 }
@@ -326,29 +335,29 @@ input[type='number'] {
   background: rgba(255, 255, 255, 0.1);
 }
 .container div:nth-child(6n + 1) label input[type='checkbox']:checked ~ span {
-  background: #38b6ff;
+  background: var(--salesHistory);
   color: #fff;
-  box-shadow: 0 2px 20px #38b6ff;
+  box-shadow: 0 2px 20px var(--salesHistory);
 }
 .container div:nth-child(6n + 2) label input[type='checkbox']:checked ~ span {
-  background: #fe5800;
+  background: var(--lastYear);
   color: #fff;
-  box-shadow: 0 2px 20px #fe5800;
+  box-shadow: 0 2px 20px var(--lastYear);
 }
 .container div:nth-child(6n + 3) label input[type='checkbox']:checked ~ span {
-  background: #389f2e;
+  background: var(--movingAverage);
   color: #fff;
-  box-shadow: 0 2px 20px #389f2e;
+  box-shadow: 0 2px 20px var(--movingAverage);
 }
 .container div:nth-child(6n + 4) label input[type='checkbox']:checked ~ span {
-  background: #ebc213;
+  background: var(--weightedAverage);
   color: #fff;
-  box-shadow: 0 2px 20px #ebc213;
+  box-shadow: 0 2px 20px var(--weightedAverage);
 }
 .container div:nth-child(6n + 5) label input[type='checkbox']:checked ~ span {
-  background: #8a1ca5;
+  background: var(--linearRegression);
   color: #fff;
-  box-shadow: 0 2px 20px #8a1ca5;
+  box-shadow: 0 2px 20px var(--linearRegression);
 }
 
 .container div label span:hover {

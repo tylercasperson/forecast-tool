@@ -144,9 +144,9 @@ const Forecast = () => {
         }
         showChangeColors={colorsDisplay === 'none' ? 'checked' : ''}
       />
-      <div style={{ display: colorsDisplay }}>
-        <ChangeColors />
-      </div>
+
+      <ChangeColors colorsDisplay={colorsDisplay} />
+
       {groupedData.length > 0 && (
         <TableData
           startDate={tempStartDate}

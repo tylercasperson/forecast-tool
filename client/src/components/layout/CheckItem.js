@@ -11,7 +11,7 @@ const CheckItem = (props) => {
           onChange={props.onChange}
           checked={props.checked ? 'checked' : ''}
         />
-        <span>{props.item}</span>
+        <span style={{ color: props.textColor }}>{props.item}</span>
       </label>
     </div>
   );
