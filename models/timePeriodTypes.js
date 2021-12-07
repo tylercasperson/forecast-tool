@@ -9,9 +9,6 @@ module.exports = function (sequelize, DataTypes) {
     type: {
       type: DataTypes.STRING,
     },
-    dayEquivalent: {
-      type: DataTypes.FLOAT,
-    },
   });
 
   timePeriodTypes.associate = (models) => {

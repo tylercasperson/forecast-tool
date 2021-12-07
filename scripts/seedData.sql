@@ -9,7 +9,7 @@ VALUES (1,'User Input','User input based on data provided','ui','No forecast is 
 (5,'weighted 3 month moving average', 'Provides more weight to recent trends while still using an average of recent months.','wa', 'To show recent trends with an emphasis on recent months',@createdAt,@updatedAt),
 (6, 'Linear Regression', 'Shows the relationship between two or more data points.', 'lr', 'To show a correlation between data points to show increase/decrease in future trends.',@createdAt,@updatedAt);
 
-INSERT INTO timePeriodTypes (id, type, dayEquivalent, createdAt, updatedAt)
+INSERT INTO timePeriodTypes (id, type, createdAt, updatedAt)
 VALUES (1,'Quarter',@createdAt,@updatedAt),
 (2,'Month',@createdAt,@updatedAt),
 (3,'Week',@createdAt,@updatedAt);
