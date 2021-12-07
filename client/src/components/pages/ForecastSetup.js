@@ -25,7 +25,8 @@ import TimePeriodTypesList from '../layout/TimePeriodTypesList';
 import DateSlider from '../layout/calendar/DateSlider';
 import ForecastList from '../layout/ForecastList';
 import ButtonHover from '../layout/ButtonHover';
-import ChangeColors from '../layout/ChangeColors.js';
+import ChangeColors from '../layout/ChangeColors';
+import HeaderLabel from '../layout/HeaderLabel';
 
 const ForecastSetup = () => {
   const dispatch = useDispatch();
@@ -332,10 +333,13 @@ const ForecastSetup = () => {
 
   return (
     <div ref={forecastForm} action={'./'}>
+      <HeaderLabel header={'Change Forecast Colors'} />
       <ChangeColors colorsDisplay={'flex'} />
-
+      <HeaderLabel header={'Show/Hide Forecast'} />
       <ForecastList />
+      <HeaderLabel header={'Date Range of Forecast'} />
       {minDate && maxDate && <DateSlider />}
+      <HeaderLabel header={'Group Forecast Data By'} />
       <TimePeriodTypesList />
       <ButtonHover onClick={(e) => onClick(e)} name={'Calculate'} />
     </div>

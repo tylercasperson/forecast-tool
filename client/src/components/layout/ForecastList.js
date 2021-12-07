@@ -79,8 +79,6 @@ const ForecastList = () => {
     return colorRatio > 160 ? '#000' : '#fff';
   };
 
-  console.log(colors);
-
   return (
     <div
       className='container'
