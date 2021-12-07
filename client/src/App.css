@@ -188,7 +188,7 @@ input[type='number'] {
   padding: 10px;
   box-sizing: border-box;
   background: rgba(56, 182, 255, 0.1);
-  font-size: 2vw;
+  font-size: 1.6vw;
   box-shadow: inset 0 0 15px rgba(56, 182, 255, 0.2);
   border-radius: 5px;
   overflow: hidden;
@@ -320,7 +320,7 @@ input[type='number'] {
   color: #555;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
   border-radius: 30px;
-  font-size: 2vh;
+  font-size: 1.6vh;
   transition: 0.5s;
   user-select: none;
   overflow: hidden;
@@ -382,13 +382,13 @@ input[type='number'] {
   cursor: pointer;
   animation: animate 0.2s;
   box-shadow: 1px 1px 1px #000000;
-  background: #3071a9;
+  background: #696969;
   border-radius: 5px;
-  border: 1px solid #000000;
+  border: 1px solid #696969;
 }
 .forecastBox input[type='range']::-webkit-slider-thumb {
-  box-shadow: 1px 1px 1px #000000;
-  border: 1px solid #000000;
+  box-shadow: 1px 1px 1px #696969;
+  border: 1px solid #696969;
   height: 2.8vh;
   width: 1vw;
   border-radius: 5px;
@@ -398,21 +398,21 @@ input[type='number'] {
   margin-top: -11px;
 }
 .forecastBox input[type='range']:focus::-webkit-slider-runnable-track {
-  background: #3071a9;
+  background: #696969;
 }
 .forecastBox input[type='range']::-moz-range-track {
   width: 100%;
   height: 10px;
   cursor: pointer;
   animation: animate 0.2s;
-  box-shadow: 1px 1px 1px #000000;
-  background: #3071a9;
+  box-shadow: 1px 1px 1px #696969;
+  background: #696969;
   border-radius: 5px;
-  border: 1px solid #000000;
+  border: 1px solid #696969;
 }
 .forecastBox input[type='range']::-moz-range-thumb {
-  box-shadow: 1px 1px 1px #000000;
-  border: 1px solid #000000;
+  box-shadow: 1px 1px 1px #696969;
+  border: 1px solid #696969;
   height: 30px;
   width: 15px;
   border-radius: 5px;
@@ -429,21 +429,21 @@ input[type='number'] {
   color: transparent;
 }
 .forecastBox input[type='range']::-ms-fill-lower {
-  background: #3071a9;
-  border: 1px solid #000000;
+  background: #696969;
+  border: 1px solid #696969;
   border-radius: 10px;
-  box-shadow: 1px 1px 1px #000000;
+  box-shadow: 1px 1px 1px #696969;
 }
 .forecastBox input[type='range']::-ms-fill-upper {
-  background: #3071a9;
-  border: 1px solid #000000;
+  background: #696969;
+  border: 1px solid #696969;
   border-radius: 10px;
-  box-shadow: 1px 1px 1px #000000;
+  box-shadow: 1px 1px 1px #696969;
 }
 .forecastBox input[type='range']::-ms-thumb {
   margin-top: 1px;
-  box-shadow: 1px 1px 1px #000000;
-  border: 1px solid #000000;
+  box-shadow: 1px 1px 1px #696969;
+  border: 1px solid #696969;
   height: 30px;
   width: 15px;
   border-radius: 5px;
@@ -451,10 +451,10 @@ input[type='number'] {
   cursor: pointer;
 }
 .forecastBox input[type='range']:focus::-ms-fill-lower {
-  background: #3071a9;
+  background: #696969;
 }
 .forecastBox input[type='range']:focus::-ms-fill-upper {
-  background: #3071a9;
+  background: #696969;
 }
 
 /* calculate button */

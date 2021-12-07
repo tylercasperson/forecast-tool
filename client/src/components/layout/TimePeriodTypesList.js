@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { getTimePeriodTypes } from '../data/actions/timePeriodTypeActions.js';
 
-const TimePeriodTypesList = () => {
+const TimePeriodTypesList = (props) => {
   const timePeriodList = useRef();
 
   const [thisOne, setThisOne] = useState();
@@ -42,7 +42,6 @@ const TimePeriodTypesList = () => {
             <li
               key={i.type}
               id={i.id}
-              day-equivalent={i.dayEquivalent}
               className={thisOne === undefined && index === 2 ? 'listItem selected' : 'listItem'}
               onClick={() => onClick(index)}
             >

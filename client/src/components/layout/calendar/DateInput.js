@@ -12,14 +12,13 @@ const DateInput = (props) => {
         width: '20vw',
       }}
     >
-      <span style={{ fontSize: '2vh', fontWeight: 'bold' }}>{props.text}</span>
+      <span style={{ fontSize: '2vh', fontWeight: '600' }}>{props.text}</span>
       <input
         style={{
           border: '1pt solid black',
-          height: '100%',
           width: '20vw',
           textAlign: 'center',
-          fontSize: '3vh',
+          fontSize: '2vh',
         }}
         className={'dateInput ' + props.text.split(' ')[0]}
         type='text'
