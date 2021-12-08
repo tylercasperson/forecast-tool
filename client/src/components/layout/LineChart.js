@@ -144,14 +144,6 @@ const LineChart = (props) => {
         .attr('y1', margin.top + margin.bottom)
         .attr('y2', d3.select('.yAxis').node().getBBox().height + margin.top + margin.bottom);
 
-      svg
-        .append('rect')
-        .attr('class', 'hoverInfo')
-        .attr('width', '100')
-        .attr('height', graphHeight - d3.select('.hoverLine').node().getBBox().height + 5)
-        .attr('x', data.length === 0 ? 0 : xScale(scrollXlabel) - 50)
-        .attr('y', 0);
-
       const forecastWrap = (words) => {
         let wordsArr = words.split(';');
         wordsArr.pop();
@@ -172,6 +164,19 @@ const LineChart = (props) => {
 
           setTextPosition(xScale(scrollXlabel) + x + positionX);
 
+          let textAnchor = x === 0 ? 'end' : 'start';
+          let textGroup = x === 0 ? 40 : 130;
+
+          svg
+            .append('text')
+            .attr('text-anchor', textAnchor)
+            .attr('font-size', '1.3vh')
+            .attr('x', data.length === 0 ? 0 : xScale(scrollXlabel) + x + positionX - textGroup)
+            .attr('y', 0 + margin.bottom - y)
+            .text(text);
+
+          let colorLabelGroup = x === 0 ? -85 - text.length * 0.0037 * documentWidth : -145;
+
           svg
             .append('rect')
             .attr('width', '1vw')
@@ -179,38 +184,32 @@ const LineChart = (props) => {
             .attr('fill', props.colors[i - 1])
             .attr(
               'x',
-              data.length === 0
-                ? 0
-                : xScale(scrollXlabel) + x + positionX - text.length * 0.0037 * documentWidth
+              data.length === 0 ? 0 : xScale(scrollXlabel) + x + positionX + colorLabelGroup
             )
             .attr('y', 0 + margin.bottom - y - 8);
-
-          svg
-            .append('text')
-            .attr('text-anchor', 'middle')
-            .attr('font-size', '1.3vh')
-            .attr('x', data.length === 0 ? 0 : xScale(scrollXlabel) + x + positionX)
-            .attr('y', 0 + margin.bottom - y)
-            .text(text);
 
           if (j > 2) {
             y = -10;
             j = 0;
           }
           y += 15;
+
+          let textTimePeriod = data.length !== 0 ? xScale(scrollXlabel) + x + positionX - 20 : 0;
+
+          if (x === 0) {
+            svg
+              .append('text')
+              .attr('font-size', '2vh')
+              .attr('font-weight', 'bold')
+              .attr('x', textTimePeriod)
+              .attr('y', 0 + margin.bottom - 20)
+              .attr('border', '1pt solid black')
+              .text(scrollXlabel);
+          }
         }
       };
 
       forecastWrap(hoverInfo);
-
-      svg
-        .append('text')
-        .attr('font-size', '2vh')
-        .attr('font-weight', 'bold')
-        .attr('x', data.length === 0 ? 0 : textPosition - 120)
-        .attr('y', 0 + margin.bottom - 20)
-        .attr('border', '1pt solid black')
-        .text(scrollXlabel);
     };
     if (props.showHoverLabels) {
       hoverLabels();
