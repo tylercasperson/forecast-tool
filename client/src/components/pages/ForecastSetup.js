@@ -48,7 +48,7 @@ const ForecastSetup = () => {
   const [dataGdp, setDataGdp] = useState([]);
 
   const selectedTimePeriod = () => {
-    let timePeriodList = forecastForm.current.children[2].children[0].children;
+    let timePeriodList = forecastForm.current.children[7].children[0].children;
     let firstLetter;
     let id;
 
@@ -88,7 +88,6 @@ const ForecastSetup = () => {
     gatherLastYear(timeVariables);
     calculateMovingAverage();
     calculateWeightedAverage();
-
     setDataGdp([]);
 
     let selectedGdp = gdp
@@ -232,7 +231,7 @@ const ForecastSetup = () => {
   const calculateMovingAverage = () => {
     let periods = parseInt(movingPeriods);
 
-    for (let i = 0; i < periods - 1; i++) {
+    for (let i = 0; i < periods; i++) {
       addToData('ma', timePeriod[timePeriod.length - 1].id + (i + 1), 0);
     }
 
@@ -244,7 +243,7 @@ const ForecastSetup = () => {
 
       addToData(
         'ma',
-        timePeriod[timePeriod.length - 1].id + (i + periods - 1),
+        timePeriod[timePeriod.length - 1].id + (i + 2),
         Math.round(average / periods)
       );
     }
@@ -252,7 +251,7 @@ const ForecastSetup = () => {
 
   const calculateWeightedAverage = () => {
     let periods = parseInt(weightedPeriods);
-    for (let i = 0; i < periods - 1; i++) {
+    for (let i = 0; i < periods; i++) {
       addToData('wa', timePeriod[timePeriod.length - 1].id + (i + 1), 0);
     }
 
@@ -265,7 +264,7 @@ const ForecastSetup = () => {
       }
       addToData(
         'wa',
-        timePeriod[timePeriod.length - 1].id + (i + periods - 1),
+        timePeriod[timePeriod.length - 1].id + (i + 2),
         Math.round(average / totalWeight)
       );
     }
