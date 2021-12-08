@@ -38,8 +38,10 @@ const Forecast = () => {
   const [tempStartDate, setTempStartDate] = useState(startDate);
   const [tempEndDate, setTempEndDate] = useState(endDate);
   const [colorsDisplay, setColorsDisplay] = useState('none');
+  const [toggleHoverText, setToggleHoverText] = useState('Hide Hover Laebls');
 
   const onChange = (e) => {
+    console.log(e);
     let month = e.target.value.split('/')[0];
     let day = e.target.value.split('/')[1];
     let year = e.target.value.split('/')[2];
@@ -63,6 +65,13 @@ const Forecast = () => {
               dispatch(saveEndDate(e.target.value));
             }
           }
+        }
+        break;
+      case 'showHideHoverLabels':
+        if (toggleHoverText.split(' ')[0] === 'Show') {
+          setToggleHoverText('Hide Hover Labels');
+        } else {
+          setToggleHoverText('Show Hover Labels');
         }
         break;
       case 'salesHistory':
@@ -131,7 +140,13 @@ const Forecast = () => {
 
   return (
     <div style={{ height: '92vh' }}>
-      {groupedData && <LineGraph data={filteredData()} colors={filteredColor()} />}
+      {groupedData && (
+        <LineGraph
+          data={filteredData()}
+          colors={filteredColor()}
+          showHoverLabels={toggleHoverText.split(' ')[0] === 'Show' ? false : true}
+        />
+      )}
       <ShowHide
         onChange={(e) => onChange(e)}
         showSalesHistory={showSalesHistory}
@@ -142,7 +157,9 @@ const Forecast = () => {
         changeColors={() =>
           colorsDisplay === 'none' ? setColorsDisplay('flex') : setColorsDisplay('none')
         }
-        showChangeColors={colorsDisplay === 'none' ? 'checked' : ''}
+        showChangeColors={colorsDisplay === 'none' ? '' : 'checked'}
+        showHoverLabels={toggleHoverText.split(' ')[0] === 'Show' ? '' : 'checked'}
+        showHideHoverText={toggleHoverText}
       />
 
       <ChangeColors colorsDisplay={colorsDisplay} />

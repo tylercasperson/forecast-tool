@@ -6,6 +6,21 @@ const ShowHide = (props) => {
     <div
       style={{ display: 'flex', flexDirection: 'column', marginTop: '10px', marginBottom: '10px' }}
     >
+      <div style={{ display: 'flex', width: '70%', flexBasis: '100%', padding: '1vh' }}>
+        <b style={{ marginTop: '-10px' }}>Chart Options</b>
+        <ToggleSwitch
+          label={'Change Colors'}
+          onChange={props.changeColors}
+          name={'changeColors'}
+          checked={props.showChangeColors}
+        />
+        <ToggleSwitch
+          label={props.showHideHoverText}
+          onChange={props.onChange}
+          name={'showHideHoverLabels'}
+          checked={props.showHoverLabels}
+        />
+      </div>
       <div
         style={{
           display: 'flex',
@@ -44,14 +59,6 @@ const ShowHide = (props) => {
           onChange={props.onChange}
           checked={props.showLinearRegression}
           name={'linearRegression'}
-        />
-      </div>
-      <div style={{ display: 'flex', flexBasis: '100%', padding: '1vh' }}>
-        <ToggleSwitch
-          label={'Change Colors'}
-          onChange={props.changeColors}
-          name={'changeColors'}
-          checked={props.showChangeColors}
         />
       </div>
     </div>
