@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import * as d3 from 'd3';
 import { nest } from 'd3-collection';
 
-const LineGraph = (props) => {
+const LineChart = (props) => {
   const lineChart = useRef();
 
   const groupedDataUpdate = useSelector((state) => state.groupedDataUpdate);
@@ -233,4 +233,4 @@ const LineGraph = (props) => {
   return <div ref={lineChart}></div>;
 };
 
-export default LineGraph;
+export default LineChart;

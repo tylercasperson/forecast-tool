@@ -13,7 +13,7 @@ import {
   saveShowLinearRegression,
 } from '../data/actions/settingsActions.js';
 
-import LineGraph from '../layout/LineGraph';
+import LineChart from '../layout/LineChart';
 import TableData from '../layout/TableData';
 import ShowHide from '../layout/ShowHide';
 import ChangeColors from '../layout/ChangeColors';
@@ -141,7 +141,7 @@ const Forecast = () => {
   return (
     <div style={{ height: '92vh' }}>
       {groupedData && (
-        <LineGraph
+        <LineChart
           data={filteredData()}
           colors={filteredColor()}
           showHoverLabels={toggleHoverText.split(' ')[0] === 'Show' ? false : true}
