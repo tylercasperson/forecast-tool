@@ -41,7 +41,6 @@ const Forecast = () => {
   const [toggleHoverText, setToggleHoverText] = useState('Hide Hover Laebls');
 
   const onChange = (e) => {
-    console.log(e);
     let month = e.target.value.split('/')[0];
     let day = e.target.value.split('/')[1];
     let year = e.target.value.split('/')[2];
@@ -82,6 +81,7 @@ const Forecast = () => {
         break;
       case 'movingAverage':
         dispatch(saveShowMovingAverage(showMovingAverage ? false : true));
+
         break;
       case 'weightedAverage':
         dispatch(saveShowWeightedAverage(showWeightedAverage ? false : true));
@@ -112,23 +112,6 @@ const Forecast = () => {
     );
   };
 
-  const filteredColor = () => {
-    let removeSalesHistory = showSalesHistory ? 0 : colors[0];
-    let removeLastYear = showLastYear ? 0 : colors[1];
-    let removeMovingAverage = showMovingAverage ? 0 : colors[2];
-    let removeWeightedAverage = showWeightedAverage ? 0 : colors[3];
-    let removeLinearRegression = showLinearRegression ? 0 : colors[4];
-
-    return colors.filter(
-      (i) =>
-        i !== removeSalesHistory &&
-        i !== removeLastYear &&
-        i !== removeMovingAverage &&
-        i !== removeWeightedAverage &&
-        i !== removeLinearRegression
-    );
-  };
-
   useEffect(() => {
     dispatch(
       listGroupedData(
@@ -143,7 +126,6 @@ const Forecast = () => {
       {groupedData && (
         <LineChart
           data={filteredData()}
-          colors={filteredColor()}
           showHoverLabels={toggleHoverText.split(' ')[0] === 'Show' ? false : true}
         />
       )}

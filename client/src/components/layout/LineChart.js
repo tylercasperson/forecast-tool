@@ -6,8 +6,10 @@ import { nest } from 'd3-collection';
 const LineChart = (props) => {
   const lineChart = useRef();
 
-  const groupedDataUpdate = useSelector((state) => state.groupedDataUpdate);
-  const { success } = groupedDataUpdate;
+  const getFromState = useSelector((state) => state);
+  const { success } = getFromState.groupedData;
+  const { movingPeriods, weightedPeriods } = getFromState.periods;
+  const { colors } = getFromState.colors;
 
   const documentWidth = document.documentElement.clientWidth;
   const documentHeight = document.documentElement.clientHeight;
@@ -30,8 +32,9 @@ const LineChart = (props) => {
     });
 
     const margin = { top: 0, right: 45, bottom: 50, left: 30 };
-    const graphWidth = width - margin.left - margin.right;
-    const graphHeight = height - margin.top - margin.bottom;
+    const chartWidth = width - margin.left - margin.right;
+    const chartHeight = height - margin.top - margin.bottom;
+    const forecastColor = { ui: 0, sh: 1, ly: 2, ma: 3, wa: 4, lr: 5 };
 
     const data = nest()
       .key((d) => d.dataType.abbreviation)
@@ -40,7 +43,7 @@ const LineChart = (props) => {
     const xScale = d3
       .scalePoint()
       .domain(props.data.map((d) => d.timePeriod.groupName))
-      .range([0 + margin.right, graphWidth - margin.left]);
+      .range([0 + margin.right, chartWidth - margin.left]);
 
     const yScale = d3
       .scaleLinear()
@@ -50,7 +53,7 @@ const LineChart = (props) => {
           return d.data;
         }),
       ])
-      .range([graphHeight, margin.bottom]);
+      .range([chartHeight, margin.bottom]);
 
     const line = d3
       .line()
@@ -62,10 +65,10 @@ const LineChart = (props) => {
       .append('svg')
       .style('background-color', 'lightgrey')
       .style('padding-left', '5vw')
-      .attr('width', graphWidth + margin.left + margin.right)
-      .attr('height', graphHeight + margin.top + margin.bottom);
+      .attr('width', chartWidth + margin.left + margin.right)
+      .attr('height', chartHeight + margin.top + margin.bottom);
 
-    let color = d3.scaleOrdinal().range(props.colors);
+    let color = d3.scaleOrdinal().range(colors);
     let colorArr = [];
 
     svg
@@ -92,7 +95,7 @@ const LineChart = (props) => {
     svg
       .append('g')
       .attr('class', 'xAxis')
-      .attr('transform', `translate(0,${graphHeight})`)
+      .attr('transform', `translate(0,${chartHeight})`)
       .call(xAxis);
 
     let heightPerTick = Math.round(height / 120) - 4;
@@ -106,39 +109,55 @@ const LineChart = (props) => {
 
     svg.append('g').attr('class', 'yAxis').attr('transform', `translate(45,0)`).call(yAxis);
 
+    svg
+      .append('rect')
+      .attr('class', 'invisibleRect')
+      .attr('width', d3.select('.xAxis').node().getBBox().width - 5)
+      .attr('height', d3.select('.yAxis').node().getBBox().height)
+      .attr('transform', 'translate(' + (margin.right - 0) + ',' + (margin.bottom - 7) + ')')
+      .attr('fill', 'none')
+      .attr('pointer-events', 'all')
+      .on('mousemove', (e) => {
+        let rect = e.target.getBoundingClientRect();
+        let x = e.clientX - rect.left;
+        let positionRatio = x / e.target.getBoundingClientRect().width;
+        setWidthRatio(positionRatio);
+        let indexToBeUsed =
+          Math.round(positionRatio * data[0].values.length) === data[0].values.length
+            ? Math.round(positionRatio * data[0].values.length - 1)
+            : Math.round(positionRatio * data[0].values.length);
+
+        setScrollXlabel(data[0].values[indexToBeUsed].timePeriod.groupName);
+
+        let needPeriodInfo = (name, periodType, data) => {
+          if (name === 'Moving Average') {
+            return (
+              movingPeriods + ' ' + periodType + ' ' + name + ' ' + d3.format(',')(data) + ';'[0]
+            );
+          } else if (name === 'Weighted Average') {
+            return (
+              weightedPeriods + ' ' + periodType + ' ' + name + ' ' + d3.format(',')(data) + ';'[0]
+            );
+          } else {
+            return name + ' ' + d3.format(',')(data) + ';'[0];
+          }
+        };
+
+        let sameGroupName = data.map((i) =>
+          i.values
+            .filter((j) => j.timePeriod.groupName === scrollXlabel)
+            .map((k) => needPeriodInfo(k.dataType.name, k.timePeriod.timePeriodType.type, k.data))
+        );
+
+        setHoverInfo(scrollXlabel + ';' + sameGroupName);
+      });
+
     const hoverLabels = () => {
-      svg
-        .append('rect')
-        .attr('class', 'invisibleRect')
-        .attr('width', d3.select('.xAxis').node().getBBox().width - 5)
-        .attr('height', d3.select('.yAxis').node().getBBox().height)
-        .attr('transform', 'translate(' + (margin.right - 0) + ',' + (margin.bottom - 7) + ')')
-        .attr('fill', 'none')
-        .attr('pointer-events', 'all')
-        .on('mousemove', (e) => {
-          let rect = e.target.getBoundingClientRect();
-          let x = e.clientX - rect.left;
-          let positionRatio = x / e.target.getBoundingClientRect().width;
-          setWidthRatio(positionRatio);
-          let indexToBeUsed =
-            Math.round(positionRatio * data[0].values.length) === data[0].values.length
-              ? Math.round(positionRatio * data[0].values.length - 1)
-              : Math.round(positionRatio * data[0].values.length);
-
-          setScrollXlabel(data[0].values[indexToBeUsed].timePeriod.groupName);
-
-          let sameGroupName = data.map((i) =>
-            i.values
-              .filter((j) => j.timePeriod.groupName === scrollXlabel)
-              .map((k) => k.dataType.name + ' ' + d3.format(',')(k.data) + ';'[0])
-          );
-
-          setHoverInfo(scrollXlabel + ';' + sameGroupName);
-        });
-
       svg
         .append('line')
         .attr('class', 'hoverLine')
+        .attr('stroke', 'black')
+        .attr('stroke-width', 2)
         .attr('x1', xScale(scrollXlabel))
         .attr('x2', xScale(scrollXlabel))
         .attr('y1', margin.top + margin.bottom)
@@ -147,6 +166,12 @@ const LineChart = (props) => {
       const forecastWrap = (words) => {
         let wordsArr = words.split(';');
         wordsArr.pop();
+
+        let forecastUsed = [];
+
+        for (let i = 0; i < data.length; i++) {
+          forecastUsed.push(data[i].key);
+        }
 
         let y = 5;
         let j = 0;
@@ -167,24 +192,50 @@ const LineChart = (props) => {
           let textAnchor = x === 0 ? 'end' : 'start';
           let textGroup = x === 0 ? 40 : 130;
 
+          const legendData = (option) => {
+            let nameInQuestion;
+            if (text.split(' ').length === 3) {
+              nameInQuestion =
+                text.split(' ')[0].charAt(0).toLowerCase() +
+                text.split(' ')[1].charAt(0).toLowerCase();
+            } else if (text.split(' ').length === 5) {
+              nameInQuestion =
+                text.split(' ')[2].charAt(0).toLowerCase() +
+                text.split(' ')[3].charAt(0).toLowerCase();
+            }
+            if (option === 'nameOnly') {
+              return forecastColor[nameInQuestion];
+            } else {
+              return !forecastUsed.includes(nameInQuestion);
+            }
+          };
+
           svg
             .append('text')
             .attr('text-anchor', textAnchor)
+            .attr('display', legendData() ? 'none' : 'flex')
             .attr('font-size', '1.3vh')
             .attr('x', data.length === 0 ? 0 : xScale(scrollXlabel) + x + positionX - textGroup)
             .attr('y', 0 + margin.bottom - y)
             .text(text);
 
-          let colorLabelGroup = x === 0 ? -85 - text.length * 0.0037 * documentWidth : -145;
+          let chartToWindow = chartWidth / documentWidth;
+
+          let textVariable =
+            text.length > 19 ? (x === 180 ? 0 : text.length * -0.7) : text.length * 0.0037;
+          let colorLabelGroup =
+            x === 0 ? -80 - text.length * 6 * chartToWindow : -200 * chartToWindow;
 
           svg
             .append('rect')
-            .attr('width', '1vw')
+            .attr('width', legendData() ? '0vh' : '1vh')
             .attr('height', '1vh')
-            .attr('fill', props.colors[i - 1])
+            .attr('fill', colors[legendData('nameOnly')])
             .attr(
               'x',
-              data.length === 0 ? 0 : xScale(scrollXlabel) + x + positionX + colorLabelGroup
+              data.length === 0
+                ? 0
+                : xScale(scrollXlabel) + textVariable + x + positionX + colorLabelGroup
             )
             .attr('y', 0 + margin.bottom - y - 8);
 
@@ -215,18 +266,20 @@ const LineChart = (props) => {
       hoverLabels();
     }
   }, [
+    colors,
     props.data,
+    props.showHoverLabels,
     height,
     width,
     documentWidth,
     documentHeight,
-    props.colors,
     success,
     scrollXlabel,
     hoverInfo,
     widthRatio,
     textPosition,
-    props.showHoverLabels,
+    movingPeriods,
+    weightedPeriods,
   ]);
 
   return <div ref={lineChart}></div>;
