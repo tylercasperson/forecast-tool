@@ -69,7 +69,7 @@ const LineChart = (props) => {
     const line = d3
       .line()
       .x(xLabelLineOption)
-      .y((d) => yScale(d.data));
+      .y((d) => yScale(isNaN(d.data) ? 0 : d.data));
 
     const svg = d3
       .select(lineChart.current)

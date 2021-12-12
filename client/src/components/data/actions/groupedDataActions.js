@@ -49,14 +49,19 @@ export const updateGroupedData = (groupedDataId, dataRecord) => async (dispatch)
   try {
     dispatch({ type: GROUPED_DATA_UPDATE_REQUEST });
 
-    const { data } = await axios.put(`/api/groupedData/${groupedDataId}`, {
-      data: dataRecord,
-    });
+    let incommingData =
+      dataRecord === '' ? 0 : dataRecord === null ? 0 : parseInt(dataRecord.replace(',', ''));
 
-    dispatch({
-      type: GROUPED_DATA_UPDATE_SUCCESS,
-      payload: data,
-    });
+    if (!isNaN(incommingData / 1)) {
+      const { data } = await axios.put(`/api/groupedData/${groupedDataId}`, {
+        data: incommingData,
+      });
+
+      dispatch({
+        type: GROUPED_DATA_UPDATE_SUCCESS,
+        payload: data,
+      });
+    }
   } catch (error) {
     dispatch({
       type: GROUPED_DATA_UPDATE_FAIL,

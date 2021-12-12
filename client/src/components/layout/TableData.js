@@ -106,7 +106,8 @@ const TableData = (props) => {
         {data &&
           data.map((i, index) => {
             const numberWithCommas = (number) => {
-              return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+              let incommingNumber = number === null ? 0 : number;
+              return incommingNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
             };
 
             let findData = (something) => {
