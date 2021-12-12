@@ -126,6 +126,7 @@ ul li a:hover:after {
   overflow: hidden;
   transition: ease-in 0.5s;
 }
+
 .toggleSwitchInput:checked ~ .check {
   background: #fff;
 }
@@ -140,6 +141,38 @@ ul li a:hover:after {
   border-radius: 50%;
   transition: 0.5s;
 }
+
+.toggleChartOptions .toggleSwitch:nth-child(6n + 1) label .toggleSwitchInput ~ .check {
+  background: linear-gradient(
+    to right,
+    var(--salesHistory),
+    var(--lastYear),
+    var(--movingAverage),
+    var(--weightedAverage),
+    var(--linearRegression)
+  );
+}
+
+.toggleLineContainer .toggleSwitch:nth-child(6n + 1) label .check:before {
+  background: var(--salesHistory);
+}
+
+.toggleLineContainer .toggleSwitch:nth-child(6n + 2) label .check:before {
+  background: var(--lastYear);
+}
+
+.toggleLineContainer .toggleSwitch:nth-child(6n + 3) label .check:before {
+  background: var(--movingAverage);
+}
+
+.toggleLineContainer .toggleSwitch:nth-child(6n + 4) label .check:before {
+  background: var(--weightedAverage);
+}
+
+.toggleLineContainer .toggleSwitch:nth-child(6n + 5) label .check:before {
+  background: var(--linearRegression);
+}
+
 .toggleSwitchInput:checked ~ .check:before {
   transform: translateX(-50px);
 }
@@ -155,6 +188,7 @@ ul li a:hover:after {
   transition: 0.5s;
   transform: translateX(50px);
 }
+
 .toggleSwitchInput:checked ~ .check:after {
   transform: translateX(0px);
 }

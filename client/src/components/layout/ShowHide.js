@@ -11,7 +11,14 @@ const ShowHide = (props) => {
     }
   };
   return (
-    <div style={{ margin: ' -2.5vh 0 0 0.5vw' }}>
+    <div
+      style={{
+        width: '90vw',
+        justifyContent: 'space-evenly',
+        alignContent: 'center',
+        margin: ' -2.5vh 0 0 0.5vw',
+      }}
+    >
       <i onClick={() => onClick()} className='fas fa-cog'></i>
       <ChartOptions
         display={display}
@@ -24,7 +31,6 @@ const ShowHide = (props) => {
         changeColors={props.changeColors}
         showChangeColors={props.showChangeColors}
         showHoverLabels={props.showHoverLabels}
-        showHideHoverText={props.showHideHoverText}
       />
     </div>
   );

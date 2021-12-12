@@ -10,6 +10,8 @@ const ExportToExcel = () => {
   const { groupedData } = getFromState.groupedData;
   const { movingPeriods, weightedPeriods } = getFromState.periods;
 
+  const size = document.documentElement.clientWidth * document.documentElement.clientHeight;
+
   const nestedData = nest()
     .key((d) => d.dataType.abbreviation)
     .entries(groupedData);
@@ -81,8 +83,19 @@ const ExportToExcel = () => {
   };
 
   return (
-    <button style={{ width: '10vw' }} className='exportDataBtn' onClick={() => onClick()}>
-      <i className='fas fa-download'></i> Download data to Excel
+    <button
+      style={{
+        display: 'flex',
+        width: '12vw',
+        padding: '0.5vw',
+        fontSize: '1.5vmin',
+        textAlign: 'center',
+        justifyContent: 'center',
+      }}
+      className='exportDataBtn'
+      onClick={() => onClick()}
+    >
+      <i style={{ paddingRight: '0.5vmin' }} className='fas fa-download'></i> Download data to Excel
     </button>
   );
 };

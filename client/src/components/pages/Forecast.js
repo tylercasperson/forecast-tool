@@ -38,9 +38,10 @@ const Forecast = () => {
   const [tempStartDate, setTempStartDate] = useState(startDate);
   const [tempEndDate, setTempEndDate] = useState(endDate);
   const [colorsDisplay, setColorsDisplay] = useState('none');
-  const [toggleHoverText, setToggleHoverText] = useState('Hide Hover Laebls');
+  const [showHoverText, setShowHoverText] = useState(true);
 
   const onChange = (e) => {
+    console.log(e);
     let month = e.target.value.split('/')[0];
     let day = e.target.value.split('/')[1];
     let year = e.target.value.split('/')[2];
@@ -66,13 +67,6 @@ const Forecast = () => {
           }
         }
         break;
-      case 'showHideHoverLabels':
-        if (toggleHoverText.split(' ')[0] === 'Show') {
-          setToggleHoverText('Hide Hover Labels');
-        } else {
-          setToggleHoverText('Show Hover Labels');
-        }
-        break;
       case 'salesHistory':
         dispatch(saveShowSalesHistory(showSalesHistory ? false : true));
         break;
@@ -81,13 +75,16 @@ const Forecast = () => {
         break;
       case 'movingAverage':
         dispatch(saveShowMovingAverage(showMovingAverage ? false : true));
-
         break;
       case 'weightedAverage':
         dispatch(saveShowWeightedAverage(showWeightedAverage ? false : true));
         break;
       case 'linearRegression':
         dispatch(saveShowLinearRegression(showLinearRegression ? false : true));
+        break;
+      case 'showHideHoverLabels':
+        showHoverText ? setShowHoverText(false) : setShowHoverText(true);
+
         break;
       default:
         return;
@@ -144,7 +141,7 @@ const Forecast = () => {
         <LineChart
           data={filteredData()}
           colors={filteredColor()}
-          showHoverLabels={toggleHoverText.split(' ')[0] === 'Show' ? false : true}
+          showHoverLabels={showHoverText ? true : false}
         />
       )}
       <ShowHide
@@ -158,8 +155,7 @@ const Forecast = () => {
           colorsDisplay === 'none' ? setColorsDisplay('flex') : setColorsDisplay('none')
         }
         showChangeColors={colorsDisplay === 'none' ? '' : 'checked'}
-        showHoverLabels={toggleHoverText.split(' ')[0] === 'Show' ? '' : 'checked'}
-        showHideHoverText={toggleHoverText}
+        showHoverLabels={showHoverText ? 'checked' : ''}
       />
 
       <ChangeColors colorsDisplay={colorsDisplay} />
