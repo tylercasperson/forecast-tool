@@ -39,9 +39,10 @@ const Forecast = () => {
   const [tempEndDate, setTempEndDate] = useState(endDate);
   const [colorsDisplay, setColorsDisplay] = useState('none');
   const [showHoverText, setShowHoverText] = useState(true);
+  const [showTimePeriod, setShowTimePeriod] = useState(false);
+  const [showTimePeriodText, setShowTimePeriodText] = useState('Show Time Period');
 
   const onChange = (e) => {
-    console.log(e);
     let month = e.target.value.split('/')[0];
     let day = e.target.value.split('/')[1];
     let year = e.target.value.split('/')[2];
@@ -82,9 +83,14 @@ const Forecast = () => {
       case 'linearRegression':
         dispatch(saveShowLinearRegression(showLinearRegression ? false : true));
         break;
+      case 'showTimePeriod':
+        showTimePeriod ? setShowTimePeriod(false) : setShowTimePeriod(true);
+        showTimePeriod
+          ? setShowTimePeriodText('Show Dates')
+          : setShowTimePeriodText('Show Time Period');
+        break;
       case 'showHideHoverLabels':
         showHoverText ? setShowHoverText(false) : setShowHoverText(true);
-
         break;
       default:
         return;
@@ -141,7 +147,8 @@ const Forecast = () => {
         <LineChart
           data={filteredData()}
           colors={filteredColor()}
-          showHoverLabels={showHoverText ? true : false}
+          showHoverLabels={showHoverText}
+          xLabelOption={showTimePeriod}
         />
       )}
       <ShowHide
@@ -155,7 +162,9 @@ const Forecast = () => {
           colorsDisplay === 'none' ? setColorsDisplay('flex') : setColorsDisplay('none')
         }
         showChangeColors={colorsDisplay === 'none' ? '' : 'checked'}
+        showTimePeriod={showTimePeriod ? 'checked' : ''}
         showHoverLabels={showHoverText ? 'checked' : ''}
+        showTimePeriodText={showTimePeriodText}
       />
 
       <ChangeColors colorsDisplay={colorsDisplay} />

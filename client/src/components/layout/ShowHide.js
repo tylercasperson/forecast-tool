@@ -31,6 +31,8 @@ const ShowHide = (props) => {
         changeColors={props.changeColors}
         showChangeColors={props.showChangeColors}
         showHoverLabels={props.showHoverLabels}
+        showTimePeriodText={props.showTimePeriodText}
+        showTimePeriod={props.showTimePeriod}
       />
     </div>
   );

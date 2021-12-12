@@ -2,6 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as d3 from 'd3';
 import { nest } from 'd3-collection';
+import { format } from 'date-fns';
+
+import { dateFormat } from '../data/formulas/dateFormulas';
 
 const LineChart = (props) => {
   const lineChart = useRef();
@@ -40,9 +43,13 @@ const LineChart = (props) => {
       .key((d) => d.dataType.abbreviation)
       .entries(props.data);
 
+    let xLabelOption = props.xLabelOption
+      ? props.data.map((d) => d.timePeriod.groupName)
+      : props.data.map((d) => format(new Date(dateFormat(d.timePeriod.startDate)), 'M/d/yyyy'));
+
     const xScale = d3
       .scalePoint()
-      .domain(props.data.map((d) => d.timePeriod.groupName))
+      .domain(xLabelOption)
       .range([0 + margin.right, chartWidth - margin.left]);
 
     const yScale = d3
@@ -55,9 +62,13 @@ const LineChart = (props) => {
       ])
       .range([chartHeight, margin.bottom]);
 
+    let xLabelLineOption = props.xLabelOption
+      ? (d) => xScale(d.timePeriod.groupName)
+      : (d) => xScale(format(new Date(dateFormat(d.timePeriod.startDate)), 'M/d/yyyy'));
+
     const line = d3
       .line()
-      .x((d) => xScale(d.timePeriod.groupName))
+      .x(xLabelLineOption)
       .y((d) => yScale(d.data));
 
     const svg = d3
@@ -88,7 +99,7 @@ const LineChart = (props) => {
     const xAxis = d3
       .axisBottom(xScale)
       .tickFormat((interval, i) => {
-        return i % widthPerTick !== 0 ? ' ' : interval;
+        return i % widthPerTick !== 0 ? ' ' : interval.charAt(0).toUpperCase() + interval.slice(1);
       })
       .tickSize(10);
 
@@ -127,7 +138,14 @@ const LineChart = (props) => {
             ? Math.round(positionRatio * data[0].values.length - 1)
             : Math.round(positionRatio * data[0].values.length);
 
-        setScrollXlabel(data[0].values[indexToBeUsed].timePeriod.groupName);
+        let scrollXlabelOption = props.xLabelOption
+          ? data[0].values[indexToBeUsed].timePeriod.groupName
+          : format(
+              new Date(dateFormat(data[0].values[indexToBeUsed].timePeriod.startDate)),
+              'M/d/yyyy'
+            ).toString();
+
+        setScrollXlabel(scrollXlabelOption);
 
         let needPeriodInfo = (name, periodType, data) => {
           if (name === 'Moving Average') {
@@ -145,7 +163,11 @@ const LineChart = (props) => {
 
         let sameGroupName = data.map((i) =>
           i.values
-            .filter((j) => j.timePeriod.groupName === scrollXlabel)
+            .filter((j) =>
+              props.xLabelOption
+                ? j.timePeriod.groupName === scrollXlabel
+                : format(new Date(dateFormat(j.timePeriod.startDate)), 'M/d/yyyy') === scrollXlabel
+            )
             .map((k) => needPeriodInfo(k.dataType.name, k.timePeriod.timePeriodType.type, k.data))
         );
 
@@ -210,26 +232,44 @@ const LineChart = (props) => {
             }
           };
 
+          let widthAdjustment = chartWidth < 450 ? 100 : 0;
+
           svg
             .append('text')
             .attr('text-anchor', textAnchor)
             .attr('display', legendData() ? 'none' : 'flex')
-            .attr('font-size', '1.3vh')
-            .attr('x', data.length === 0 ? 0 : xScale(scrollXlabel) + x + positionX - textGroup)
+            .attr('font-size', '1.3vmin')
+            .attr(
+              'x',
+              data.length === 0
+                ? 0
+                : widthAdjustment + xScale(scrollXlabel) + x + positionX - textGroup
+            )
             .attr('y', 0 + margin.bottom - y)
             .text(text);
 
           let chartToWindow = chartWidth / documentWidth;
 
+          let textWindowAdjustment = chartWidth < 450 ? 0.2 : -0.7;
+
           let textVariable =
-            text.length > 19 ? (x === 180 ? 0 : text.length * -0.7) : text.length * 0.0037;
+            text.length > 19
+              ? x === 180
+                ? 0
+                : text.length * textWindowAdjustment
+              : text.length * 0.0037;
+
           let colorLabelGroup =
-            x === 0 ? -80 - text.length * 6 * chartToWindow : -200 * chartToWindow;
+            x === 0
+              ? widthAdjustment * 1.5 - 80 - text.length * 6 * chartToWindow
+              : widthAdjustment * 0.9 + -200 * chartToWindow;
+
+          let colorYadjustment = chartWidth < 450 ? 4 : 0;
 
           svg
             .append('rect')
-            .attr('width', legendData() ? '0vh' : '1vh')
-            .attr('height', '1vh')
+            .attr('width', legendData() ? '0vh' : '1vmin')
+            .attr('height', '1vmin')
             .attr('fill', colors[legendData('nameOnly')])
             .attr(
               'x',
@@ -237,25 +277,55 @@ const LineChart = (props) => {
                 ? 0
                 : xScale(scrollXlabel) + textVariable + x + positionX + colorLabelGroup
             )
-            .attr('y', 0 + margin.bottom - y - 8);
+            .attr('y', colorYadjustment + 0 + margin.bottom - y - 8);
 
           if (j > 2) {
             y = -10;
             j = 0;
           }
-          y += 15;
+          y += chartWidth < 450 ? 10 : 15;
 
           let textTimePeriod = data.length !== 0 ? xScale(scrollXlabel) + x + positionX - 20 : 0;
 
+          let xLabelOption = props.xLabelOption
+            ? scrollXlabel.charAt(0).toUpperCase() + scrollXlabel.slice(1)
+            : scrollXlabel;
+
           if (x === 0) {
-            svg
-              .append('text')
-              .attr('font-size', '2vh')
-              .attr('font-weight', 'bold')
-              .attr('x', textTimePeriod)
-              .attr('y', 0 + margin.bottom - 20)
-              .attr('border', '1pt solid black')
-              .text(scrollXlabel);
+            if (props.xLabelOption) {
+              svg
+                .append('text')
+                .attr('font-size', '2vmin')
+                .attr('font-weight', 'bold')
+                .attr('x', widthAdjustment + textTimePeriod)
+                .attr('y', 0 + margin.bottom - 20)
+                .attr('border', '1pt solid black')
+                .text(xLabelOption);
+            } else {
+              let yAdjustment = 0;
+
+              for (let i = 0; i < 3; i++) {
+                let textAdjustment =
+                  xLabelOption.split('/')[i] && xLabelOption.split('/')[i].length === 1
+                    ? 5
+                    : xLabelOption.split('/')[i].length === 2
+                    ? 0
+                    : xLabelOption.split('/')[i].length === 4
+                    ? -5
+                    : 0;
+
+                svg
+                  .append('text')
+                  .attr('font-size', '1.8vmin')
+                  .attr('font-weight', 'bold')
+                  .attr('x', widthAdjustment + textTimePeriod + textAdjustment)
+                  .attr('y', 0 + margin.bottom - 32 + yAdjustment)
+                  .attr('border', '1pt solid black')
+                  .text(xLabelOption.split('/')[i]);
+
+                yAdjustment += 20;
+              }
+            }
           }
         }
       };
@@ -270,6 +340,7 @@ const LineChart = (props) => {
     props.colors,
     props.data,
     props.showHoverLabels,
+    props.xLabelOption,
     height,
     width,
     documentWidth,

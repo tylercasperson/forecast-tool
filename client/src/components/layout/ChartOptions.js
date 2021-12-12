@@ -41,7 +41,13 @@ const ChartOptions = (props) => {
             checked={props.showChangeColors}
           />
           <ToggleSwitch
-            label={'Hover Laebls'}
+            label={props.showTimePeriodText}
+            onChange={props.onChange}
+            name={'showTimePeriod'}
+            checked={props.showTimePeriod}
+          />
+          <ToggleSwitch
+            label={'Hover Labels'}
             showHide={props.showHoverLabels ? 'Hide' : 'Show'}
             onChange={props.onChange}
             name={'showHideHoverLabels'}
