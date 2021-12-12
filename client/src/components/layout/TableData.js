@@ -105,9 +105,13 @@ const TableData = (props) => {
       <div style={{ height: '40vh', overflowY: 'auto' }} ref={tableData}>
         {data &&
           data.map((i, index) => {
+            const numberWithCommas = (number) => {
+              return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            };
+
             let findData = (something) => {
               let exists = i.values.find((o) => o.dataType.abbreviation === something);
-              return exists === undefined ? 0 : exists.data;
+              return exists === undefined ? 0 : numberWithCommas(exists.data);
             };
             let background = index % 2 !== 0 ? 'lightgrey' : 'none';
             return (

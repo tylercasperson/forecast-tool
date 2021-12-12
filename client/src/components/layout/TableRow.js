@@ -65,7 +65,7 @@ const TableRow = (props) => {
       />
       <input
         style={{ width: '8vw', backgroundColor: props.background }}
-        type='number'
+        type='text'
         name={'userInput'}
         onChange={(e) => onChange(e)}
         onChangeCapture={props.onChange}
@@ -77,7 +77,7 @@ const TableRow = (props) => {
           backgroundColor: props.background,
           display: props.showSalesHistory,
         }}
-        type='number'
+        type='text'
         name={'salesHistory'}
         onChange={(e) => onChange(e)}
         onChangeCapture={props.onChange}
@@ -89,7 +89,7 @@ const TableRow = (props) => {
           backgroundColor: props.background,
           display: props.showLastYear,
         }}
-        type='number'
+        type='text'
         name={'lastYear'}
         onChange={(e) => onChange(e)}
         onChangeCapture={props.onChange}
@@ -101,7 +101,7 @@ const TableRow = (props) => {
           backgroundColor: props.background,
           display: props.showMovingAverage,
         }}
-        type='number'
+        type='text'
         name={'movingAverage'}
         onChange={(e) => onChange(e)}
         onChangeCapture={props.onChange}
@@ -113,7 +113,7 @@ const TableRow = (props) => {
           backgroundColor: props.background,
           display: props.showWeightedAverage,
         }}
-        type='number'
+        type='text'
         name={'weightedAverage'}
         onChange={(e) => onChange(e)}
         onChangeCapture={props.onChange}
@@ -125,7 +125,7 @@ const TableRow = (props) => {
           backgroundColor: props.background,
           display: props.showLinearRegression,
         }}
-        type='number'
+        type='text'
         name={'linearRegression'}
         onChange={(e) => onChange(e)}
         onChangeCapture={props.onChange}
