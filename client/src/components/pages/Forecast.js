@@ -39,8 +39,8 @@ const Forecast = () => {
   const [tempEndDate, setTempEndDate] = useState(endDate);
   const [colorsDisplay, setColorsDisplay] = useState('none');
   const [showHoverText, setShowHoverText] = useState(true);
-  const [showTimePeriod, setShowTimePeriod] = useState(false);
-  const [showTimePeriodText, setShowTimePeriodText] = useState('Show Time Period');
+  const [showTimePeriod, setShowTimePeriod] = useState(true);
+  const [showTimePeriodText, setShowTimePeriodText] = useState('Show Dates');
 
   const onChange = (e) => {
     let month = e.target.value.split('/')[0];
@@ -86,8 +86,9 @@ const Forecast = () => {
       case 'showTimePeriod':
         showTimePeriod ? setShowTimePeriod(false) : setShowTimePeriod(true);
         showTimePeriod
-          ? setShowTimePeriodText('Show Dates')
-          : setShowTimePeriodText('Show Time Period');
+          ? setShowTimePeriodText('Show Time Period')
+          : setShowTimePeriodText('Show Dates');
+
         break;
       case 'showHideHoverLabels':
         showHoverText ? setShowHoverText(false) : setShowHoverText(true);

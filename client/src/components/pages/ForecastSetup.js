@@ -186,7 +186,7 @@ const ForecastSetup = () => {
         }, 0);
 
       timePeriodArr.push({
-        groupName: timeVariables.firstLetter + (i + 1),
+        groupName: timeVariables.firstLetter.toUpperCase() + (i + 1),
         startDate: format(startDay, 'yyyy-M-d'),
         endDate: format(stopOnDay, 'yyyy-M-d'),
         timePeriodTypeID: timeVariables.id,

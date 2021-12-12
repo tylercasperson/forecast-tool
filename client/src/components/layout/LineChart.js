@@ -94,14 +94,19 @@ const LineChart = (props) => {
       .attr('name', (d) => d.key)
       .attr('stroke-width', 1.5);
 
-    let widthPerTick = Math.round(width / 100) - 13;
+    let labelLengthAdjustment = props.xLabelOption
+      ? Math.floor(props.data.length / 20)
+      : Math.floor(props.data.length / 17);
+
+    let widthPerTick = Math.round(width / 100) - labelLengthAdjustment;
 
     const xAxis = d3
       .axisBottom(xScale)
+      .tickSize(10)
+      .ticks(3)
       .tickFormat((interval, i) => {
-        return i % widthPerTick !== 0 ? ' ' : interval.charAt(0).toUpperCase() + interval.slice(1);
-      })
-      .tickSize(10);
+        return i % widthPerTick !== 0 ? ' ' : interval;
+      });
 
     svg
       .append('g')
@@ -306,13 +311,14 @@ const LineChart = (props) => {
 
               for (let i = 0; i < 3; i++) {
                 let textAdjustment =
-                  xLabelOption.split('/')[i] && xLabelOption.split('/')[i].length === 1
+                  xLabelOption.split('/')[i] &&
+                  (xLabelOption.split('/')[i].length === 1
                     ? 5
                     : xLabelOption.split('/')[i].length === 2
                     ? 0
                     : xLabelOption.split('/')[i].length === 4
                     ? -5
-                    : 0;
+                    : 0);
 
                 svg
                   .append('text')
@@ -321,7 +327,7 @@ const LineChart = (props) => {
                   .attr('x', widthAdjustment + textTimePeriod + textAdjustment)
                   .attr('y', 0 + margin.bottom - 32 + yAdjustment)
                   .attr('border', '1pt solid black')
-                  .text(xLabelOption.split('/')[i]);
+                  .text(props.xLabelOption ? xLabelOption : xLabelOption.split('/')[i]);
 
                 yAdjustment += 20;
               }
