@@ -22,9 +22,9 @@ const DateSlider = () => {
   const [sliderMin] = useState(0);
   const [sliderMax, setSliderMax] = useState(100);
   const [load, setLoad] = useState(true);
+  const [sliderLock, setSliderLock] = useState(false);
 
   const dateCapture = (e) => {
-    console.log('dateCapture');
     if (e.target.name === 'startDate') {
       setTempStartDate(e.target.value);
     } else if (e.target.name === 'endDate') {
@@ -32,7 +32,6 @@ const DateSlider = () => {
     }
 
     const saveDate = () => {
-      console.log('saveDate');
       if (e.target.name === 'startDate') {
         dispatch(saveStartDate(e.target.value));
       } else if (e.target.name === 'endDate') {
@@ -41,9 +40,7 @@ const DateSlider = () => {
     };
 
     const dateValidation = (date) => {
-      console.log('dateValidation');
       let dateParts = date.split('/');
-      console.log(dateParts);
 
       if (dateParts.length === 3) {
         if (parseInt(dateParts[2]) > 0 && parseInt(dateParts[2]) < 9999) {
@@ -78,10 +75,12 @@ const DateSlider = () => {
   };
 
   const onFocus = () => {
+    setSliderLock(false);
     setShowHide('show');
   };
 
   const onBlur = () => {
+    setSliderLock(true);
     setShowHide('hide');
   };
 
@@ -119,6 +118,8 @@ const DateSlider = () => {
   };
 
   const sliderChange = (e) => {
+    setSliderLock(true);
+
     const sliderToDates = (value) => {
       let addValueOne;
       let addValueTwo;
@@ -165,13 +166,15 @@ const DateSlider = () => {
   };
 
   useEffect(() => {
-    setSliderOne(differenceInDays(new Date(startDate), new Date(dateFormat(minDate))));
-    setSliderTwo(differenceInDays(new Date(endDate), new Date(dateFormat(minDate))));
+    if (!sliderLock) {
+      setSliderOne(differenceInDays(new Date(startDate), new Date(dateFormat(minDate))));
+      setSliderTwo(differenceInDays(new Date(endDate), new Date(dateFormat(minDate))));
+    }
     if (load) {
       setSliderMax(differenceInDays(new Date(dateFormat(maxDate)), new Date(dateFormat(minDate))));
       setLoad(false);
     }
-  }, [dispatch, startDate, endDate, minDate, maxDate, load]);
+  }, [dispatch, startDate, endDate, minDate, maxDate, load, sliderLock]);
 
   return (
     <div className='dateSection'>

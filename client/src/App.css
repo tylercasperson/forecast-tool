@@ -537,27 +537,49 @@ input[type='number'] {
   transition-delay: 0.5s;
 }
 
-/* rotate settings */
-
-.rotate_02:hover {
-  -webkit-animation: spin 1s linear infinite;
-  -moz-animation: spin 1s linear infinite;
-  animation: spin 1s linear infinite;
+.exportDataBtn:hover {
+  color: white;
+  background-color: #424242;
 }
 
-/*use keyframes*/
-@-webkit-keyframes spin {
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
+/* which data source */
+
+.radioBtn > i {
+  color: #ffffff;
+  background-color: #424242;
+  font-size: 2vh;
+  position: absolute;
+  top: -1vh;
+  left: 50%;
+  transform: translateX(-50%) scale(4);
+  border-radius: 5vh;
+  padding: 3px;
+  transition: 0.2s;
+  pointer-events: none;
+  opacity: 0;
 }
-@-moz-keyframes spin {
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
+
+.dataOption input:checked + .radioBtn {
+  border: 3px solid #424242;
 }
-@keyframes spin {
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
+
+.dataOption input:checked + .radioBtn > i {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+/* Select Option */
+
+.selectList {
+  padding: 8px 12px;
+  border-color: white;
+  background-color: #ededed;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.selectList:hover,
+.selectList:focus {
+  outline: none;
+  border-color: black;
 }

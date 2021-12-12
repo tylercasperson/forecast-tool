@@ -112,6 +112,23 @@ const Forecast = () => {
     );
   };
 
+  const filteredColor = () => {
+    let removeSalesHistory = showSalesHistory ? 0 : colors[1];
+    let removeLastYear = showLastYear ? 0 : colors[2];
+    let removeMovingAverage = showMovingAverage ? 0 : colors[3];
+    let removeWeightedAverage = showWeightedAverage ? 0 : colors[4];
+    let removeLinearRegression = showLinearRegression ? 0 : colors[5];
+
+    return colors.filter(
+      (i) =>
+        i !== removeSalesHistory &&
+        i !== removeLastYear &&
+        i !== removeMovingAverage &&
+        i !== removeWeightedAverage &&
+        i !== removeLinearRegression
+    );
+  };
+
   useEffect(() => {
     dispatch(
       listGroupedData(
@@ -126,6 +143,7 @@ const Forecast = () => {
       {groupedData && (
         <LineChart
           data={filteredData()}
+          colors={filteredColor()}
           showHoverLabels={toggleHoverText.split(' ')[0] === 'Show' ? false : true}
         />
       )}

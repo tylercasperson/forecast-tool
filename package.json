@@ -28,6 +28,7 @@
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3-rc.0",
+    "request": "^2.88.2",
     "sequelize": "^6.9.0"
   },
   "devDependencies": {

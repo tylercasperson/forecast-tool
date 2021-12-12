@@ -68,7 +68,7 @@ const LineChart = (props) => {
       .attr('width', chartWidth + margin.left + margin.right)
       .attr('height', chartHeight + margin.top + margin.bottom);
 
-    let color = d3.scaleOrdinal().range(colors);
+    let color = d3.scaleOrdinal().range(props.colors);
     let colorArr = [];
 
     svg
@@ -267,6 +267,7 @@ const LineChart = (props) => {
     }
   }, [
     colors,
+    props.colors,
     props.data,
     props.showHoverLabels,
     height,

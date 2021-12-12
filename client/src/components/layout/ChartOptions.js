@@ -1,5 +1,6 @@
 import React from 'react';
 import ToggleSwitch from './ToggleSwitch';
+import ExportToExcel from './ExportToExcel';
 
 const ChartOptions = (props) => {
   return (
@@ -25,6 +26,7 @@ const ChartOptions = (props) => {
           name={'showHideHoverLabels'}
           checked={props.showHoverLabels}
         />
+        <ExportToExcel />
       </div>
       <div
         style={{
