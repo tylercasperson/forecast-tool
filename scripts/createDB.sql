@@ -7,7 +7,7 @@ CREATE TABLE dataTypes (
     name varChar(255),
     description varChar(255),
     abbreviation varChar(255),
-    bestToUseWhen varChar(255),
+    calculation varChar(800),
     createdAt datetime,
     updatedAt datetime,
     PRIMARY KEY (id)

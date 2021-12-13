@@ -23,12 +23,19 @@ const ForecastTypes = () => {
       <div
         style={{
           backgroundColor: colors[record],
+          marginTop: '12vh',
           paddingLeft: '10vw',
           width: '80%',
           height: '5vh',
         }}
       ></div>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
         <i
           onClick={() => setRecord(record - 1 < 0 ? dataTypes.length - 1 : record - 1)}
           style={{ fontSize: '10vh', margin: '3%' }}

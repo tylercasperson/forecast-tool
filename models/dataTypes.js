@@ -15,7 +15,7 @@ module.exports = function (sequelize, DataTypes) {
     abbreviation: {
       type: DataTypes.STRING,
     },
-    bestToUseWhen: {
+    calculation: {
       type: DataTypes.STRING,
     },
   });

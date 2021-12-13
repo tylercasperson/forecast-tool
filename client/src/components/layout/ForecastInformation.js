@@ -4,11 +4,11 @@ const ForecastInformation = (props) => {
   return (
     <div
       style={{
-        height: '30vh',
-        width: '40vw',
+        height: '60vh',
+        width: '50vw',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'start',
       }}
     >
       <div>
@@ -23,18 +23,26 @@ const ForecastInformation = (props) => {
           {props.name}
         </div>
         <div style={{ fontSize: '2vh', padding: '0.5vw' }}>{props.description}</div>
-        <div style={{ textAlign: 'center', fontSize: '2vh', padding: '0.5vw' }}>
+        <div
+          style={{
+            textAlign: 'start',
+            justifyContent: 'flex-start',
+            width: '45vw',
+            fontSize: '2vh',
+            padding: '0.5vw',
+          }}
+        >
           <div
             style={{
               display: 'flex',
-              justifySelf: 'flex-start',
               fontWeight: 'bold',
               paddingTop: '1vh',
+              paddingBottom: '1vh',
             }}
           >
             Calculation:
           </div>
-          {props.bestToUseWhen}
+          {props.calculation}
         </div>
       </div>
     </div>

@@ -1,13 +1,15 @@
 SET @createdAt = '2021-11-06 00:00:00';
 SET @updatedAt = '2021-11-06 00:00:00';
 
-INSERT INTO dataTypes (id, name, description, abbreviation, bestToUseWhen, createdAt, updatedAt)
-VALUES (1,'User Input','User input based on data provided','ui','No forecast is absolutly correct, the input helps to figure out what amount should be used.',@createdAt,@updatedAt),
-(2,'salesHistory','Sales History','sh','Actual data',@createdAt,@updatedAt),
+INSERT INTO dataTypes (id, name, description, abbreviation, calculation, createdAt, updatedAt)
+VALUES (1,'User Input','User input based on data provided. The input calculated when the forecast is loaded is an average of all forecasts for that time period.','ui','No forecast is absolutly correct, the input helps to figure out what amount should be used.',@createdAt,@updatedAt),
+(2,'Sales History','Actual data based on sales.','sh','Depends on when items are sold.',@createdAt,@updatedAt),
 (3, 'Last Year', "Last year's data.", 'ly', 'Great way to compare current forecast to last years trends.',@createdAt,@updatedAt),
-(4,'3 month moving average','Average of the past 3 months.','ma', 'To show recent trends',@createdAt,@updatedAt),
-(5,'weighted 3 month moving average', 'Provides more weight to recent trends while still using an average of recent months.','wa', 'To show recent trends with an emphasis on recent months',@createdAt,@updatedAt),
-(6, 'Linear Regression', 'Shows the relationship between two or more data points.', 'lr', 'To show a correlation between data points to show increase/decrease in future trends.',@createdAt,@updatedAt);
+(4,'Moving Average','Average of a specified time period.','ma', 'Add the sales data from a selected number of time periods together. Divide the result by the total number of time periods.',@createdAt,@updatedAt),
+(5,'Weighted Average', 'Provides more weight to recent time periods.','wa', 'Figure out the total number of time periods that will be used. Multiply the sales data from the most recent time period by the total number of time periods. Take the sales data from the next most recent time period and multiply by the weight minus 1 or the total number of time periods minus 1. Keep doing this until the multiplying number is 1. Add everything together and divide the total by the factoral of the weight.',@createdAt,@updatedAt),
+(6, 'Linear Regression', 'Shows the relationship between two or more data points. In a forecast, the trends are less apparent than in other forecast methods.', 'lr', '
+Get two data sets that influence each other. This app uses gdp and sales data. First, find the slope. Multiply the number of data sets by the sum of the first and second data sets. Multiply the first and second data sets mean together and subtract from the first total. Divide by multipling the number of data sets by the sum of square of first data set subtracted from the sum of the first data set squared. Second, find the Intercept. Take the sum of the second data set and subtract from the mean of the first set. 
+Third, plug in the numebrs to the linear regression equation. Take the value of the first data set and multiply it by the slope. Add the result to the intercept. Subtract the second data set value.',@createdAt,@updatedAt);
 
 INSERT INTO timePeriodTypes (id, type, createdAt, updatedAt)
 VALUES (1,'Quarter',@createdAt,@updatedAt),
