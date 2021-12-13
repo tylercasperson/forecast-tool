@@ -92,7 +92,6 @@ const TableHeader = (props) => {
           }}
         ></div>
         Sales History
-        {console.log()}
       </div>
       <div
         style={{

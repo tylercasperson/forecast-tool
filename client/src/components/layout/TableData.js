@@ -7,6 +7,7 @@ import {
   updateGroupedData,
   deleteGroupedData,
 } from '../data/actions/groupedDataActions.js';
+
 import { GROUPED_DATA_UPDATE_RESET } from '../data/constants/groupedDataConstants.js';
 
 import TableHeader from './TableHeader';
@@ -59,9 +60,11 @@ const TableData = (props) => {
     arr[dataTypes[e.target.name] - 1].data = e.target.value;
   };
 
-  const onDelete = (arr, tableRow) => {
+  const onDelete = (arr) => {
+    localStorage.setItem('scrollPosition', tableData.current.scrollTop);
+
     arr.forEach((i) => {
-      dispatch(deleteGroupedData(i.timePeriodId));
+      dispatch(deleteGroupedData(i.id));
     });
 
     dispatch(
@@ -73,6 +76,8 @@ const TableData = (props) => {
   };
 
   useEffect(() => {
+    tableData.current.scrollTop = localStorage.getItem('scrollPosition');
+
     if (success) {
       dispatch({ type: GROUPED_DATA_UPDATE_RESET });
       setLock(false);
@@ -129,7 +134,7 @@ const TableData = (props) => {
                 movingAverage={findData('ma')}
                 linearRegression={findData('lr')}
                 onChange={(e) => onChange(e, i.values)}
-                delete={(e) => onDelete(i.values, index)}
+                delete={() => onDelete(i.values)}
                 showSalesHistory={props.showSalesHistory}
                 showLastYear={props.showLastYear}
                 showMovingAverage={props.showMovingAverage}
