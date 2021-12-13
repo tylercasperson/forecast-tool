@@ -96,7 +96,7 @@ const LineChart = (props) => {
       .attr('stroke-width', 1.5);
 
     let tickAdjustment = chartWidth > 450 ? 40 : props.xLabelOption ? 8 : 6;
-    let widthPerTick = Math.floor(chartWidth / tickAdjustment);
+    let widthPerTick = props.data.length < 100 ? 1 : Math.floor(chartWidth / tickAdjustment);
 
     const xAxis = d3
       .axisBottom(xScale)
@@ -186,7 +186,7 @@ const LineChart = (props) => {
       svg
         .append('line')
         .attr('class', 'hoverLine')
-        .attr('stroke', 'black')
+        .attr('stroke', chartSpot === 0 ? 'none' : 'black')
         .attr('stroke-width', 2)
         .attr('x1', chartSpot)
         .attr('x2', chartSpot)
