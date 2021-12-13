@@ -23,6 +23,7 @@ const LineChart = (props) => {
   const [hoverInfo, setHoverInfo] = useState(' ');
   const [widthRatio, setWidthRatio] = useState(0);
   const [textPosition, setTextPosition] = useState(0);
+  const [chartSpot, setChartSpot] = useState(0);
 
   useEffect(() => {
     if (lineChart.current.childNodes.length > 0) {
@@ -94,11 +95,8 @@ const LineChart = (props) => {
       .attr('name', (d) => d.key)
       .attr('stroke-width', 1.5);
 
-    let labelLengthAdjustment = props.xLabelOption
-      ? Math.floor(props.data.length / 20)
-      : Math.floor(props.data.length / 17);
-
-    let widthPerTick = Math.round(width / 100) - labelLengthAdjustment;
+    let tickAdjustment = chartWidth > 450 ? 40 : props.xLabelOption ? 8 : 6;
+    let widthPerTick = Math.floor(chartWidth / tickAdjustment);
 
     const xAxis = d3
       .axisBottom(xScale)
@@ -113,6 +111,12 @@ const LineChart = (props) => {
       .attr('class', 'xAxis')
       .attr('transform', `translate(0,${chartHeight})`)
       .call(xAxis);
+
+    let xTickMarks = svg.select('g.xAxis').selectAll('g.tick')._groups[0];
+
+    Array.from(xTickMarks).map((i, index) =>
+      index % widthPerTick !== 0 ? (i.children[0].attributes.stroke.value = 'none') : ''
+    );
 
     let heightPerTick = Math.round(height / 120) - 4;
 
@@ -137,20 +141,19 @@ const LineChart = (props) => {
         let rect = e.target.getBoundingClientRect();
         let x = e.clientX - rect.left;
         let positionRatio = x / e.target.getBoundingClientRect().width;
+
         setWidthRatio(positionRatio);
+
         let indexToBeUsed =
           Math.round(positionRatio * data[0].values.length) === data[0].values.length
             ? Math.round(positionRatio * data[0].values.length - 1)
             : Math.round(positionRatio * data[0].values.length);
 
-        let scrollXlabelOption = props.xLabelOption
-          ? data[0].values[indexToBeUsed].timePeriod.groupName
-          : format(
-              new Date(dateFormat(data[0].values[indexToBeUsed].timePeriod.startDate)),
-              'M/d/yyyy'
-            ).toString();
+        setScrollXlabel(data[0].values[indexToBeUsed].timePeriod);
 
-        setScrollXlabel(scrollXlabelOption);
+        let xLabel = props.xLabelOption
+          ? scrollXlabel.groupName
+          : format(new Date(dateFormat(scrollXlabel.startDate)), 'M/d/yyyy').toString();
 
         let needPeriodInfo = (name, periodType, data) => {
           if (name === 'Moving Average') {
@@ -170,13 +173,13 @@ const LineChart = (props) => {
           i.values
             .filter((j) =>
               props.xLabelOption
-                ? j.timePeriod.groupName === scrollXlabel
-                : format(new Date(dateFormat(j.timePeriod.startDate)), 'M/d/yyyy') === scrollXlabel
+                ? j.timePeriod.groupName === xLabel
+                : format(new Date(dateFormat(j.timePeriod.startDate)), 'M/d/yyyy') === xLabel
             )
             .map((k) => needPeriodInfo(k.dataType.name, k.timePeriod.timePeriodType.type, k.data))
         );
 
-        setHoverInfo(scrollXlabel + ';' + sameGroupName);
+        setHoverInfo(xLabel + ';' + sameGroupName);
       });
 
     const hoverLabels = () => {
@@ -185,12 +188,12 @@ const LineChart = (props) => {
         .attr('class', 'hoverLine')
         .attr('stroke', 'black')
         .attr('stroke-width', 2)
-        .attr('x1', xScale(scrollXlabel))
-        .attr('x2', xScale(scrollXlabel))
+        .attr('x1', chartSpot)
+        .attr('x2', chartSpot)
         .attr('y1', margin.top + margin.bottom)
         .attr('y2', d3.select('.yAxis').node().getBBox().height + margin.top + margin.bottom);
 
-      const forecastWrap = (words) => {
+      const forecastWrap = (words, xLabel) => {
         let wordsArr = words.split(';');
         wordsArr.pop();
 
@@ -214,7 +217,7 @@ const LineChart = (props) => {
               ? hoverInfo.split(';')[i].slice(1, periodInfo.length)
               : hoverInfo.split(';')[i];
 
-          setTextPosition(xScale(scrollXlabel) + x + positionX);
+          setTextPosition(xScale(xLabel) + x + positionX);
 
           let textAnchor = x === 0 ? 'end' : 'start';
           let textGroup = x === 0 ? 40 : 130;
@@ -239,6 +242,10 @@ const LineChart = (props) => {
 
           let widthAdjustment = chartWidth < 450 ? 100 : 0;
 
+          if (xScale(xLabel) !== undefined) {
+            setChartSpot(xScale(xLabel));
+          }
+
           svg
             .append('text')
             .attr('text-anchor', textAnchor)
@@ -246,9 +253,7 @@ const LineChart = (props) => {
             .attr('font-size', '1.3vmin')
             .attr(
               'x',
-              data.length === 0
-                ? 0
-                : widthAdjustment + xScale(scrollXlabel) + x + positionX - textGroup
+              data.length === 0 ? 0 : widthAdjustment + chartSpot + x + positionX - textGroup
             )
             .attr('y', 0 + margin.bottom - y)
             .text(text);
@@ -278,9 +283,7 @@ const LineChart = (props) => {
             .attr('fill', colors[legendData('nameOnly')])
             .attr(
               'x',
-              data.length === 0
-                ? 0
-                : xScale(scrollXlabel) + textVariable + x + positionX + colorLabelGroup
+              data.length === 0 ? 0 : chartSpot + textVariable + x + positionX + colorLabelGroup
             )
             .attr('y', colorYadjustment + 0 + margin.bottom - y - 8);
 
@@ -290,11 +293,7 @@ const LineChart = (props) => {
           }
           y += chartWidth < 450 ? 10 : 15;
 
-          let textTimePeriod = data.length !== 0 ? xScale(scrollXlabel) + x + positionX - 20 : 0;
-
-          let xLabelOption = props.xLabelOption
-            ? scrollXlabel.charAt(0).toUpperCase() + scrollXlabel.slice(1)
-            : scrollXlabel;
+          let textTimePeriod = data.length !== 0 ? chartSpot + x + positionX - 20 : 0;
 
           if (x === 0) {
             if (props.xLabelOption) {
@@ -305,18 +304,18 @@ const LineChart = (props) => {
                 .attr('x', widthAdjustment + textTimePeriod)
                 .attr('y', 0 + margin.bottom - 20)
                 .attr('border', '1pt solid black')
-                .text(xLabelOption);
+                .text(xLabel);
             } else {
               let yAdjustment = 0;
 
               for (let i = 0; i < 3; i++) {
                 let textAdjustment =
-                  xLabelOption.split('/')[i] &&
-                  (xLabelOption.split('/')[i].length === 1
+                  xLabel.split('/')[i] &&
+                  (xLabel.split('/')[i].length === 1
                     ? 5
-                    : xLabelOption.split('/')[i].length === 2
+                    : xLabel.split('/')[i].length === 2
                     ? 0
-                    : xLabelOption.split('/')[i].length === 4
+                    : xLabel.split('/')[i].length === 4
                     ? -5
                     : 0);
 
@@ -324,10 +323,15 @@ const LineChart = (props) => {
                   .append('text')
                   .attr('font-size', '1.8vmin')
                   .attr('font-weight', 'bold')
-                  .attr('x', widthAdjustment + textTimePeriod + textAdjustment)
+                  .attr(
+                    'x',
+                    isNaN(textTimePeriod) || textAdjustment === undefined
+                      ? 0
+                      : widthAdjustment + textTimePeriod + textAdjustment
+                  )
                   .attr('y', 0 + margin.bottom - 32 + yAdjustment)
                   .attr('border', '1pt solid black')
-                  .text(props.xLabelOption ? xLabelOption : xLabelOption.split('/')[i]);
+                  .text(xLabel.split('/')[i]);
 
                 yAdjustment += 20;
               }
@@ -336,7 +340,11 @@ const LineChart = (props) => {
         }
       };
 
-      forecastWrap(hoverInfo);
+      let xLabel = props.xLabelOption
+        ? scrollXlabel.groupName
+        : format(new Date(dateFormat(scrollXlabel.startDate)), 'M/d/yyyy').toString();
+
+      forecastWrap(hoverInfo, xLabel);
     };
     if (props.showHoverLabels) {
       hoverLabels();
@@ -347,6 +355,7 @@ const LineChart = (props) => {
     props.data,
     props.showHoverLabels,
     props.xLabelOption,
+    chartSpot,
     height,
     width,
     documentWidth,
