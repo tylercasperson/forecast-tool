@@ -10,8 +10,6 @@ const ExportToExcel = () => {
   const { groupedData } = getFromState.groupedData;
   const { movingPeriods, weightedPeriods } = getFromState.periods;
 
-  const size = document.documentElement.clientWidth * document.documentElement.clientHeight;
-
   const nestedData = nest()
     .key((d) => d.dataType.abbreviation)
     .entries(groupedData);

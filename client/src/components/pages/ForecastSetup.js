@@ -133,6 +133,8 @@ const ForecastSetup = () => {
     }
 
     dispatch(createBulkGroupedData(data));
+
+    localStorage.removeItem('scrollPosition');
   };
 
   const addToData = (abbreviation, timePeriodId, value) => {
@@ -331,7 +333,7 @@ const ForecastSetup = () => {
   }, [dispatch, load, startDate, endDate]);
 
   return (
-    <div ref={forecastForm} action={'./'}>
+    <form ref={forecastForm} action={'./'}>
       <HeaderLabel header={'Change Forecast Colors'} />
       <ChangeColors colorsDisplay={'flex'} />
       <HeaderLabel header={'Show/Hide Forecast'} />
@@ -341,7 +343,7 @@ const ForecastSetup = () => {
       <HeaderLabel header={'Group Forecast Data By'} />
       <TimePeriodTypesList />
       <ButtonHover onClick={(e) => onClick(e)} name={'Calculate'} />
-    </div>
+    </form>
   );
 };
 

@@ -19,7 +19,11 @@ const ShowHide = (props) => {
         margin: ' -2.5vh 0 0 0.5vw',
       }}
     >
-      <i onClick={() => onClick()} className='fas fa-cog'></i>
+      <i
+        style={{ display: 'flex', marginLeft: '5vw' }}
+        onClick={() => onClick()}
+        className='fas fa-cog'
+      ></i>
       <ChartOptions
         display={display}
         onChange={props.onChange}

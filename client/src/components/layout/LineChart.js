@@ -96,7 +96,12 @@ const LineChart = (props) => {
       .attr('stroke-width', 1.5);
 
     let tickAdjustment = chartWidth > 450 ? 40 : props.xLabelOption ? 8 : 6;
-    let widthPerTick = props.data.length < 100 ? 1 : Math.floor(chartWidth / tickAdjustment);
+    let widthPerTick =
+      props.data.length < 100
+        ? 1
+        : props.data.length < 300
+        ? Math.floor(chartWidth / tickAdjustment / 4)
+        : Math.floor(chartWidth / tickAdjustment);
 
     const xAxis = d3
       .axisBottom(xScale)

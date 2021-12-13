@@ -15,6 +15,7 @@ const TableHeader = (props) => {
           width: '5vw',
           marginTop: 'auto',
           marginBottom: 'auto',
+          fontSize: '1.8vmin',
         }}
       >
         Time Period
@@ -24,6 +25,7 @@ const TableHeader = (props) => {
           width: '12vw',
           marginTop: 'auto',
           marginBottom: 'auto',
+          fontSize: '1.8vmin',
         }}
       >
         <input
@@ -36,6 +38,7 @@ const TableHeader = (props) => {
             width: '90%',
             marginBottom: '3%',
             fontWeight: 'bold',
+            fontSize: '1.8vmin',
           }}
           id='one'
         />
@@ -46,6 +49,7 @@ const TableHeader = (props) => {
           width: '12vw',
           marginTop: 'auto',
           marginBottom: 'auto',
+          fontSize: '1.8vmin',
         }}
       >
         <input
@@ -58,11 +62,12 @@ const TableHeader = (props) => {
             width: '90%',
             marginBottom: '3%',
             fontWeight: 'bold',
+            fontSize: '1.8vmin',
           }}
         />
         End Date
       </div>
-      <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto' }}>
+      <div style={{ width: '8vw', marginTop: 'auto', marginBottom: 'auto', fontSize: '1.8vmin' }}>
         <div
           style={{
             height: '1vh',
@@ -80,6 +85,7 @@ const TableHeader = (props) => {
           marginTop: 'auto',
           marginBottom: 'auto',
           display: props.showSalesHistory,
+          fontSize: '1.8vmin',
         }}
       >
         <div
@@ -99,6 +105,7 @@ const TableHeader = (props) => {
           marginTop: 'auto',
           marginBottom: 'auto',
           display: props.showLastYear,
+          fontSize: '1.8vmin',
         }}
       >
         <div
@@ -118,6 +125,7 @@ const TableHeader = (props) => {
           marginTop: 'auto',
           marginBottom: 'auto',
           display: props.showMovingAverage,
+          fontSize: '1.8vmin',
         }}
       >
         <div
@@ -129,7 +137,7 @@ const TableHeader = (props) => {
             backgroundColor: props.colors[3],
           }}
         ></div>
-        {props.movingPeriod} moving average
+        {props.movingPeriod} Moving Average
       </div>
       <div
         style={{
@@ -137,6 +145,7 @@ const TableHeader = (props) => {
           marginTop: 'auto',
           marginBottom: 'auto',
           display: props.showWeightedAverage,
+          fontSize: '1.8vmin',
         }}
       >
         <div
@@ -148,7 +157,7 @@ const TableHeader = (props) => {
             backgroundColor: props.colors[4],
           }}
         ></div>
-        {props.weightedPeriod} weight average
+        {props.weightedPeriod} Weighted Average
       </div>
 
       <div
@@ -157,6 +166,7 @@ const TableHeader = (props) => {
           marginTop: 'auto',
           marginBottom: 'auto',
           display: props.showLinearRegression,
+          fontSize: '1.8vmin',
         }}
       >
         <div

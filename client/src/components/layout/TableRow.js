@@ -50,6 +50,7 @@ const TableRow = (props) => {
         style={{
           width: '12vw',
           backgroundColor: props.background,
+          fontSize: '1.7vmin',
         }}
         type='text'
         name={'startDate'}
@@ -57,14 +58,14 @@ const TableRow = (props) => {
         value={startDate}
       />
       <input
-        style={{ width: '12vw', backgroundColor: props.background }}
+        style={{ width: '12vw', backgroundColor: props.background, fontSize: '1.7vmin' }}
         type='text'
         name={'endDate'}
         onChange={(e) => onChange(e)}
         value={endDate}
       />
       <input
-        style={{ width: '8vw', backgroundColor: props.background }}
+        style={{ width: '8vw', backgroundColor: props.background, fontSize: '1.7vmin' }}
         type='text'
         name={'userInput'}
         onChange={(e) => onChange(e)}
@@ -76,6 +77,7 @@ const TableRow = (props) => {
           width: '8vw',
           backgroundColor: props.background,
           display: props.showSalesHistory,
+          fontSize: '1.7vmin',
         }}
         type='text'
         name={'salesHistory'}
@@ -88,6 +90,7 @@ const TableRow = (props) => {
           width: '8vw',
           backgroundColor: props.background,
           display: props.showLastYear,
+          fontSize: '1.7vmin',
         }}
         type='text'
         name={'lastYear'}
@@ -100,6 +103,7 @@ const TableRow = (props) => {
           width: '8vw',
           backgroundColor: props.background,
           display: props.showMovingAverage,
+          fontSize: '1.7vmin',
         }}
         type='text'
         name={'movingAverage'}
@@ -112,6 +116,7 @@ const TableRow = (props) => {
           width: '8vw',
           backgroundColor: props.background,
           display: props.showWeightedAverage,
+          fontSize: '1.7vmin',
         }}
         type='text'
         name={'weightedAverage'}
@@ -124,6 +129,7 @@ const TableRow = (props) => {
           width: '8vw',
           backgroundColor: props.background,
           display: props.showLinearRegression,
+          fontSize: '1.7vmin',
         }}
         type='text'
         name={'linearRegression'}

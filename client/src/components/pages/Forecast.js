@@ -143,7 +143,7 @@ const Forecast = () => {
   }, [dispatch, startDate, endDate]);
 
   return (
-    <div style={{ height: '92vh' }}>
+    <div style={{ height: '92vh', textAlign: 'center' }}>
       {groupedData && (
         <LineChart
           data={filteredData()}
@@ -182,12 +182,8 @@ const Forecast = () => {
           showMovingAverage={showMovingAverage ? '' : 'none'}
           showWeightedAverage={showWeightedAverage ? '' : 'none'}
           showLinearRegression={showLinearRegression ? '' : 'none'}
-          movingPeriod={
-            movingPeriods + ' ' + groupedData[0].timePeriod.timePeriodType.type.toLowerCase()
-          }
-          weightedPeriod={
-            weightedPeriods + ' ' + groupedData[0].timePeriod.timePeriodType.type.toLowerCase()
-          }
+          movingPeriod={movingPeriods + ' ' + groupedData[0].timePeriod.timePeriodType.type}
+          weightedPeriod={weightedPeriods + ' ' + groupedData[0].timePeriod.timePeriodType.type}
         />
       )}
     </div>
