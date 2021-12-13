@@ -98,7 +98,9 @@ const LineChart = (props) => {
     let tickAdjustment = chartWidth > 450 ? 40 : props.xLabelOption ? 8 : 6;
     let widthPerTick =
       props.data.length < 100
-        ? 1
+        ? chartWidth < 450
+          ? 2
+          : 1
         : props.data.length < 300
         ? Math.floor(chartWidth / tickAdjustment / 4)
         : Math.floor(chartWidth / tickAdjustment);
@@ -158,7 +160,8 @@ const LineChart = (props) => {
 
         let xLabel = props.xLabelOption
           ? scrollXlabel.groupName
-          : format(new Date(dateFormat(scrollXlabel.startDate)), 'M/d/yyyy').toString();
+          : scrollXlabel.startDate &&
+            format(new Date(dateFormat(scrollXlabel.startDate)), 'M/d/yyyy').toString();
 
         let needPeriodInfo = (name, periodType, data) => {
           if (name === 'Moving Average') {
@@ -347,7 +350,8 @@ const LineChart = (props) => {
 
       let xLabel = props.xLabelOption
         ? scrollXlabel.groupName
-        : format(new Date(dateFormat(scrollXlabel.startDate)), 'M/d/yyyy').toString();
+        : scrollXlabel.startDate &&
+          format(new Date(dateFormat(scrollXlabel.startDate)), 'M/d/yyyy').toString();
 
       forecastWrap(hoverInfo, xLabel);
     };
