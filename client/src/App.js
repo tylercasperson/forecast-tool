@@ -6,6 +6,7 @@ import Navbar from './components/layout/Navbar';
 import Forecast from './components/pages/Forecast';
 import ForecastTypes from './components/pages/ForecastTypes';
 import ForecastSetup from './components/pages/ForecastSetup';
+import SalesHistory from './components/pages/SalesHistory';
 
 function App() {
   const getFromState = useSelector((state) => state);
@@ -32,6 +33,7 @@ function App() {
           <Route path='/' element={<Forecast />} exact />
           <Route path='/forecastTypes' element={<ForecastTypes />} />
           <Route path='/forecastSetup' element={<ForecastSetup />} />
+          <Route path='/salesHistory' element={<SalesHistory />} />
         </Routes>
       </Router>
     </div>

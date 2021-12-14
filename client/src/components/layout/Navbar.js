@@ -23,6 +23,9 @@ const Navbar = () => {
         <li>
           <a href='/forecastSetup'>Forecast Setup</a>
         </li>
+        <li>
+          <a href='/salesHistory'>Sales History</a>
+        </li>
       </ul>
     </div>
   );
