@@ -2,6 +2,7 @@ const colors = require('colors');
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const path = require('path');
 const PORT = process.env.PORT || 4000;
 
 const db = require('./models');
@@ -27,6 +28,14 @@ app.use('/api/timePeriods', timePeriodsRoute);
 app.use('/api/salesData', salesDataRoute);
 app.use('/api/groupedData', groupedDataRoute);
 app.use('/api/gdp', gdpRoute);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '/client/build')));
+
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+  );
+}
 
 app.use(notFound);
 app.use(errorHandler);
