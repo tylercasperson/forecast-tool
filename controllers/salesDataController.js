@@ -42,11 +42,14 @@ const getOneSalesData = asyncHandler(async (req, res) => {
 });
 
 const updateSalesData = asyncHandler(async (req, res) => {
-  const salesData = await db.salesData.update(req.body, {
-    where: {
-      id: { [Op.eq]: req.params.id },
-    },
-  });
+  const salesData = await db.salesData.update(
+    { data: req.body.data },
+    {
+      where: {
+        id: { [Op.eq]: req.params.id },
+      },
+    }
+  );
   res.json({ salesData });
 });
 

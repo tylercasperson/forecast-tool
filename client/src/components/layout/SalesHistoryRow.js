@@ -19,6 +19,7 @@ const SalesHistoryRow = (props) => {
         type='text'
         name={'value'}
         onChange={(e) => onChange(e)}
+        onChangeCapture={props.onChange}
         value={value}
       />
       <div

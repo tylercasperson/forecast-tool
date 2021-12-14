@@ -11,6 +11,10 @@ import {
   SALES_DATA_DELETE_REQUEST,
   SALES_DATA_DELETE_SUCCESS,
   SALES_DATA_DELETE_FAIL,
+  SALES_DATA_UPDATE_REQUEST,
+  SALES_DATA_UPDATE_SUCCESS,
+  SALES_DATA_UPDATE_FAIL,
+  SALES_DATA_UPDATE_RESET,
 } from '../constants/salesDataConstants.js';
 
 export const salesDataListReducer = (state = { salesData: [] }, action) => {
@@ -63,6 +67,25 @@ export const salesDataDeleteReducer = (state = {}, action) => {
       };
     case SALES_DATA_DELETE_FAIL:
       return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const salesDataUpdateReducer = (state = { salesData: [] }, action) => {
+  switch (action.type) {
+    case SALES_DATA_UPDATE_REQUEST:
+      return { loading: true };
+    case SALES_DATA_UPDATE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        groupedData: action.payload.salesData,
+      };
+    case SALES_DATA_UPDATE_FAIL:
+      return { loading: false, error: action.payload };
+    case SALES_DATA_UPDATE_RESET:
+      return {};
     default:
       return state;
   }

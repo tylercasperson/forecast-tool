@@ -13,6 +13,9 @@ import {
   SALES_DATA_DELETE_REQUEST,
   SALES_DATA_DELETE_SUCCESS,
   SALES_DATA_DELETE_FAIL,
+  SALES_DATA_UPDATE_REQUEST,
+  SALES_DATA_UPDATE_SUCCESS,
+  SALES_DATA_UPDATE_FAIL,
 } from '../constants/salesDataConstants.js';
 
 export const listSalesData = () => async (dispatch) => {
@@ -102,6 +105,32 @@ export const deleteSalesData = (salesDataId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: SALES_DATA_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.message ? error.response.data.message : error.message,
+    });
+  }
+};
+
+export const updateSalesData = (salesDataId, dataRecord) => async (dispatch) => {
+  try {
+    dispatch({ type: SALES_DATA_UPDATE_REQUEST });
+
+    let incommingData =
+      dataRecord === '' ? 0 : dataRecord === null ? 0 : parseInt(dataRecord.replace(',', ''));
+
+    if (!isNaN(incommingData / 1)) {
+      const { data } = await axios.put(`/api/salesData/${salesDataId}`, {
+        data: incommingData,
+      });
+
+      dispatch({
+        type: SALES_DATA_UPDATE_SUCCESS,
+        payload: data,
+      });
+    }
+  } catch (error) {
+    dispatch({
+      type: SALES_DATA_UPDATE_FAIL,
       payload:
         error.response && error.response.data.message ? error.response.data.message : error.message,
     });
