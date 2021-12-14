@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 
-import {} from '../data/actions/salesDataActions.js';
-import {} from '../data/actions/groupedDataActions.js';
-
 const SalesHistoryRow = (props) => {
   const [value, setValue] = useState(props.value);
 
@@ -29,7 +26,7 @@ const SalesHistoryRow = (props) => {
           width: '5vw',
           backgroundColor: props.background,
         }}
-        onClick={props.delete}
+        onClick={props.onDelete}
       >
         <i
           style={{

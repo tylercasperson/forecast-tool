@@ -8,6 +8,7 @@ import {
   salesDataListReducer,
   salesDataRangeReducer,
   salesDateMinMaxReducer,
+  salesDataDeleteReducer,
 } from './components/data/reducers/salesDataReducers.js';
 import {
   groupedDataListReducer,
@@ -37,6 +38,7 @@ const reducer = combineReducers({
   salesData: salesDataListReducer,
   salesDataRange: salesDataRangeReducer,
   salesDateMinMax: salesDateMinMaxReducer,
+  salesDataDelete: salesDataDeleteReducer,
   groupedData: groupedDataListReducer,
   groupedDataUpdate: groupedDataUpdateReducer,
   groupedDataDelete: groupedDataDeleteReducer,

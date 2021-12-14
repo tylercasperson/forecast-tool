@@ -10,6 +10,9 @@ import {
   SALES_DATA_RANGE_REQUEST,
   SALES_DATA_RANGE_SUCCESS,
   SALES_DATA_RANGE_FAIL,
+  SALES_DATA_DELETE_REQUEST,
+  SALES_DATA_DELETE_SUCCESS,
+  SALES_DATA_DELETE_FAIL,
 } from '../constants/salesDataConstants.js';
 
 export const listSalesData = () => async (dispatch) => {
@@ -83,3 +86,24 @@ export const rangeSalesData =
       });
     }
   };
+
+export const deleteSalesData = (salesDataId) => async (dispatch) => {
+  try {
+    dispatch({ type: SALES_DATA_DELETE_REQUEST });
+
+    console.log(salesDataId);
+
+    const { data } = await axios.delete(`/api/salesData/${salesDataId}`);
+
+    dispatch({
+      type: SALES_DATA_DELETE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: SALES_DATA_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.message ? error.response.data.message : error.message,
+    });
+  }
+};
