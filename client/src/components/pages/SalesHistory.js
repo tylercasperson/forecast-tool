@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'date-fns';
 
 import { listSalesData } from '../data/actions/salesDataActions.js';
 import { listGroupedData } from '../data/actions/groupedDataActions.js';
+import { saveStartDate, saveEndDate } from '../data/actions/settingsActions.js';
 
 import LineChart from '../layout/LineChart';
+import SalesHistorySettings from '../layout/SalesHistorySettings.js';
 import SalesHistoryTable from '../layout/SalesHistoryTable';
 
 const SalesHistory = () => {
@@ -16,6 +18,53 @@ const SalesHistory = () => {
   const { groupedData } = getFromState.groupedData;
   const { colors } = getFromState.colors;
   const { startDate, endDate } = getFromState.dates;
+
+  const [tempStartDate, setTempStartDate] = useState(startDate);
+  const [tempEndDate, setTempEndDate] = useState(endDate);
+  const [showHoverText, setShowHoverText] = useState(true);
+  const [showTimePeriod, setShowTimePeriod] = useState(true);
+  const [showTimePeriodText, setShowTimePeriodText] = useState('Show Dates');
+
+  const onChange = (e) => {
+    let month = e.target.value.split('/')[0];
+    let day = e.target.value.split('/')[1];
+    let year = e.target.value.split('/')[2];
+
+    switch (e.target.name) {
+      case 'startDate':
+        setTempStartDate(e.target.value);
+        if (month > 0 && month < 13) {
+          if (day > 0 && day < 32) {
+            if (year > 0 && year < 9999) {
+              dispatch(saveStartDate(e.target.value));
+            }
+          }
+        }
+        break;
+      case 'endDate':
+        setTempEndDate(e.target.value);
+        if (month > 0 && month < 13) {
+          if (day > 0 && day < 32) {
+            if (year > 0 && year < 9999) {
+              dispatch(saveEndDate(e.target.value));
+            }
+          }
+        }
+        break;
+      case 'showTimePeriod':
+        showTimePeriod ? setShowTimePeriod(false) : setShowTimePeriod(true);
+        showTimePeriod
+          ? setShowTimePeriodText('Show Time Period')
+          : setShowTimePeriodText('Show Dates');
+
+        break;
+      case 'showHideHoverLabels':
+        showHoverText ? setShowHoverText(false) : setShowHoverText(true);
+        break;
+      default:
+        return;
+    }
+  };
 
   useEffect(() => {
     dispatch(listSalesData());
@@ -32,11 +81,18 @@ const SalesHistory = () => {
       {salesData && (
         <LineChart
           data={groupedData && groupedData.filter((data) => data.dataTypeId === 2)}
-          colors={[colors[1], 'white']}
-          showHoverLabels={false}
-          xLabelOption={false}
+          colors={[colors[1], colors[1]]}
+          showHoverLabels={showHoverText}
+          xLabelOption={showTimePeriod}
         />
       )}
+      <SalesHistorySettings
+        color={colors[1]}
+        showTimePeriod={showTimePeriod ? 'checked' : ''}
+        showHoverLabels={showHoverText ? 'checked' : ''}
+        showTimePeriodText={showTimePeriodText}
+        onChange={(e) => onChange(e)}
+      />
       <SalesHistoryTable array={salesData} />
     </div>
   );

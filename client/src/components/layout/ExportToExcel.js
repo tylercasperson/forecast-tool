@@ -5,9 +5,12 @@ import { saveAs } from 'file-saver';
 import { format } from 'date-fns';
 import { nest } from 'd3-collection';
 
-const ExportToExcel = () => {
+import { dateFormat } from '../data/formulas/dateFormulas';
+
+const ExportToExcel = (props) => {
   const getFromState = useSelector((state) => state);
   const { groupedData } = getFromState.groupedData;
+  const { salesData } = getFromState.salesData;
   const { movingPeriods, weightedPeriods } = getFromState.periods;
 
   const nestedData = nest()
@@ -15,58 +18,72 @@ const ExportToExcel = () => {
     .entries(groupedData);
 
   const onClick = () => {
-    let data = {
-      rows: [['TimePeriod', 'startDate', 'endDate', 'userInput']],
-    };
+    let data;
 
-    const addColumnTitles = () => {
-      data.rows[0].push(nestedData.filter((i) => i.key === 'sh')[0].values[0].dataType.name);
-      data.rows[0].push(nestedData.filter((i) => i.key === 'ly')[0].values[0].dataType.name);
-      data.rows[0].push(
-        movingPeriods +
-          ' ' +
-          nestedData[0].values[0].timePeriod.timePeriodType.type.toLowerCase() +
-          ' ' +
-          nestedData.filter((i) => i.key === 'ma')[0].values[0].dataType.name
-      );
-      data.rows[0].push(
-        weightedPeriods +
-          ' ' +
-          nestedData[0].values[0].timePeriod.timePeriodType.type.toLowerCase() +
-          ' ' +
-          nestedData.filter((i) => i.key === 'wa')[0].values[0].dataType.name
-      );
-      data.rows[0].push(nestedData.filter((i) => i.key === 'lr')[0].values[0].dataType.name);
-    };
+    if (props.option === 'salesData') {
+      data = {
+        rows: [['Date', 'Sales']],
+      };
 
-    addColumnTitles();
-
-    const addRows = () => {
-      nestedData[0].values.map((i, index) => {
-        return data.rows.push([
-          i.timePeriod.groupName,
-          format(new Date(i.timePeriod.startDate), 'M/d/yyyy'),
-          format(new Date(i.timePeriod.endDate), 'M/d/yyyy'),
-          i.data,
-          nestedData.filter((i) => i.key === 'sh')[0].values[index].data,
-          nestedData.filter((i) => i.key === 'ly')[0].values[index].data,
-          nestedData.filter((i) => i.key === 'ma')[0].values[index].data,
-          nestedData.filter((i) => i.key === 'wa')[0].values[index].data,
-          nestedData.filter((i) => i.key === 'lr')[0].values[index].data,
-        ]);
+      salesData.map((i) => {
+        return data.rows.push([format(new Date(dateFormat(i.date)), 'M/d/yyyy'), i.data]);
       });
-    };
-    addRows();
+    } else {
+      data = {
+        rows: [['TimePeriod', 'startDate', 'endDate', 'userInput']],
+      };
+
+      const addColumnTitles = () => {
+        data.rows[0].push(nestedData.filter((i) => i.key === 'sh')[0].values[0].dataType.name);
+        data.rows[0].push(nestedData.filter((i) => i.key === 'ly')[0].values[0].dataType.name);
+        data.rows[0].push(
+          movingPeriods +
+            ' ' +
+            nestedData[0].values[0].timePeriod.timePeriodType.type.toLowerCase() +
+            ' ' +
+            nestedData.filter((i) => i.key === 'ma')[0].values[0].dataType.name
+        );
+        data.rows[0].push(
+          weightedPeriods +
+            ' ' +
+            nestedData[0].values[0].timePeriod.timePeriodType.type.toLowerCase() +
+            ' ' +
+            nestedData.filter((i) => i.key === 'wa')[0].values[0].dataType.name
+        );
+        data.rows[0].push(nestedData.filter((i) => i.key === 'lr')[0].values[0].dataType.name);
+      };
+
+      addColumnTitles();
+
+      const addRows = () => {
+        nestedData[0].values.map((i, index) => {
+          return data.rows.push([
+            i.timePeriod.groupName,
+            format(new Date(i.timePeriod.startDate), 'M/d/yyyy'),
+            format(new Date(i.timePeriod.endDate), 'M/d/yyyy'),
+            i.data,
+            nestedData.filter((i) => i.key === 'sh')[0].values[index].data,
+            nestedData.filter((i) => i.key === 'ly')[0].values[index].data,
+            nestedData.filter((i) => i.key === 'ma')[0].values[index].data,
+            nestedData.filter((i) => i.key === 'wa')[0].values[index].data,
+            nestedData.filter((i) => i.key === 'lr')[0].values[index].data,
+          ]);
+        });
+      };
+      addRows();
+    }
+
+    let title = props.option === 'salesData' ? 'salesHistory' : 'forecasts';
 
     let workbook = XLSX.utils.book_new();
     workbook.Props = {
-      Title: 'Forecasts',
+      Title: title,
       Author: 'Tyler Casperson',
       CreatedDate: new Date(),
     };
-    workbook.SheetNames.push('forecast');
+    workbook.SheetNames.push(title);
     let worksheet = XLSX.utils.aoa_to_sheet(data.rows);
-    workbook.Sheets['forecast'] = worksheet;
+    workbook.Sheets[title] = worksheet;
 
     let wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
 
@@ -77,7 +94,7 @@ const ExportToExcel = () => {
       return buf;
     };
 
-    saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'forecast.xlsx');
+    saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), title + '.xlsx');
   };
 
   return (
