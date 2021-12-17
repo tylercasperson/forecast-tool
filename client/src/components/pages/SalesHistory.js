@@ -24,6 +24,7 @@ const SalesHistory = () => {
   const [showHoverText, setShowHoverText] = useState(true);
   const [showTimePeriod, setShowTimePeriod] = useState(true);
   const [showTimePeriodText, setShowTimePeriodText] = useState('Show Dates');
+  const [lock, setLock] = useState(true);
 
   const onChange = (e) => {
     let month = e.target.value.split('/')[0];
@@ -67,17 +68,19 @@ const SalesHistory = () => {
   };
 
   useEffect(() => {
-    dispatch(listSalesData());
+    dispatch(
+      listSalesData(format(new Date(startDate), 'yyyy-M-d'), format(new Date(endDate), 'yyyy-M-d'))
+    );
     dispatch(
       listGroupedData(
         format(new Date(startDate), 'yyyy-M-d'),
         format(new Date(endDate), 'yyyy-M-d')
       )
     );
-  }, [dispatch, startDate, endDate]);
+  }, [dispatch, startDate, endDate, lock]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       {salesData && (
         <LineChart
           data={groupedData && groupedData.filter((data) => data.dataTypeId === 2)}

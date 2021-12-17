@@ -27,24 +27,28 @@ import {
   SALES_DATA_CREATE_FAIL,
 } from '../constants/salesDataConstants.js';
 
-export const listSalesData = () => async (dispatch) => {
-  try {
-    dispatch({ type: SALES_DATA_LIST_REQUEST });
+export const listSalesData =
+  (startDate = '', endDate = '') =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: SALES_DATA_LIST_REQUEST });
 
-    const { data } = await axios.get(`/api/salesData`);
+      const { data } = await axios.get(`/api/salesData?startDate=${startDate}&endDate=${endDate}`);
 
-    dispatch({
-      type: SALES_DATA_LIST_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: SALES_DATA_LIST_FAIL,
-      payload:
-        error.response && error.response.data.message ? error.response.data.message : error.message,
-    });
-  }
-};
+      dispatch({
+        type: SALES_DATA_LIST_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: SALES_DATA_LIST_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
 
 export const minMaxSalesDates = () => async (dispatch) => {
   try {
