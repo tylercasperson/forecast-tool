@@ -71,6 +71,8 @@ const TableRow = (props) => {
         onChange={(e) => onChange(e)}
         onChangeCapture={props.onChange}
         value={userInput}
+        onFocus={() => setUserInput(props.userInputFocus)}
+        onBlur={() => setUserInput(props.userInput)}
       />
       <input
         style={{
@@ -84,6 +86,8 @@ const TableRow = (props) => {
         onChange={(e) => onChange(e)}
         onChangeCapture={props.onChange}
         value={salesHistory}
+        onFocus={() => setSalesHistory(props.salesHistoryFocus)}
+        onBlur={() => setSalesHistory(props.salesHistory)}
       />
       <input
         style={{
@@ -97,6 +101,8 @@ const TableRow = (props) => {
         onChange={(e) => onChange(e)}
         onChangeCapture={props.onChange}
         value={lastYear}
+        onFocus={() => setLastYear(props.lastYearFocus)}
+        onBlur={() => setLastYear(props.lastYear)}
       />
       <input
         style={{
@@ -110,6 +116,8 @@ const TableRow = (props) => {
         onChange={(e) => onChange(e)}
         onChangeCapture={props.onChange}
         value={movingAverage}
+        onFocus={() => setMovingAverage(props.movingAverageFocus)}
+        onBlur={() => setMovingAverage(props.movingAverage)}
       />
       <input
         style={{
@@ -123,6 +131,8 @@ const TableRow = (props) => {
         onChange={(e) => onChange(e)}
         onChangeCapture={props.onChange}
         value={weightedAverage}
+        onFocus={() => setWeightedAverage(props.weightedAverageFocus)}
+        onBlur={() => setWeightedAverage(props.weightedAverage)}
       />
       <input
         style={{
@@ -136,6 +146,8 @@ const TableRow = (props) => {
         onChange={(e) => onChange(e)}
         onChangeCapture={props.onChange}
         value={linearRegression}
+        onFocus={() => setLinearRegression(props.linearRegressionFocus)}
+        onBlur={() => setLinearRegression(props.linearRegression)}
       />
       <div
         style={{

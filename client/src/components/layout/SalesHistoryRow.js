@@ -9,11 +9,10 @@ const SalesHistoryRow = (props) => {
 
   return (
     <div style={{ display: 'flex', textAlign: 'center', padding: '1pt' }}>
-      <div style={{ backgroundColor: props.background, width: '12vw' }}>{props.date}</div>
+      <div style={{ width: '12vw' }}>{props.date}</div>
       <input
         style={{
           width: '12vw',
-          backgroundColor: props.background,
           fontSize: '1.7vmin',
         }}
         type='text'
@@ -21,11 +20,12 @@ const SalesHistoryRow = (props) => {
         onChange={(e) => onChange(e)}
         onChangeCapture={props.onChange}
         value={value}
+        onFocus={() => setValue(props.valueFocus)}
+        onBlur={() => setValue(props.value)}
       />
       <div
         style={{
           width: '5vw',
-          backgroundColor: props.background,
         }}
         onClick={props.onDelete}
       >

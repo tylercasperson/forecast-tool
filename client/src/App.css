@@ -588,3 +588,9 @@ input[type='number'] {
 input:focus {
   outline: none;
 }
+
+/* sales table */
+.salesTable div:nth-child(even),
+.salesTable div:nth-child(even) input {
+  background-color: lightgray;
+}

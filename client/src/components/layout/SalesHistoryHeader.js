@@ -9,6 +9,7 @@ const SalesHistoryHeader = (props) => {
         height: '3vh',
         textAlign: 'center',
         alignItems: 'center',
+        fontWeight: 'bold',
       }}
     >
       <div

@@ -2,12 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'date-fns';
 import { nest } from 'd3-collection';
+
+import { dateFormat } from '../data/formulas/dateFormulas.js';
+import { noCommas, numberWithCommas } from '../data/formulas/numberFormulas.js';
 import {
   listGroupedData,
   updateGroupedData,
   deleteGroupedData,
 } from '../data/actions/groupedDataActions.js';
-import { numberWithCommas } from '../data/formulas/numberFormulas.js';
 
 import { GROUPED_DATA_UPDATE_RESET } from '../data/constants/groupedDataConstants.js';
 
@@ -17,8 +19,9 @@ import TableRow from './TableRow';
 const TableData = (props) => {
   const dispatch = useDispatch();
 
-  const groupedDataUpdate = useSelector((state) => state.groupedDataUpdate);
-  const { success } = groupedDataUpdate;
+  const getFromState = useSelector((state) => state);
+  const { success } = getFromState.groupedDataUpdate;
+  const { dataTypes } = getFromState.dataTypes;
 
   const [lock, setLock] = useState();
 
@@ -30,35 +33,22 @@ const TableData = (props) => {
       .key((d) => d.timePeriod.groupName)
       .entries(props.data);
 
-  const dateFormat = (date) => {
-    let dateParts = date.split('T')[0].split('-');
-    let month = dateParts[1][0] === '0' ? dateParts[1][1] : dateParts[1];
-    let day = dateParts[2][0] === '0' ? dateParts[2][1] : dateParts[2];
-    let year = dateParts[0];
-
-    return month + '/' + day + '/' + year;
-  };
-
-  const dataTypes = {
-    userInput: 1,
-    salesHistory: 2,
-    lastYear: 3,
-    ma: 4,
-    wa: 5,
-    linearRegression: 6,
-  };
-
   const onChange = (e, arr) => {
+    let dataTypeRecord = dataTypes.find((i) => {
+      let nameParts = i.name.split(' ');
+      return nameParts[0].toLowerCase() + nameParts[1] === e.target.name;
+    });
+
     dispatch(
       updateGroupedData(
-        arr[dataTypes[e.target.name] - 1].id,
+        arr[dataTypeRecord.id - 1].id,
         e.target.value,
         props.startDate,
         props.endDate
       )
     );
 
-    arr[dataTypes[e.target.name] - 1].data = e.target.value;
+    arr[dataTypeRecord.id - 1].data = e.target.value;
   };
 
   const onDelete = (arr) => {
@@ -113,7 +103,7 @@ const TableData = (props) => {
           data.map((i, index) => {
             let findData = (something) => {
               let exists = i.values.find((o) => o.dataType.abbreviation === something);
-              return exists === undefined ? 0 : numberWithCommas(exists.data);
+              return exists === undefined ? 0 : exists.data.toString();
             };
             let background = index % 2 !== 0 ? 'lightgrey' : 'none';
             return (
@@ -123,12 +113,18 @@ const TableData = (props) => {
                 timePeriod={i.key}
                 startDate={dateFormat(i.values[0].timePeriod.startDate)}
                 endDate={dateFormat(i.values[0].timePeriod.endDate)}
-                salesHistory={findData('sh')}
-                userInput={findData('ui')}
-                lastYear={findData('ly')}
-                weightedAverage={findData('wa')}
-                movingAverage={findData('ma')}
-                linearRegression={findData('lr')}
+                userInput={numberWithCommas(findData('ui'))}
+                salesHistory={numberWithCommas(findData('sh'))}
+                lastYear={numberWithCommas(findData('ly'))}
+                weightedAverage={numberWithCommas(findData('wa'))}
+                movingAverage={numberWithCommas(findData('ma'))}
+                linearRegression={numberWithCommas(findData('lr'))}
+                userInputFocus={() => noCommas(findData('ui'))}
+                salesHistoryFocus={() => noCommas(findData('sh'))}
+                lastYearFocus={() => noCommas(findData('ly'))}
+                weightedAverageFocus={() => noCommas(findData('wa'))}
+                movingAverageFocus={() => noCommas(findData('ma'))}
+                linearRegressionFocus={() => noCommas(findData('lr'))}
                 onChange={(e) => onChange(e, i.values)}
                 delete={() => onDelete(i.values)}
                 showSalesHistory={props.showSalesHistory}
