@@ -9,6 +9,9 @@ import {
   MOVING_PERIOD_SAVE_REQUEST,
   WEIGHTED_PERIOD_SAVE_REQUEST,
   COLOR_SAVE_REQUEST,
+  FIRST_LETTER_SAVE_REQUEST,
+  PERIOD_ID_SAVE_REQUEST,
+  OCCURRENCES_SAVE_REQUEST,
 } from '../constants/settingsConstants.js';
 
 export const settingsReducer = (state = { dates: [], showForecast: [] }, action) => {
@@ -63,6 +66,22 @@ export const settingsReducer = (state = { dates: [], showForecast: [] }, action)
         ...state,
         colors: action.payload,
       };
+    case FIRST_LETTER_SAVE_REQUEST:
+      return {
+        ...state,
+        groupVariables: action.payload,
+      };
+    case PERIOD_ID_SAVE_REQUEST:
+      return {
+        ...state,
+        groupVariables: action.payload,
+      };
+    case OCCURRENCES_SAVE_REQUEST:
+      return {
+        ...state,
+        groupVariables: action.payload,
+      };
+
     default:
       return state;
   }

@@ -37,6 +37,7 @@ const reducer = combineReducers({
   dates: settingsReducer,
   showForecast: settingsReducer,
   periods: settingsReducer,
+  groupVariables: settingsReducer,
   colors: settingsReducer,
   dataTypes: dataTypesListReducer,
   salesData: salesDataListReducer,
@@ -88,6 +89,14 @@ const periodsFromStorage = localStorage.getItem('periods')
       weightedPeriods: 3,
     };
 
+const groupVariablesFromStorage = localStorage.getItem('groupVariables')
+  ? JSON.parse(localStorage.getItem('groupVariables'))
+  : {
+      firstLetter: 'w',
+      periodId: 3,
+      occurrences: 53,
+    };
+
 const colorsFromStorage = localStorage.getItem('colors')
   ? JSON.parse(localStorage.getItem('colors'))
   : ['#144fc6', '#e41a1c', '#ffff33', '#984ea3', '#ff7f00', '#4daf4a'];
@@ -97,6 +106,7 @@ const initialState = {
   showForecast: showForecastFromStorage,
   periods: periodsFromStorage,
   colors: { colors: colorsFromStorage },
+  groupVariables: groupVariablesFromStorage,
 };
 
 const middleware = [thunk];

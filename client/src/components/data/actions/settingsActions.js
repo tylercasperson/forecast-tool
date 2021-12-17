@@ -9,6 +9,9 @@ import {
   MOVING_PERIOD_SAVE_REQUEST,
   WEIGHTED_PERIOD_SAVE_REQUEST,
   COLOR_SAVE_REQUEST,
+  FIRST_LETTER_SAVE_REQUEST,
+  PERIOD_ID_SAVE_REQUEST,
+  OCCURRENCES_SAVE_REQUEST,
 } from '../constants/settingsConstants.js';
 
 export const saveStartDate = (date) => (dispatch) => {
@@ -149,4 +152,49 @@ export const saveColor = (color) => (dispatch) => {
   });
 
   localStorage.setItem('colors', JSON.stringify(color));
+};
+
+export const saveFirstLetter = (firstLetter) => (dispatch, getState) => {
+  const values = {
+    firstLetter: firstLetter,
+    periodId: getState().groupVariables.periodId,
+    occurrences: getState().groupVariables.occurrences,
+  };
+
+  dispatch({
+    type: FIRST_LETTER_SAVE_REQUEST,
+    payload: firstLetter,
+  });
+
+  localStorage.setItem('groupVariables', JSON.stringify(values));
+};
+
+export const savePeriodId = (id) => (dispatch, getState) => {
+  const values = {
+    firstLetter: getState().groupVariables.firstLetter,
+    periodId: id,
+    occurrences: getState().groupVariables.occurrences,
+  };
+
+  dispatch({
+    type: PERIOD_ID_SAVE_REQUEST,
+    payload: id,
+  });
+
+  localStorage.setItem('groupVariables', JSON.stringify(values));
+};
+
+export const saveOccurrences = (occurrences) => (dispatch, getState) => {
+  const values = {
+    firstLetter: getState().groupVariables.firstLetter,
+    periodId: getState().groupVariables.periodId,
+    occurrences: occurrences,
+  };
+
+  dispatch({
+    type: OCCURRENCES_SAVE_REQUEST,
+    payload: occurrences,
+  });
+
+  localStorage.setItem('groupVariables', JSON.stringify(values));
 };
