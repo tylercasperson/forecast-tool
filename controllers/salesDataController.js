@@ -67,6 +67,15 @@ const deleteSalesData = asyncHandler(async (req, res) => {
   res.json({ salesData });
 });
 
+const deleteAllSalesData = asyncHandler(async (req, res) => {
+  const salesData = await db.salesData.destroy({
+    where: {
+      id: { [Op.gte]: 0 },
+    },
+  });
+  res.json({ salesData });
+});
+
 module.exports = {
   getSalesData,
   getSalesDataRange,
@@ -74,5 +83,6 @@ module.exports = {
   updateSalesData,
   addSalesData,
   deleteSalesData,
+  deleteAllSalesData,
   minMaxDates,
 };

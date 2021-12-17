@@ -11,6 +11,9 @@ import {
   SALES_DATA_DELETE_REQUEST,
   SALES_DATA_DELETE_SUCCESS,
   SALES_DATA_DELETE_FAIL,
+  SALES_DATA_DELETE_ALL_REQUEST,
+  SALES_DATA_DELETE_ALL_SUCCESS,
+  SALES_DATA_DELETE_ALL_FAIL,
   SALES_DATA_UPDATE_REQUEST,
   SALES_DATA_UPDATE_SUCCESS,
   SALES_DATA_UPDATE_FAIL,
@@ -66,6 +69,22 @@ export const salesDataDeleteReducer = (state = {}, action) => {
         success: true,
       };
     case SALES_DATA_DELETE_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const salesDataDeleteAllReducer = (state = {}, action) => {
+  switch (action.type) {
+    case SALES_DATA_DELETE_ALL_REQUEST:
+      return { loading: true };
+    case SALES_DATA_DELETE_ALL_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+    case SALES_DATA_DELETE_ALL_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

@@ -13,6 +13,9 @@ import {
   SALES_DATA_DELETE_REQUEST,
   SALES_DATA_DELETE_SUCCESS,
   SALES_DATA_DELETE_FAIL,
+  SALES_DATA_DELETE_ALL_REQUEST,
+  SALES_DATA_DELETE_ALL_SUCCESS,
+  SALES_DATA_DELETE_ALL_FAIL,
   SALES_DATA_UPDATE_REQUEST,
   SALES_DATA_UPDATE_SUCCESS,
   SALES_DATA_UPDATE_FAIL,
@@ -105,6 +108,25 @@ export const deleteSalesData = (salesDataId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: SALES_DATA_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.message ? error.response.data.message : error.message,
+    });
+  }
+};
+
+export const deleteAllSalesData = () => async (dispatch) => {
+  try {
+    dispatch({ type: SALES_DATA_DELETE_ALL_REQUEST });
+
+    const { data } = await axios.delete(`/api/salesData/delete/all`);
+
+    dispatch({
+      type: SALES_DATA_DELETE_ALL_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: SALES_DATA_DELETE_ALL_FAIL,
       payload:
         error.response && error.response.data.message ? error.response.data.message : error.message,
     });
