@@ -575,3 +575,16 @@ input[type='number'] {
   color: white;
   background-color: #424242;
 }
+
+/* button random */
+.buttonRandom:hover {
+  font-weight: bold;
+  background-color: #424242;
+  color: white;
+  box-shadow: 0 2px 20px rgb(56, 182, 255);
+  border: none;
+}
+
+input:focus {
+  outline: none;
+}

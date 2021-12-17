@@ -6,21 +6,23 @@ const ButtonHover = (props) => {
       style={{
         position: 'relative',
         display: 'inline-block',
-        padding: '10px 30px',
+        padding: props.padding,
         marginTop: '3vh',
         marginBottom: '5vh',
-        width: '100%',
+        width: props.width,
+        borderWidth: '0.2vw',
         borderRadius: '5px',
         textDecoration: 'none',
         textTransform: 'uppercase',
-        color: 'rgba(255,255,255,0.8)',
-        background: '#424242',
-        letterSpacing: '2px',
+        color: props.color,
+        background: props.background,
+        letterSpacing: '3px',
         fontSize: '16px',
         transition: '0.5s',
       }}
-      className='buttonHover'
+      className='buttonHover buttonRandom'
       onClick={props.onClick}
+      onClickCapture={props.onClickCapture}
     >
       <span></span>
       <span></span>

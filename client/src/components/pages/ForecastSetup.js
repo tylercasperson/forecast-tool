@@ -342,7 +342,14 @@ const ForecastSetup = () => {
       {minDate && maxDate && <DateSlider />}
       <HeaderLabel header={'Group Forecast Data By'} />
       <TimePeriodTypesList />
-      <ButtonHover onClick={(e) => onClick(e)} name={'Calculate'} />
+      <ButtonHover
+        onClick={(e) => onClick(e)}
+        name={'Calculate'}
+        width={'90%'}
+        padding={'2vh 30vw'}
+        background={'#424242'}
+        color={'white'}
+      />
     </form>
   );
 };
