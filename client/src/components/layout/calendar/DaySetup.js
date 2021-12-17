@@ -81,7 +81,17 @@ const DaySetup = (props) => {
       } else {
         if (props.value === props.daySelected) {
           if (!day.current.classList.contains('notThisMonth')) {
-            day.current.classList.add('selectedDate');
+            let startMonth = Number(props.startDate.split('/')[0]);
+            let startYear = Number(props.startDate.split('/')[2]);
+            let endMonth = Number(props.endDate.split('/')[0]);
+            let endYear = Number(props.endDate.split('/')[2]);
+
+            if (
+              (props.month === startMonth && props.year === startYear) ||
+              (props.month === endMonth && props.year === endYear)
+            ) {
+              day.current.classList.add('selectedDate');
+            }
           } else {
             day.current.classList.remove('selectedDate');
           }
