@@ -11,6 +11,7 @@ import {
   salesDataDeleteReducer,
   salesDataDeleteAllReducer,
   salesDataUpdateReducer,
+  salesDataBulkCreateReducer,
 } from './components/data/reducers/salesDataReducers.js';
 import {
   groupedDataListReducer,
@@ -43,6 +44,7 @@ const reducer = combineReducers({
   salesDataDelete: salesDataDeleteReducer,
   salesDataDeleteAll: salesDataDeleteAllReducer,
   salesDataUpdate: salesDataUpdateReducer,
+  salesDataBulkCreate: salesDataBulkCreateReducer,
   groupedData: groupedDataListReducer,
   groupedDataUpdate: groupedDataUpdateReducer,
   groupedDataDelete: groupedDataDeleteReducer,

@@ -76,13 +76,27 @@ const deleteAllSalesData = asyncHandler(async (req, res) => {
   res.json({ salesData });
 });
 
+const addAlotOfSalesData = asyncHandler(async (req, res) => {
+  const salesData = await db.salesData.bulkCreate(
+    req.body.map((i) => {
+      return {
+        date: i.date,
+        data: i.data,
+      };
+    })
+  );
+
+  res.json({ salesData });
+});
+
 module.exports = {
   getSalesData,
-  getSalesDataRange,
   getOneSalesData,
+  getSalesDataRange,
+  minMaxDates,
   updateSalesData,
   addSalesData,
+  addAlotOfSalesData,
   deleteSalesData,
   deleteAllSalesData,
-  minMaxDates,
 };
