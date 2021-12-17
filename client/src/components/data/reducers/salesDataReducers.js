@@ -18,6 +18,10 @@ import {
   SALES_DATA_UPDATE_SUCCESS,
   SALES_DATA_UPDATE_FAIL,
   SALES_DATA_UPDATE_RESET,
+  SALES_DATA_CREATE_REQUEST,
+  SALES_DATA_CREATE_SUCCESS,
+  SALES_DATA_CREATE_FAIL,
+  SALES_DATA_CREATE_RESET,
   SALES_DATA_BULK_CREATE_REQUEST,
   SALES_DATA_BULK_CREATE_SUCCESS,
   SALES_DATA_BULK_CREATE_FAIL,
@@ -108,6 +112,25 @@ export const salesDataUpdateReducer = (state = { salesData: [] }, action) => {
     case SALES_DATA_UPDATE_FAIL:
       return { loading: false, error: action.payload };
     case SALES_DATA_UPDATE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const salesDataCreateReducer = (state = { salesData: [] }, action) => {
+  switch (action.type) {
+    case SALES_DATA_CREATE_REQUEST:
+      return { loading: true };
+    case SALES_DATA_CREATE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        salesData: action.payload.salesData,
+      };
+    case SALES_DATA_CREATE_FAIL:
+      return { loading: false, error: action.payload };
+    case SALES_DATA_CREATE_RESET:
       return {};
     default:
       return state;

@@ -22,6 +22,9 @@ import {
   SALES_DATA_BULK_CREATE_REQUEST,
   SALES_DATA_BULK_CREATE_SUCCESS,
   SALES_DATA_BULK_CREATE_FAIL,
+  SALES_DATA_CREATE_REQUEST,
+  SALES_DATA_CREATE_SUCCESS,
+  SALES_DATA_CREATE_FAIL,
 } from '../constants/salesDataConstants.js';
 
 export const listSalesData = () => async (dispatch) => {
@@ -156,6 +159,25 @@ export const updateSalesData = (salesDataId, dataRecord) => async (dispatch) => 
   } catch (error) {
     dispatch({
       type: SALES_DATA_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message ? error.response.data.message : error.message,
+    });
+  }
+};
+
+export const createSalesData = (salesData) => async (dispatch) => {
+  try {
+    dispatch({ type: SALES_DATA_CREATE_REQUEST });
+
+    const { data } = await axios.post(`/api/salesData`, salesData);
+
+    dispatch({
+      type: SALES_DATA_CREATE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: SALES_DATA_CREATE_FAIL,
       payload:
         error.response && error.response.data.message ? error.response.data.message : error.message,
     });
