@@ -95,22 +95,35 @@ const MonthSetup = (props) => {
     >
       <div
         className={'monthYear ' + props.type}
-        style={{ margin: '5%', fontWeight: 'bold', fontSize: '90%', width: '20vw' }}
+        style={{
+          display: 'flex',
+          margin: '0.5vw 0 0.5vw 0',
+          fontWeight: 'bold',
+          fontSize: '1.7vh',
+          width: '20vw',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
       >
         <i
           className='fas fa-arrow-left'
           style={{ padding: '0 1vw' }}
           onClick={props.previousMonth}
         ></i>
-
-        {monthName + ' ' + yearUsed}
+        <div style={{ width: '10vw', display: 'flex', flexDirection: 'column' }}>
+          <b>{monthName}</b>
+          <b>{yearUsed}</b>
+        </div>
         <i
           className='fas fa-arrow-right'
           style={{ padding: '0 1vw' }}
           onClick={props.nextMonth}
         ></i>
       </div>
-      <div className='dayAbbreviation' style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div
+        className='dayAbbreviation'
+        style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.5vh' }}
+      >
         <div>S</div>
         <div>M</div>
         <div>T</div>

@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import MonthSetup from './MonthSetup.js';
 
 const DateInput = (props) => {
+  const dateInput = useRef();
+
   return (
     <div
       style={{
@@ -10,24 +12,46 @@ const DateInput = (props) => {
         textAlign: 'center',
         height: '6vh',
         width: '20vw',
+        alignItems:
+          dateInput.current && dateInput.current.parentElement.children[0] === dateInput.current
+            ? 'end'
+            : 'start',
       }}
+      ref={dateInput}
     >
-      <span style={{ fontSize: '2vh', fontWeight: '600' }}>{props.text}</span>
-      <input
+      <div
         style={{
-          border: '1pt solid black',
-          width: '20vw',
-          textAlign: 'center',
-          fontSize: '2vh',
+          display: 'flex',
+          flexDirection: 'column',
+          width: props.inputWidth,
+          alignContent: 'center',
         }}
-        className={'dateInput ' + props.text.split(' ')[0]}
-        type='text'
-        name={props.name}
-        value={props.value}
-        onChange={props.onChange}
-      />
+      >
+        <span
+          style={{
+            fontSize: props.inputFontSize,
+            fontWeight: '600',
+            marginBottom: '0.3vh',
+          }}
+        >
+          {props.text}
+        </span>
+        <input
+          style={{
+            border: props.inputBorder,
+            textAlign: 'center',
+            fontSize: props.inputFontSize,
+            backgroundColor: props.inputBackgroundColor,
+          }}
+          className={'dateInput ' + props.text.split(' ')[0]}
+          type='text'
+          name={props.name}
+          value={props.value}
+          onChange={props.onChange}
+        />
+      </div>
 
-      <div className={props.showHide}>
+      <div className={props.showHide} style={{ width: '20vw' }}>
         <MonthSetup
           dayClick={props.dayClick}
           dateSelected={props.dateSelected}

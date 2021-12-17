@@ -190,7 +190,7 @@ const DateSlider = () => {
         onBlur={() => onBlur()}
       >
         <DateInput
-          text={new Date(startDate) < new Date(endDate) ? 'Start Date' : 'EndDate'}
+          text={new Date(startDate) < new Date(endDate) ? 'Start Date' : 'End Date'}
           name='startDate'
           value={tempStartDate}
           showHide={showHide}
@@ -201,9 +201,13 @@ const DateSlider = () => {
           endDate={endDate}
           previousMonth={() => previousMonth('start')}
           nextMonth={() => nextMonth('start')}
+          inputBorder={'1pt solid black'}
+          inputWidth={'20vw'}
+          inputFontSize={'2vh'}
+          inputBackgroundColor={'white'}
         />
         <DateInput
-          text={new Date(startDate) < new Date(endDate) ? 'EndDate' : 'Start Date'}
+          text={new Date(startDate) < new Date(endDate) ? 'End Date' : 'Start Date'}
           name='endDate'
           value={tempEndDate}
           showHide={showHide}
@@ -212,8 +216,12 @@ const DateSlider = () => {
           dateSelected={endDate}
           startDate={startDate}
           endDate={endDate}
-          previousMonth={() => previousMonth('start')}
-          nextMonth={() => nextMonth('start')}
+          previousMonth={() => previousMonth('end')}
+          nextMonth={() => nextMonth('end')}
+          inputBorder={'1pt solid black'}
+          inputWidth={'20vw'}
+          inputFontSize={'2vh'}
+          inputBackgroundColor={'white'}
         />
       </div>
 
