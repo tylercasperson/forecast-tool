@@ -7,6 +7,7 @@ import {
   updateGroupedData,
   deleteGroupedData,
 } from '../data/actions/groupedDataActions.js';
+import { numberWithCommas } from '../data/formulas/numberFormulas.js';
 
 import { GROUPED_DATA_UPDATE_RESET } from '../data/constants/groupedDataConstants.js';
 
@@ -110,11 +111,6 @@ const TableData = (props) => {
       <div style={{ height: '40vh', overflowY: 'auto' }} ref={tableData}>
         {data &&
           data.map((i, index) => {
-            const numberWithCommas = (number) => {
-              let incommingNumber = number === null ? 0 : number;
-              return incommingNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            };
-
             let findData = (something) => {
               let exists = i.values.find((o) => o.dataType.abbreviation === something);
               return exists === undefined ? 0 : numberWithCommas(exists.data);

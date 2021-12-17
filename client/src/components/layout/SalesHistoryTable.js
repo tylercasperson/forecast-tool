@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { dateFormat } from '../data/formulas/dateFormulas.js';
+import { numberWithCommas, noCommas } from '../data/formulas/numberFormulas.js';
 import {
   listSalesData,
   deleteSalesData,
@@ -43,7 +44,7 @@ const SalesHistoryTable = (props) => {
               onChange={(e) => onChange(i.id, e.target.value)}
               onDelete={() => onDelete(i.id)}
               date={dateFormat(i.date)}
-              value={i.data}
+              value={numberWithCommas(i.data)}
               background={index % 2 !== 0 ? 'lightgrey' : 'none'}
             />
           ))}
