@@ -45,23 +45,18 @@ export const listGroupedData =
     }
   };
 
-export const updateGroupedData = (groupedDataId, dataRecord) => async (dispatch) => {
+export const updateGroupedData = (groupedDataId, dataPoint) => async (dispatch) => {
   try {
     dispatch({ type: GROUPED_DATA_UPDATE_REQUEST });
 
-    let incommingData =
-      dataRecord === '' ? 0 : dataRecord === null ? 0 : parseInt(dataRecord.replace(',', ''));
+    const { data } = await axios.put(`/api/groupedData/${groupedDataId}`, {
+      data: dataPoint,
+    });
 
-    if (!isNaN(incommingData / 1)) {
-      const { data } = await axios.put(`/api/groupedData/${groupedDataId}`, {
-        data: incommingData,
-      });
-
-      dispatch({
-        type: GROUPED_DATA_UPDATE_SUCCESS,
-        payload: data,
-      });
-    }
+    dispatch({
+      type: GROUPED_DATA_UPDATE_SUCCESS,
+      payload: data,
+    });
   } catch (error) {
     dispatch({
       type: GROUPED_DATA_UPDATE_FAIL,
