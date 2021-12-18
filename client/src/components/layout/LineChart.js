@@ -1,8 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import * as d3 from 'd3';
 import { nest } from 'd3-collection';
 import { format } from 'date-fns';
+import {
+  select,
+  line as d3line,
+  format as d3format,
+  scalePoint,
+  scaleLinear,
+  max,
+  scaleOrdinal,
+  axisBottom,
+  axisLeft,
+} from 'd3';
 
 import { dateFormat } from '../data/formulas/dateFormulas';
 
@@ -27,7 +37,7 @@ const LineChart = (props) => {
 
   useEffect(() => {
     if (lineChart.current.childNodes.length > 0) {
-      d3.select(lineChart.current).select('svg').remove();
+      select(lineChart.current).select('svg').remove();
     }
 
     window.addEventListener('resize', () => {
@@ -48,16 +58,14 @@ const LineChart = (props) => {
       ? props.data.map((d) => d.timePeriod.groupName)
       : props.data.map((d) => format(new Date(dateFormat(d.timePeriod.startDate)), 'M/d/yyyy'));
 
-    const xScale = d3
-      .scalePoint()
+    const xScale = scalePoint()
       .domain(xLabelOption)
       .range([0 + margin.right, chartWidth - margin.left]);
 
-    const yScale = d3
-      .scaleLinear()
+    const yScale = scaleLinear()
       .domain([
         0,
-        d3.max(props.data, (d) => {
+        max(props.data, (d) => {
           return d.data;
         }),
       ])
@@ -67,20 +75,18 @@ const LineChart = (props) => {
       ? (d) => xScale(d.timePeriod.groupName)
       : (d) => xScale(format(new Date(dateFormat(d.timePeriod.startDate)), 'M/d/yyyy'));
 
-    const line = d3
-      .line()
+    const line = d3line()
       .x(xLabelLineOption)
       .y((d) => yScale(isNaN(d.data) ? 0 : d.data));
 
-    const svg = d3
-      .select(lineChart.current)
+    const svg = select(lineChart.current)
       .append('svg')
       .style('background-color', 'lightgrey')
       .style('padding-left', '5vw')
       .attr('width', chartWidth + margin.left + margin.right)
       .attr('height', chartHeight + margin.top + margin.bottom);
 
-    let color = d3.scaleOrdinal().range(props.colors);
+    let color = scaleOrdinal().range(props.colors);
     let colorArr = [];
 
     svg
@@ -95,18 +101,11 @@ const LineChart = (props) => {
       .attr('name', (d) => d.key)
       .attr('stroke-width', 1.5);
 
-    let tickAdjustment = chartWidth > 450 ? 40 : props.xLabelOption ? 8 : 6;
-    let widthPerTick =
-      props.data.length < 100
-        ? chartWidth < 450
-          ? 2
-          : 1
-        : props.data.length < 300
-        ? Math.floor(chartWidth / tickAdjustment / 4)
-        : Math.floor(chartWidth / tickAdjustment);
+    let dataLength = data[0] !== undefined ? data[0].values.length : 0;
+    let ticksPerDataPoints = Math.floor((dataLength / chartWidth) * 100);
+    let widthPerTick = ticksPerDataPoints === 0 ? 1 : ticksPerDataPoints;
 
-    const xAxis = d3
-      .axisBottom(xScale)
+    const xAxis = axisBottom(xScale)
       .tickSize(10)
       .ticks(3)
       .tickFormat((interval, i) => {
@@ -127,68 +126,69 @@ const LineChart = (props) => {
 
     let heightPerTick = Math.round(height / 120) - 4;
 
-    const yAxis = d3
-      .axisLeft(yScale)
+    const yAxis = axisLeft(yScale)
       .tickFormat((interval, i) => {
-        return i % heightPerTick !== 0 ? ' ' : d3.format(',')(interval);
+        return i % heightPerTick !== 0 ? ' ' : d3format(',')(interval);
       })
       .tickSize(8);
 
     svg.append('g').attr('class', 'yAxis').attr('transform', `translate(45,0)`).call(yAxis);
 
-    svg
-      .append('rect')
-      .attr('class', 'invisibleRect')
-      .attr('width', d3.select('.xAxis').node().getBBox().width - 5)
-      .attr('height', d3.select('.yAxis').node().getBBox().height)
-      .attr('transform', 'translate(' + (margin.right - 0) + ',' + (margin.bottom - 7) + ')')
-      .attr('fill', 'none')
-      .attr('pointer-events', 'all')
-      .on('mousemove', (e) => {
-        let rect = e.target.getBoundingClientRect();
-        let x = e.clientX - rect.left;
-        let positionRatio = x / e.target.getBoundingClientRect().width;
+    if (props.data.length !== 0) {
+      svg
+        .append('rect')
+        .attr('class', 'invisibleRect')
+        .attr('width', select('.xAxis').node().getBBox().width - 5)
+        .attr('height', select('.yAxis').node().getBBox().height)
+        .attr('transform', 'translate(' + (margin.right - 0) + ',' + (margin.bottom - 7) + ')')
+        .attr('fill', 'none')
+        .attr('pointer-events', 'all')
+        .on('mousemove', (e) => {
+          let rect = e.target.getBoundingClientRect();
+          let x = e.clientX - rect.left;
+          let positionRatio = x / e.target.getBoundingClientRect().width;
 
-        setWidthRatio(positionRatio);
+          setWidthRatio(positionRatio);
 
-        let indexToBeUsed =
-          Math.round(positionRatio * data[0].values.length) === data[0].values.length
-            ? Math.round(positionRatio * data[0].values.length - 1)
-            : Math.round(positionRatio * data[0].values.length);
+          let indexToBeUsed =
+            Math.round(positionRatio * data[0].values.length) === data[0].values.length
+              ? Math.round(positionRatio * data[0].values.length - 1)
+              : Math.round(positionRatio * data[0].values.length);
 
-        setScrollXlabel(data[0].values[indexToBeUsed].timePeriod);
+          setScrollXlabel(data[0].values[indexToBeUsed].timePeriod);
 
-        let xLabel = props.xLabelOption
-          ? scrollXlabel.groupName
-          : scrollXlabel.startDate &&
-            format(new Date(dateFormat(scrollXlabel.startDate)), 'M/d/yyyy').toString();
+          let xLabel = props.xLabelOption
+            ? scrollXlabel.groupName
+            : scrollXlabel.startDate &&
+              format(new Date(dateFormat(scrollXlabel.startDate)), 'M/d/yyyy').toString();
 
-        let needPeriodInfo = (name, periodType, data) => {
-          if (name === 'Moving Average') {
-            return (
-              movingPeriods + ' ' + periodType + ' ' + name + ' ' + d3.format(',')(data) + ';'[0]
-            );
-          } else if (name === 'Weighted Average') {
-            return (
-              weightedPeriods + ' ' + periodType + ' ' + name + ' ' + d3.format(',')(data) + ';'[0]
-            );
-          } else {
-            return name + ' ' + d3.format(',')(data) + ';'[0];
-          }
-        };
+          let needPeriodInfo = (name, periodType, data) => {
+            if (name === 'Moving Average') {
+              return (
+                movingPeriods + ' ' + periodType + ' ' + name + ' ' + d3format(',')(data) + ';'[0]
+              );
+            } else if (name === 'Weighted Average') {
+              return (
+                weightedPeriods + ' ' + periodType + ' ' + name + ' ' + d3format(',')(data) + ';'[0]
+              );
+            } else {
+              return name + ' ' + d3format(',')(data) + ';'[0];
+            }
+          };
 
-        let sameGroupName = data.map((i) =>
-          i.values
-            .filter((j) =>
-              props.xLabelOption
-                ? j.timePeriod.groupName === xLabel
-                : format(new Date(dateFormat(j.timePeriod.startDate)), 'M/d/yyyy') === xLabel
-            )
-            .map((k) => needPeriodInfo(k.dataType.name, k.timePeriod.timePeriodType.type, k.data))
-        );
+          let sameGroupName = data.map((i) =>
+            i.values
+              .filter((j) =>
+                props.xLabelOption
+                  ? j.timePeriod.groupName === xLabel
+                  : format(new Date(dateFormat(j.timePeriod.startDate)), 'M/d/yyyy') === xLabel
+              )
+              .map((k) => needPeriodInfo(k.dataType.name, k.timePeriod.timePeriodType.type, k.data))
+          );
 
-        setHoverInfo(xLabel + ';' + sameGroupName);
-      });
+          setHoverInfo(xLabel + ';' + sameGroupName);
+        });
+    }
 
     const hoverLabels = () => {
       svg
@@ -199,7 +199,7 @@ const LineChart = (props) => {
         .attr('x1', chartSpot)
         .attr('x2', chartSpot)
         .attr('y1', margin.top + margin.bottom)
-        .attr('y2', d3.select('.yAxis').node().getBBox().height + margin.top + margin.bottom);
+        .attr('y2', select('.yAxis').node().getBBox().height + margin.top + margin.bottom);
 
       const forecastWrap = (words, xLabel) => {
         let wordsArr = words.split(';');
