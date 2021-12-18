@@ -70,7 +70,8 @@ ul li a {
   transition: 0.5s;
   padding: 5px 10px;
 }
-ul li a:hover {
+ul li a:hover,
+.selectedNav {
   color: #fff;
   background: #424242;
 }

@@ -15,16 +15,47 @@ const Navbar = () => {
         }}
       >
         <li>
-          <a href='/'>Line Chart</a>
+          <a
+            className={
+              (!document.URL.includes('forecastSetup') &&
+                !document.URL.includes('forecastTypes') &&
+                !document.URL.includes('salesHistory')) ||
+              document.URL.includes('?salesHistory')
+                ? 'selectedNav'
+                : ''
+            }
+            href='/'
+          >
+            Forecast
+          </a>
         </li>
         <li>
-          <a href='forecastTypes'>Forecast Types</a>
+          <a
+            className={document.URL.includes('forecastTypes') ? 'selectedNav' : ''}
+            href='forecastTypes'
+          >
+            Forecast Types
+          </a>
         </li>
         <li>
-          <a href='/forecastSetup'>Forecast Setup</a>
+          <a
+            className={document.URL.includes('forecastSetup') ? 'selectedNav' : ''}
+            href='/forecastSetup'
+          >
+            Forecast Setup
+          </a>
         </li>
         <li>
-          <a href='/salesHistory'>Sales History</a>
+          <a
+            className={
+              document.URL.includes('salesHistory') && !document.URL.includes('?salesHistory')
+                ? 'selectedNav'
+                : ''
+            }
+            href='/salesHistory'
+          >
+            Sales History
+          </a>
         </li>
       </ul>
     </div>
