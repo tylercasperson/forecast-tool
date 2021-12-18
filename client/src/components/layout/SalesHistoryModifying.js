@@ -1,9 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { add, differenceInDays, format } from 'date-fns';
+import {
+  add,
+  differenceInDays,
+  format,
+  min,
+  max,
+  eachYearOfInterval,
+  eachQuarterOfInterval,
+  eachMonthOfInterval,
+  eachWeekOfInterval,
+} from 'date-fns';
 
 import { getRandomNumber } from '../data/formulas/numberFormulas';
 import { deleteAllSalesData, createBulkSalesData } from '../data/actions/salesDataActions.js';
+
+import { calculateForecasts } from '../data/formulas/forecastFormulas.js';
+import { rangeSalesData } from '../data/actions/salesDataActions.js';
+import {
+  createBulkTimePeriod,
+  deleteAllTimePeriod,
+  listTimePeriod,
+} from '../data/actions/timePeriodActions.js';
+import { listDataTypes } from '../data/actions/dataTypeActions.js';
+import {
+  createBulkGroupedData,
+  deleteAllGroupedData,
+  listGroupedData,
+} from '../data/actions/groupedDataActions.js';
+import { listGdp } from '../data/actions/gdpActions.js';
 
 import ButtonHover from './ButtonHover';
 import DropDownCalendar from './calendar/DropDownCalendar';
@@ -13,10 +38,17 @@ const SalesHistoryModifying = (props) => {
 
   const getFromState = useSelector((state) => state);
   const { startDate, endDate } = getFromState.dates;
+  const { movingPeriods, weightedPeriods } = getFromState.periods;
+  const { firstLetter, periodId, occurences } = getFromState.groupVariables;
+  const { dataTypes } = getFromState.dataTypes;
+  const { timePeriod } = getFromState.timePeriods;
+  const { current, previousYear } = getFromState.salesDataRange.salesData;
+  const { gdp } = getFromState.gdp;
 
   const [tempStartDate, setTempStartDate] = useState(startDate);
   const [tempEndDate, setTempEndDate] = useState(endDate);
   const [showHide, setShowHide] = useState('hide');
+  const [load, setLoad] = useState(true);
 
   const onFocus = () => {
     setShowHide('show');
@@ -24,6 +56,63 @@ const SalesHistoryModifying = (props) => {
 
   const onBlur = () => {
     setShowHide('hide');
+  };
+
+  const selectedTimePeriod = () => {
+    let firstLetter = 'w';
+    let periodId = 3;
+
+    const firstDate = min([new Date(startDate), new Date(endDate)]);
+    const secondDate = max([new Date(startDate), new Date(endDate)]);
+
+    const interval = (firstLetter) => {
+      let dateRange = { start: firstDate, end: secondDate };
+
+      switch (firstLetter) {
+        case 'y':
+          return eachYearOfInterval(dateRange);
+        case 'q':
+          return eachQuarterOfInterval(dateRange);
+        case 'm':
+          return eachMonthOfInterval(dateRange);
+        case 'w':
+          return eachWeekOfInterval(dateRange);
+        default:
+          return differenceInDays(secondDate, firstDate);
+      }
+    };
+
+    let occurrences = interval(firstLetter).length;
+    let dayEquivalent = Math.ceil(differenceInDays(secondDate, firstDate) / occurrences);
+    return {
+      dayEquivalent,
+      occurrences,
+      firstLetter,
+      periodId,
+      startOn: interval(firstLetter),
+    };
+  };
+
+  const forecastCalculations = () => {
+    dispatch(deleteAllGroupedData());
+    dispatch(deleteAllTimePeriod());
+    let timeVariables = selectedTimePeriod();
+
+    let forecastData = calculateForecasts(
+      timeVariables,
+      startDate,
+      endDate,
+      current.salesData,
+      dataTypes,
+      timePeriod,
+      previousYear,
+      movingPeriods,
+      weightedPeriods,
+      gdp
+    );
+
+    dispatch(createBulkTimePeriod(forecastData.timePeriods));
+    dispatch(createBulkGroupedData(forecastData.data));
   };
 
   const addSeasonalTrends = () => {
@@ -65,6 +154,8 @@ const SalesHistoryModifying = (props) => {
 
     dispatch(deleteAllSalesData());
     dispatch(createBulkSalesData(sortedArr));
+
+    forecastCalculations();
   };
 
   const justRandomData = () => {
@@ -81,9 +172,13 @@ const SalesHistoryModifying = (props) => {
     for (let i = 0; i < dayDifferenceStartEnd * 0.9; i++) {
       let randomDay = getRandomNumber(0, dayDifferenceStartEnd);
       let randomDate = format(add(new Date(startDate), { days: randomDay }), 'yyyy-M-d');
-      let randomNumber = getRandomNumber(0, 1000);
+      let randomDateLastYear = format(
+        add(add(new Date(startDate), { days: randomDay }), { years: -1 }),
+        'yyyy-M-d'
+      );
 
-      arr.push({ date: randomDate, data: randomNumber });
+      arr.push({ date: randomDate, data: getRandomNumber(0, 1000) });
+      arr.push({ date: randomDateLastYear, data: getRandomNumber(0, 1000) });
     }
 
     let sortedArr = arr.sort((a, b) => {
@@ -92,6 +187,22 @@ const SalesHistoryModifying = (props) => {
 
     return sortedArr;
   };
+
+  useEffect(() => {
+    dispatch(
+      listGroupedData(
+        format(new Date(startDate), 'yyyy-M-d'),
+        format(new Date(endDate), 'yyyy-M-d')
+      )
+    );
+    if (load) {
+      dispatch(rangeSalesData(startDate, endDate));
+      dispatch(listTimePeriod());
+      dispatch(listDataTypes());
+      dispatch(listGdp());
+      setLoad(false);
+    }
+  }, [dispatch, load, startDate, endDate]);
 
   return (
     <div
