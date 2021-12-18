@@ -69,17 +69,17 @@ export const settingsReducer = (state = { dates: [], showForecast: [] }, action)
     case FIRST_LETTER_SAVE_REQUEST:
       return {
         ...state,
-        groupVariables: action.payload,
+        firstLetter: action.payload,
       };
     case PERIOD_ID_SAVE_REQUEST:
       return {
         ...state,
-        groupVariables: action.payload,
+        periodId: action.payload,
       };
     case OCCURRENCES_SAVE_REQUEST:
       return {
         ...state,
-        groupVariables: action.payload,
+        occurrences: action.payload,
       };
 
     default:
