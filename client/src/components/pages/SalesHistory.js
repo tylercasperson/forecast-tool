@@ -8,6 +8,7 @@ import { saveStartDate, saveEndDate } from '../data/actions/settingsActions.js';
 
 import LineChart from '../layout/LineChart';
 import SalesHistorySettings from '../layout/SalesHistorySettings.js';
+import SalesHistoryModifying from '../layout/SalesHistoryModifying.js';
 import SalesHistoryTable from '../layout/SalesHistoryTable';
 
 const SalesHistory = () => {
@@ -95,6 +96,19 @@ const SalesHistory = () => {
         showHoverLabels={showHoverText ? 'checked' : ''}
         showTimePeriodText={showTimePeriodText}
         onChange={(e) => onChange(e)}
+      />
+      <SalesHistoryModifying
+        startDate={tempStartDate}
+        endDate={tempEndDate}
+        onChange={() => onChange()}
+        onClick={() =>
+          dispatch(
+            listSalesData(
+              format(new Date(startDate), 'yyyy-M-d'),
+              format(new Date(endDate), 'yyyy-M-d')
+            )
+          )
+        }
       />
       <SalesHistoryTable array={salesData} />
     </div>

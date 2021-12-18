@@ -590,6 +590,23 @@ input:focus {
   outline: none;
 }
 
+.calculateButton {
+  width: 90%;
+  padding: 2vh 30vw;
+  margin-bottom: 5vh;
+  background: #424242;
+  color: white;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.modifyingButton {
+  width: 15vw;
+  padding: 1vw;
+  font-size: 1.5vmin;
+}
+
 /* sales table */
 .salesTable div:nth-child(even),
 .salesTable div:nth-child(even) input {
