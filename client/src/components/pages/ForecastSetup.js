@@ -36,7 +36,7 @@ const ForecastSetup = () => {
   const [load, setLoad] = useState(true);
 
   const onClick = () => {
-    let lastTimePeriodId = timePeriod[timePeriod.length - 1].id;
+    let lastTimePeriodId = timePeriod.length === 0 ? 1 : timePeriod[timePeriod.length - 1].id;
 
     dispatch(deleteAllGroupedData());
     dispatch(deleteAllTimePeriod());
@@ -59,6 +59,7 @@ const ForecastSetup = () => {
 
     dispatch(createBulkTimePeriod(forecastData.timePeriods));
     dispatch(createBulkGroupedData(forecastData.data));
+
     localStorage.removeItem('scrollPosition');
   };
 
@@ -74,7 +75,7 @@ const ForecastSetup = () => {
   }, [dispatch, load, startDate, endDate]);
 
   return (
-    <div action={'./'}>
+    <form action={'./'}>
       <HeaderLabel header={'Change Forecast Colors'} />
       <ChangeColors colorsDisplay={'flex'} />
       <HeaderLabel header={'Show / Hide Forecast'} />
@@ -84,7 +85,7 @@ const ForecastSetup = () => {
       <HeaderLabel header={'Group Forecast Data By'} />
       <TimePeriodTypesList />
       <ButtonHover onClick={(e) => onClick(e)} name={'Calculate'} className={'calculateButton'} />
-    </div>
+    </form>
   );
 };
 

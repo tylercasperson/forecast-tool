@@ -6,7 +6,6 @@ const ButtonHover = (props) => {
       style={{
         position: 'relative',
         display: 'inline-block',
-        marginTop: '3vh',
         borderWidth: '0.2vw',
         borderRadius: '5px',
         textDecoration: 'none',

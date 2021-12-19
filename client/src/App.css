@@ -593,6 +593,7 @@ input:focus {
 .calculateButton {
   width: 90%;
   padding: 2vh 30vw;
+  margin-top: 3vh;
   margin-bottom: 5vh;
   background: #424242;
   color: white;

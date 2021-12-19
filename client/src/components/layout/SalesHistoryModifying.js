@@ -7,7 +7,7 @@ import { deleteAllSalesData, createBulkSalesData } from '../data/actions/salesDa
 
 import { calculateForecasts } from '../data/formulas/forecastFormulas.js';
 import { groupFrequency } from '../data/formulas/dateFormulas';
-import { rangeSalesData } from '../data/actions/salesDataActions.js';
+import { rangeSalesData, listSalesData } from '../data/actions/salesDataActions.js';
 import {
   createBulkTimePeriod,
   deleteAllTimePeriod,
@@ -38,22 +38,15 @@ const SalesHistoryModifying = (props) => {
 
   const [tempStartDate, setTempStartDate] = useState(startDate);
   const [tempEndDate, setTempEndDate] = useState(endDate);
-  const [showHide, setShowHide] = useState('hide');
   const [load, setLoad] = useState(true);
 
-  const onFocus = () => {
-    setShowHide('show');
-  };
-
-  const onBlur = () => {
-    setShowHide('hide');
-  };
-
   const forecastCalculations = () => {
-    let lastTimePeriodId = timePeriod[timePeriod.length - 1].id;
+    let lastTimePeriodId = timePeriod.length === 0 ? 1 : timePeriod[timePeriod.length - 1].id;
 
-    dispatch(deleteAllGroupedData());
+    setLoad(true);
+
     dispatch(deleteAllTimePeriod());
+    dispatch(deleteAllGroupedData());
 
     let { occurrences, dayEquivalent } = groupFrequency(firstLetter, startDate, endDate);
     let timeVariables = { occurrences, dayEquivalent, periodId, firstLetter };
@@ -114,8 +107,8 @@ const SalesHistoryModifying = (props) => {
 
     dispatch(deleteAllSalesData());
     dispatch(createBulkSalesData(sortedArr));
-
     forecastCalculations();
+    setLoad(true);
   };
 
   const justRandomData = () => {
@@ -123,6 +116,7 @@ const SalesHistoryModifying = (props) => {
 
     dispatch(deleteAllSalesData());
     dispatch(createBulkSalesData(arr));
+    forecastCalculations();
   };
 
   const randomSalesData = () => {
@@ -155,6 +149,9 @@ const SalesHistoryModifying = (props) => {
         format(new Date(endDate), 'yyyy-M-d')
       )
     );
+    dispatch(
+      listSalesData(format(new Date(startDate), 'yyyy-M-d'), format(new Date(endDate), 'yyyy-M-d'))
+    );
     if (load) {
       dispatch(rangeSalesData(startDate, endDate));
       dispatch(listTimePeriod());
@@ -183,53 +180,48 @@ const SalesHistoryModifying = (props) => {
         }}
       >
         <ButtonHover
-          onClick={() => justRandomData()}
-          onClickCapture={props.onClick}
+          onClickCapture={() => justRandomData()}
+          onClick={props.onClick}
           name={'Randomize Data'}
           className={'modifyingButton'}
         />
-
-        <ButtonHover
-          name='Randomize with seasonal trends'
-          onClick={() => addSeasonalTrends()}
-          onClickCapture={props.onClick}
-          className={'modifyingButton'}
-        />
-      </div>
-
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          textAlign: 'center',
-          marginTop: '2vh',
-          marginBottom: '2vh',
-        }}
-        tabIndex={0}
-        onFocus={() => onFocus()}
-        onBlur={() => onBlur()}
-      >
         <div
           style={{
-            width: '24vw',
-            height: '5vh',
-            fontSize: '1.8vmin',
-            backgroundColor: '#efefef',
-            border: '1pt solid black',
-            padding: '0.5vh',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            textAlign: 'center',
+            marginTop: '2vh',
+            marginBottom: '2vh',
           }}
         >
-          <DropDownCalendar
-            startDate={startDate}
-            endDate={endDate}
-            startValue={tempStartDate}
-            endValue={tempEndDate}
-            inputWidth={'12vw'}
-            inputFontSize={'1.8vh'}
-            inputBackgroundColor={'#efefef'}
-          />
+          <div
+            style={{
+              width: '24vw',
+              height: '5vh',
+              fontSize: '1.8vmin',
+              backgroundColor: '#efefef',
+              border: '1pt solid black',
+              padding: '0.5vh',
+            }}
+          >
+            <DropDownCalendar
+              startDate={startDate}
+              endDate={endDate}
+              startValue={tempStartDate}
+              endValue={tempEndDate}
+              inputWidth={'12vw'}
+              inputFontSize={'1.8vh'}
+              inputBackgroundColor={'#efefef'}
+            />
+          </div>
         </div>
+        <ButtonHover
+          name='Randomize with seasonal trends'
+          onClickCapture={() => addSeasonalTrends()}
+          onClick={props.onClick}
+          className={'modifyingButton'}
+        />
       </div>
     </div>
   );

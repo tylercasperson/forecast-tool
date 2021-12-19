@@ -210,7 +210,7 @@ const calculateWeightedAverage = (dataArr, weightedPeriods, lastTimePeriodId, da
 const gdpSelected = (timeVariables, gdp, firstDate, secondDate) => {
   let dataGdp = [];
 
-  let selectedGdp = gdp
+  let selectedGdp = Array.from(gdp)
     .filter((i) => {
       return (
         new Date(dateFormat(i.date)) >= firstDate && new Date(dateFormat(i.date)) <= secondDate

@@ -68,23 +68,36 @@ const SalesHistory = () => {
     }
   };
 
+  const justSalesData = () => {
+    return groupedData.filter((data) => data.dataTypeId === 2);
+  };
+
+  const onClick = () => {
+    setLock(true);
+  };
+
   useEffect(() => {
-    dispatch(
-      listSalesData(format(new Date(startDate), 'yyyy-M-d'), format(new Date(endDate), 'yyyy-M-d'))
-    );
-    dispatch(
-      listGroupedData(
-        format(new Date(startDate), 'yyyy-M-d'),
-        format(new Date(endDate), 'yyyy-M-d')
-      )
-    );
+    if (lock) {
+      dispatch(
+        listSalesData(
+          format(new Date(startDate), 'yyyy-M-d'),
+          format(new Date(endDate), 'yyyy-M-d')
+        )
+      );
+      dispatch(
+        listGroupedData(
+          format(new Date(startDate), 'yyyy-M-d'),
+          format(new Date(endDate), 'yyyy-M-d')
+        )
+      );
+    }
   }, [dispatch, startDate, endDate, lock]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      {salesData && (
+      {groupedData && (
         <LineChart
-          data={groupedData && groupedData.filter((data) => data.dataTypeId === 2)}
+          data={justSalesData()}
           colors={[colors[1], colors[1]]}
           showHoverLabels={showHoverText}
           xLabelOption={showTimePeriod}
@@ -101,16 +114,9 @@ const SalesHistory = () => {
         startDate={tempStartDate}
         endDate={tempEndDate}
         onChange={() => onChange()}
-        onClick={() =>
-          dispatch(
-            listSalesData(
-              format(new Date(startDate), 'yyyy-M-d'),
-              format(new Date(endDate), 'yyyy-M-d')
-            )
-          )
-        }
+        onClick={() => onClick()}
       />
-      <SalesHistoryTable array={salesData} />
+      <SalesHistoryTable array={salesData} lock={lock} />
     </div>
   );
 };
