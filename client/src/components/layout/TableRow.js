@@ -39,7 +39,7 @@ const TableRow = (props) => {
   return (
     <div style={{ display: 'flex' }}>
       <input
-        style={{ width: '5vw', backgroundColor: props.background }}
+        style={{ width: '5vw', backgroundColor: props.background, fontSize: '1.7vmin' }}
         type='text'
         name={'timePeriod'}
         onChange={(e) => onChange(e)}
