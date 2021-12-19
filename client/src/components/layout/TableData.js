@@ -10,6 +10,7 @@ import {
   updateGroupedData,
   deleteGroupedData,
 } from '../data/actions/groupedDataActions.js';
+import { listDataTypes } from '../data/actions/dataTypeActions.js';
 
 import { GROUPED_DATA_UPDATE_RESET } from '../data/constants/groupedDataConstants.js';
 
@@ -68,6 +69,8 @@ const TableData = (props) => {
 
   useEffect(() => {
     tableData.current.scrollTop = localStorage.getItem('scrollPosition');
+
+    dispatch(listDataTypes());
 
     if (success) {
       dispatch({ type: GROUPED_DATA_UPDATE_RESET });
