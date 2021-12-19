@@ -99,7 +99,7 @@ const MonthSetup = (props) => {
           display: 'flex',
           margin: '0.5vw 0 0.5vw 0',
           fontWeight: 'bold',
-          fontSize: '1.7vh',
+          fontSize: '1.8vmin',
           width: '20vw',
           justifyContent: 'center',
           alignItems: 'center',
@@ -122,7 +122,7 @@ const MonthSetup = (props) => {
       </div>
       <div
         className='dayAbbreviation'
-        style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.5vh' }}
+        style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.8vmin' }}
       >
         <div>S</div>
         <div>M</div>
@@ -133,7 +133,10 @@ const MonthSetup = (props) => {
         <div>S</div>
       </div>
 
-      <div className='calendarDays' style={{ width: '100%', borderTop: '2pt solid black' }}>
+      <div
+        className='calendarDays'
+        style={{ width: '100%', borderTop: '2pt solid black', fontSize: '1.8vmin' }}
+      >
         <WeekLineUp
           name='week1'
           sunday={days[0]}

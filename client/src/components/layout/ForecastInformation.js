@@ -9,32 +9,33 @@ const ForecastInformation = (props) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'start',
+        fontSize: '3vmin',
       }}
     >
       <div>
         <div
           style={{
             textAlign: 'center',
-            fontSize: '3vh',
+            fontSize: '3.5vmin',
             fontWeight: 'bold',
             padding: '1vw',
           }}
         >
           {props.name}
         </div>
-        <div style={{ fontSize: '2vh', padding: '0.5vw' }}>{props.description}</div>
+        <div style={{ padding: '0.5vw' }}>{props.description}</div>
         <div
           style={{
             textAlign: 'start',
             justifyContent: 'flex-start',
             width: '45vw',
-            fontSize: '2vh',
             padding: '0.5vw',
           }}
         >
           <div
             style={{
               display: 'flex',
+              fontSize: '3.5vmin',
               fontWeight: 'bold',
               paddingTop: '1vh',
               paddingBottom: '1vh',

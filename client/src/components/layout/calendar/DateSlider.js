@@ -16,6 +16,8 @@ const DateSlider = () => {
 
   const [tempStartDate, setTempStartDate] = useState(startDate);
   const [tempEndDate, setTempEndDate] = useState(endDate);
+  const [displayStartDate, setDisplayStartDate] = useState(startDate);
+  const [displayEndDate, setDisplayEndDate] = useState(endDate);
   const [showHide, setShowHide] = useState('hide');
   const [sliderOne, setSliderOne] = useState(0);
   const [sliderTwo, setSliderTwo] = useState(100);
@@ -23,6 +25,7 @@ const DateSlider = () => {
   const [sliderMax, setSliderMax] = useState(100);
   const [load, setLoad] = useState(true);
   const [sliderLock, setSliderLock] = useState(false);
+  const [monthTracker, setMonthTracker] = useState([0, 0]);
 
   const dateCapture = (e) => {
     if (e.target.name === 'startDate') {
@@ -96,24 +99,24 @@ const DateSlider = () => {
 
   const nextMonth = (type) => {
     if (type === 'start') {
-      let nextMonth = format(add(new Date(startDate), { months: 1 }), 'M/d/yyyy');
-      dispatch(saveStartDate(nextMonth));
-      setTempStartDate(nextMonth);
+      let numberOfMonths = showHide === 'show' ? (monthTracker[0] = monthTracker[0] + 1) : 0;
+      let nextMonth = format(add(new Date(startDate), { months: numberOfMonths }), 'M/d/yyyy');
+      setDisplayStartDate(nextMonth);
     } else {
-      let nextMonth = format(add(new Date(endDate), { months: 1 }), 'M/d/yyyy');
-      dispatch(saveEndDate(nextMonth));
-      setTempEndDate(nextMonth);
+      let numberOfMonths = showHide === 'show' ? (monthTracker[1] = monthTracker[1] + 1) : 0;
+      let nextMonth = format(add(new Date(endDate), { months: numberOfMonths }), 'M/d/yyyy');
+      setDisplayEndDate(nextMonth);
     }
   };
   const previousMonth = (type) => {
     if (type === 'start') {
-      let previousMonth = format(add(new Date(startDate), { months: -1 }), 'M/d/yyyy');
-      dispatch(saveStartDate(previousMonth));
-      setTempStartDate(previousMonth);
+      let numberOfMonths = showHide === 'show' ? (monthTracker[0] = monthTracker[0] - 1) : 0;
+      let previousMonth = format(add(new Date(startDate), { months: numberOfMonths }), 'M/d/yyyy');
+      setDisplayStartDate(previousMonth);
     } else {
-      let previousMonth = format(add(new Date(endDate), { months: -1 }), 'M/d/yyyy');
-      dispatch(saveEndDate(previousMonth));
-      setTempEndDate(previousMonth);
+      let numberOfMonths = showHide === 'show' ? (monthTracker[1] = monthTracker[1] - 1) : 0;
+      let previousMonth = format(add(new Date(endDate), { months: numberOfMonths }), 'M/d/yyyy');
+      setDisplayEndDate(previousMonth);
     }
   };
 
@@ -174,6 +177,8 @@ const DateSlider = () => {
       setSliderMax(differenceInDays(new Date(dateFormat(maxDate)), new Date(dateFormat(minDate))));
       setLoad(false);
     }
+    setMonthTracker([0, 0]);
+    setDisplayStartDate(startDate);
   }, [dispatch, startDate, endDate, minDate, maxDate, load, sliderLock]);
 
   return (
@@ -196,7 +201,7 @@ const DateSlider = () => {
           showHide={showHide}
           onClick={(e) => onClick(e, 'start')}
           onChange={(e) => dateCapture(e)}
-          dateSelected={startDate}
+          dateSelected={displayStartDate}
           startDate={startDate}
           endDate={endDate}
           previousMonth={() => previousMonth('start')}
@@ -213,7 +218,7 @@ const DateSlider = () => {
           showHide={showHide}
           onClick={(e) => onClick(e, 'end')}
           onChange={(e) => dateCapture(e)}
-          dateSelected={endDate}
+          dateSelected={displayEndDate}
           startDate={startDate}
           endDate={endDate}
           previousMonth={() => previousMonth('end')}

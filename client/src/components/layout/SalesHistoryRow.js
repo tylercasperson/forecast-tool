@@ -8,12 +8,12 @@ const SalesHistoryRow = (props) => {
   };
 
   return (
-    <div style={{ display: 'flex', textAlign: 'center', padding: '1pt' }}>
+    <div style={{ display: 'flex', textAlign: 'center', padding: '1pt', fontSize: '1.8vmin' }}>
       <div style={{ width: '12vw' }}>{props.date}</div>
       <input
         style={{
           width: '12vw',
-          fontSize: '1.7vmin',
+          fontSize: '1.8vmin',
         }}
         type='text'
         name={'value'}
@@ -31,7 +31,6 @@ const SalesHistoryRow = (props) => {
       >
         <i
           style={{
-            fontSize: '0.7rem',
             margin: '2px',
           }}
           className='far fa-trash-alt'

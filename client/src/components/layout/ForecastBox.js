@@ -12,7 +12,10 @@ const ForecastBox = (props) => {
   };
 
   return (
-    <div className='forecastBox' style={{ display: 'flex', flexDirection: 'column' }}>
+    <div
+      className='forecastBox'
+      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+    >
       <div
         style={{
           display: 'inline-block',
@@ -23,7 +26,8 @@ const ForecastBox = (props) => {
         <input
           type='text'
           style={{
-            fontSize: '1.5vw',
+            fontSize: '2vmin',
+            marginRight: '0.5vw',
             width: numberWidth,
           }}
           name='numberInput'
@@ -31,7 +35,7 @@ const ForecastBox = (props) => {
           onChange={props.onChange}
           onChangeCapture={(e) => onChange(e)}
         />
-        <label style={{ fontSize: '1.5vw', marginLeft: '0.2vw' }} htmlFor='numberInput'>
+        <label style={{ fontSize: '2vmin', marginLeft: '0.2vw' }} htmlFor='numberInput'>
           time periods will be {props.type} together.
         </label>
       </div>

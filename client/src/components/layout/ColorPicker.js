@@ -49,6 +49,7 @@ const ColorPicker = (props) => {
         display: 'flex',
         flexDirection: 'column',
         padding: '1%',
+        fontSize: '90%',
       }}
     >
       <div

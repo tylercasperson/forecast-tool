@@ -88,9 +88,18 @@ const ForecastList = () => {
         display: 'flex',
         flexWrap: 'wrap',
         flexDirection: 'row',
+        justifyContent: 'space-evenly',
       }}
     >
-      <div style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+      <div
+        style={{
+          marginTop: 'auto',
+          marginBottom: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
         <CheckItem
           item='Sales History'
           name='salesHistory'
@@ -99,7 +108,15 @@ const ForecastList = () => {
           checked={showSalesHistory}
         />
       </div>
-      <div style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+      <div
+        style={{
+          marginTop: 'auto',
+          marginBottom: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
         <CheckItem
           item='Last Year'
           name='lastYear'
@@ -108,7 +125,17 @@ const ForecastList = () => {
           checked={showLastYear}
         />
       </div>
-      <div style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+      <div
+        style={{
+          marginTop: 'auto',
+          marginBottom: 'auto',
+          marginLeft: '1vw',
+          marginRight: '1vw',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
         <CheckItem
           item='Moving Average'
           name='movingAverage'
@@ -125,7 +152,17 @@ const ForecastList = () => {
           />
         )}
       </div>
-      <div style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+      <div
+        style={{
+          marginTop: 'auto',
+          marginBottom: 'auto',
+          marginLeft: '1vw',
+          marginRight: '1vw',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
         <CheckItem
           item='Weighted Average'
           name='weightedAverage'
@@ -142,7 +179,15 @@ const ForecastList = () => {
           />
         )}
       </div>
-      <div style={{ marginTop: 'auto', marginBottom: 'auto' }}>
+      <div
+        style={{
+          marginTop: 'auto',
+          marginBottom: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
         <CheckItem
           item='Linear Regression'
           name='linearRegression'

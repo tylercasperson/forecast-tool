@@ -211,7 +211,7 @@ const SalesHistoryModifying = (props) => {
               startValue={tempStartDate}
               endValue={tempEndDate}
               inputWidth={'12vw'}
-              inputFontSize={'1.8vh'}
+              inputFontSize={'2vmin'}
               inputBackgroundColor={'#efefef'}
             />
           </div>
