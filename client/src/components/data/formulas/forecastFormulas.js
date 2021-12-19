@@ -7,7 +7,7 @@ export const calculateForecasts = (
   endDate,
   salesDateRange,
   dataTypes,
-  timePeriod,
+  lastTimePeriodId,
   previousYear,
   movingPeriods,
   weightedPeriods,
@@ -24,7 +24,7 @@ export const calculateForecasts = (
     secondDate,
     salesDateRange,
     dataTypes,
-    timePeriod
+    lastTimePeriodId
   );
 
   gatherLastYear(
@@ -32,21 +32,19 @@ export const calculateForecasts = (
     dataArr,
     firstDate,
     secondDate,
-    timePeriod,
+    lastTimePeriodId,
     previousYear,
     dataTypes
   );
 
-  calculateMovingAverage(dataArr, movingPeriods, timePeriod, dataTypes);
-  calculateWeightedAverage(dataArr, weightedPeriods, timePeriod, dataTypes);
+  calculateMovingAverage(dataArr, movingPeriods, lastTimePeriodId, dataTypes);
+  calculateWeightedAverage(dataArr, weightedPeriods, lastTimePeriodId, dataTypes);
 
   let gdpData = gdpSelected(timeVariables, gdp, firstDate, secondDate);
   let dataSales = dataArr.filter((i) => i.dataTypeId === 2);
 
-  calculateLinearRegression(dataSales, gdpData.data, timePeriod, dataArr, dataTypes);
-  userInputDefault(dataArr, dataSales, timePeriod, dataArr, dataTypes);
-
-  console.log({ data: dataArr, timePeriods: salesData.timePeriodArr });
+  calculateLinearRegression(dataSales, gdpData.data, lastTimePeriodId, dataArr, dataTypes);
+  userInputDefault(dataArr, dataSales, lastTimePeriodId, dataArr, dataTypes);
 
   return { data: dataArr, timePeriods: salesData.timePeriodArr };
 };
@@ -62,7 +60,7 @@ const gatherSalesData = (
   secondDate,
   salesDateRange,
   dataTypes,
-  timePeriod
+  lastTimePeriodId
 ) => {
   let dataSales = [];
   let timePeriodArr = [];
@@ -70,9 +68,6 @@ const gatherSalesData = (
   let dataTypeId = dataTypes.filter((i) => {
     return i.abbreviation === 'sh';
   })[0].id;
-
-  console.log('timeVariables.occurrences', timeVariables.occurrences);
-  console.log('tv', timeVariables);
 
   for (let i = 0; i < timeVariables.occurrences; i++) {
     const timeUnit = (unit, date, amount) => {
@@ -116,11 +111,9 @@ const gatherSalesData = (
       timePeriodTypeID: timeVariables.periodId,
     });
 
-    addToData(dataTypeId, timePeriod[timePeriod.length - 1].id + (i + 1), timePeriodTotal, dataArr);
+    addToData(dataTypeId, lastTimePeriodId + (i + 1), timePeriodTotal, dataArr);
     dataSales.push(timePeriodTotal);
   }
-
-  console.log('timePeriodArr', timePeriodArr);
 
   return { timePeriodArr: timePeriodArr, data: dataArr };
 };
@@ -130,7 +123,7 @@ const gatherLastYear = (
   dataArr,
   firstDate,
   secondDate,
-  timePeriod,
+  lastTimePeriodId,
   previousYear,
   dataTypes
 ) => {
@@ -160,7 +153,7 @@ const gatherLastYear = (
       return a + b.data;
     }, 0);
 
-    addToData(dataTypeId, timePeriod[timePeriod.length - 1].id + (i + 1), timePeriodTotal, dataArr);
+    addToData(dataTypeId, lastTimePeriodId + (i + 1), timePeriodTotal, dataArr);
 
     arr.push(timePeriodTotal);
   }
@@ -168,7 +161,7 @@ const gatherLastYear = (
   return { data: dataArr };
 };
 
-const calculateMovingAverage = (dataArr, movingPeriods, timePeriod, dataTypes) => {
+const calculateMovingAverage = (dataArr, movingPeriods, lastTimePeriodId, dataTypes) => {
   let periods = parseInt(movingPeriods);
 
   let dataSales = dataArr.filter((i) => i.dataTypeId === 2);
@@ -178,7 +171,7 @@ const calculateMovingAverage = (dataArr, movingPeriods, timePeriod, dataTypes) =
   })[0].id;
 
   for (let i = 0; i < periods; i++) {
-    addToData(dataTypeId, timePeriod[timePeriod.length - 1].id + (i + 1), 0, dataArr);
+    addToData(dataTypeId, lastTimePeriodId + (i + 1), 0, dataArr);
   }
 
   for (let i = periods - 1; i < dataSales.length; i++) {
@@ -187,16 +180,11 @@ const calculateMovingAverage = (dataArr, movingPeriods, timePeriod, dataTypes) =
       average += dataSales[i - j].data;
     }
 
-    addToData(
-      dataTypeId,
-      timePeriod[timePeriod.length - 1].id + (i + 2),
-      Math.round(average / periods),
-      dataArr
-    );
+    addToData(dataTypeId, lastTimePeriodId + (i + 2), Math.round(average / periods), dataArr);
   }
 };
 
-const calculateWeightedAverage = (dataArr, weightedPeriods, timePeriod, dataTypes) => {
+const calculateWeightedAverage = (dataArr, weightedPeriods, lastTimePeriodId, dataTypes) => {
   let periods = parseInt(weightedPeriods);
   let dataSales = dataArr.filter((i) => i.dataTypeId === 2);
 
@@ -205,7 +193,7 @@ const calculateWeightedAverage = (dataArr, weightedPeriods, timePeriod, dataType
   })[0].id;
 
   for (let i = 0; i < periods; i++) {
-    addToData(dataTypeId, timePeriod[timePeriod.length - 1].id + (i + 1), 0, dataArr);
+    addToData(dataTypeId, lastTimePeriodId + (i + 1), 0, dataArr);
   }
 
   for (let i = periods - 1; i < dataSales.length; i++) {
@@ -215,12 +203,7 @@ const calculateWeightedAverage = (dataArr, weightedPeriods, timePeriod, dataType
       average += dataSales[i - j].data * (periods - j);
       totalWeight += j + 1;
     }
-    addToData(
-      dataTypeId,
-      timePeriod[timePeriod.length - 1].id + (i + 2),
-      Math.round(average / totalWeight),
-      dataArr
-    );
+    addToData(dataTypeId, lastTimePeriodId + (i + 2), Math.round(average / totalWeight), dataArr);
   }
 };
 
@@ -255,7 +238,7 @@ const gdpSelected = (timeVariables, gdp, firstDate, secondDate) => {
   return { data: dataGdp };
 };
 
-const calculateLinearRegression = (arr1, arr2, timePeriod, dataArr, dataTypes) => {
+const calculateLinearRegression = (arr1, arr2, lastTimePeriodId, dataArr, dataTypes) => {
   const linearRegression = (x, y) => {
     let lr = {};
     let n = y.length;
@@ -300,7 +283,7 @@ const calculateLinearRegression = (arr1, arr2, timePeriod, dataArr, dataTypes) =
   for (let i = 0; i < arr1.length; i++) {
     addToData(
       dataTypeId,
-      timePeriod[timePeriod.length - 1].id + (i + 1),
+      lastTimePeriodId + (i + 1),
       Math.round(lr.intercept + arr1[i].data * lr.slope),
       dataArr
     );
@@ -308,7 +291,7 @@ const calculateLinearRegression = (arr1, arr2, timePeriod, dataArr, dataTypes) =
   }
 };
 
-const userInputDefault = (data, dataSales, timePeriod, dataArr, dataTypes) => {
+const userInputDefault = (data, dataSales, lastTimePeriodId, dataArr, dataTypes) => {
   const uniqueArr = [...new Set(data.map((i) => i.dataTypeId))];
 
   let dataTypeId = dataTypes.filter((i) => {
@@ -321,11 +304,6 @@ const userInputDefault = (data, dataSales, timePeriod, dataArr, dataTypes) => {
       sum += data.filter((i) => i.dataTypeId === uniqueArr[j])[i].data;
     }
 
-    addToData(
-      dataTypeId,
-      timePeriod[timePeriod.length - 1].id + (i + 1),
-      Math.floor(sum / uniqueArr.length),
-      dataArr
-    );
+    addToData(dataTypeId, lastTimePeriodId + (i + 1), Math.floor(sum / uniqueArr.length), dataArr);
   }
 };

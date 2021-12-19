@@ -1,3 +1,13 @@
+import {
+  min,
+  max,
+  eachYearOfInterval,
+  eachQuarterOfInterval,
+  eachMonthOfInterval,
+  eachWeekOfInterval,
+  differenceInDays,
+} from 'date-fns';
+
 export const monthList = [
   'January',
   'February',
@@ -119,4 +129,36 @@ export const dateFormat = (date) => {
   let year = dateParts[0];
 
   return month + '/' + day + '/' + year;
+};
+
+export const groupFrequency = (firstLetter, startDate, endDate) => {
+  const firstDate = min([new Date(startDate), new Date(endDate)]);
+  const secondDate = max([new Date(startDate), new Date(endDate)]);
+  let dateRange = { start: firstDate, end: secondDate };
+  let occurrences;
+
+  switch (firstLetter) {
+    case 'Y':
+    case 'y':
+      occurrences = eachYearOfInterval(dateRange).length;
+      break;
+    case 'Q':
+    case 'q':
+      occurrences = eachQuarterOfInterval(dateRange).length;
+      break;
+    case 'M':
+    case 'm':
+      occurrences = eachMonthOfInterval(dateRange).length;
+      break;
+    case 'W':
+    case 'w':
+      occurrences = eachWeekOfInterval(dateRange).length;
+      break;
+    default:
+      occurrences = differenceInDays(secondDate, firstDate).length;
+      break;
+  }
+  let dayEquivalent = Math.ceil(differenceInDays(secondDate, firstDate) / occurrences);
+
+  return { occurrences, dayEquivalent };
 };

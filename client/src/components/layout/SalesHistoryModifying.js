@@ -1,21 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  add,
-  differenceInDays,
-  format,
-  min,
-  max,
-  eachYearOfInterval,
-  eachQuarterOfInterval,
-  eachMonthOfInterval,
-  eachWeekOfInterval,
-} from 'date-fns';
+import { add, differenceInDays, format } from 'date-fns';
 
 import { getRandomNumber } from '../data/formulas/numberFormulas';
 import { deleteAllSalesData, createBulkSalesData } from '../data/actions/salesDataActions.js';
 
 import { calculateForecasts } from '../data/formulas/forecastFormulas.js';
+import { groupFrequency } from '../data/formulas/dateFormulas';
 import { rangeSalesData } from '../data/actions/salesDataActions.js';
 import {
   createBulkTimePeriod,
@@ -39,7 +30,7 @@ const SalesHistoryModifying = (props) => {
   const getFromState = useSelector((state) => state);
   const { startDate, endDate } = getFromState.dates;
   const { movingPeriods, weightedPeriods } = getFromState.periods;
-  const { firstLetter, periodId, occurences } = getFromState.groupVariables;
+  const { firstLetter, periodId } = getFromState.groupVariables;
   const { dataTypes } = getFromState.dataTypes;
   const { timePeriod } = getFromState.timePeriods;
   const { current, previousYear } = getFromState.salesDataRange.salesData;
@@ -58,45 +49,14 @@ const SalesHistoryModifying = (props) => {
     setShowHide('hide');
   };
 
-  const selectedTimePeriod = () => {
-    let firstLetter = 'w';
-    let periodId = 3;
-
-    const firstDate = min([new Date(startDate), new Date(endDate)]);
-    const secondDate = max([new Date(startDate), new Date(endDate)]);
-
-    const interval = (firstLetter) => {
-      let dateRange = { start: firstDate, end: secondDate };
-
-      switch (firstLetter) {
-        case 'y':
-          return eachYearOfInterval(dateRange);
-        case 'q':
-          return eachQuarterOfInterval(dateRange);
-        case 'm':
-          return eachMonthOfInterval(dateRange);
-        case 'w':
-          return eachWeekOfInterval(dateRange);
-        default:
-          return differenceInDays(secondDate, firstDate);
-      }
-    };
-
-    let occurrences = interval(firstLetter).length;
-    let dayEquivalent = Math.ceil(differenceInDays(secondDate, firstDate) / occurrences);
-    return {
-      dayEquivalent,
-      occurrences,
-      firstLetter,
-      periodId,
-      startOn: interval(firstLetter),
-    };
-  };
-
   const forecastCalculations = () => {
+    let lastTimePeriodId = timePeriod[timePeriod.length - 1].id;
+
     dispatch(deleteAllGroupedData());
     dispatch(deleteAllTimePeriod());
-    let timeVariables = selectedTimePeriod();
+
+    let { occurrences, dayEquivalent } = groupFrequency(firstLetter, startDate, endDate);
+    let timeVariables = { occurrences, dayEquivalent, periodId, firstLetter };
 
     let forecastData = calculateForecasts(
       timeVariables,
@@ -104,7 +64,7 @@ const SalesHistoryModifying = (props) => {
       endDate,
       current.salesData,
       dataTypes,
-      timePeriod,
+      lastTimePeriodId,
       previousYear,
       movingPeriods,
       weightedPeriods,
@@ -228,14 +188,10 @@ const SalesHistoryModifying = (props) => {
           name={'Randomize Data'}
           className={'modifyingButton'}
         />
+
         <ButtonHover
           name='Randomize with seasonal trends'
           onClick={() => addSeasonalTrends()}
-          onClickCapture={props.onClick}
-          className={'modifyingButton'}
-        />
-        <ButtonHover
-          name='Recalculate Forecasts'
           onClickCapture={props.onClick}
           className={'modifyingButton'}
         />
