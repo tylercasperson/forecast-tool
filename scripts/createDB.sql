@@ -12,6 +12,14 @@ CREATE TABLE dataTypes (
     updatedAt datetime,
     PRIMARY KEY (id)
 );
+CREATE TABLE gdpData (
+    id int auto_increment,
+    date string,
+    value float(10,4),
+    createdAt datetime,
+    updatedAt datetime,
+    PRIMARY KEY (id)
+);
 CREATE TABLE timePeriodTypes (
     id int auto_increment,
     type varChar(255),

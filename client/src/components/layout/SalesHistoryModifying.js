@@ -19,7 +19,7 @@ import {
   deleteAllGroupedData,
   listGroupedData,
 } from '../data/actions/groupedDataActions.js';
-import { listGdp } from '../data/actions/gdpActions.js';
+import { listGdp, listStoredGdp, createStoredGdp } from '../data/actions/gdpActions.js';
 
 import ButtonHover from './ButtonHover';
 import DropDownCalendar from './calendar/DropDownCalendar';
@@ -35,7 +35,8 @@ const SalesHistoryModifying = (props) => {
   const { dataTypes } = getFromState.dataTypes;
   const { timePeriod } = getFromState.timePeriods;
   const { current, previousYear } = getFromState.salesDataRange.salesData;
-  const { gdp } = getFromState.gdp;
+  const { gdpData } = getFromState.gdp;
+  const { gdpStoredData } = getFromState.gdpStoredData;
 
   const [load, setLoad] = useState(true);
   const [errorDisplay, setErrorDisplay] = useState('none');
@@ -50,6 +51,13 @@ const SalesHistoryModifying = (props) => {
 
     let { occurrences, dayEquivalent } = groupFrequency(firstLetter, startDate, endDate);
     let timeVariables = { occurrences, dayEquivalent, periodId, firstLetter };
+    let gdpToUse = gdpData.length === 0 ? gdpStoredData : gdpData;
+
+    if (gdpData.length !== 0) {
+      if (gdpStoredData.filter((i) => i.date === gdpData[0].date).length === 0) {
+        dispatch(createStoredGdp({ date: gdpData[0].date, value: gdpData[0].value }));
+      }
+    }
 
     let forecastData = calculateForecasts(
       timeVariables,
@@ -61,7 +69,7 @@ const SalesHistoryModifying = (props) => {
       previousYear,
       movingPeriods,
       weightedPeriods,
-      gdp
+      gdpToUse
     );
 
     dispatch(createBulkTimePeriod(forecastData.timePeriods));
@@ -173,6 +181,7 @@ const SalesHistoryModifying = (props) => {
       dispatch(listTimePeriod());
       dispatch(listDataTypes());
       dispatch(listGdp());
+      dispatch(listStoredGdp());
       setLoad(false);
     }
   }, [dispatch, load, startDate, endDate, errorDisplay]);

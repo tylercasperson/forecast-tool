@@ -31,7 +31,11 @@ import {
   timePeriodDeleteAllReducer,
   timePeriodUpdateReducer,
 } from './components/data/reducers/timePeriodReducers.js';
-import { gdpListReducer } from './components/data/reducers/gdpReducers.js';
+import {
+  gdpListReducer,
+  gdpStoredListReducer,
+  gdpStoredCreateReducer,
+} from './components/data/reducers/gdpReducers.js';
 
 const reducer = combineReducers({
   dates: settingsReducer,
@@ -62,6 +66,8 @@ const reducer = combineReducers({
   timePeriodsDeleteAll: timePeriodDeleteAllReducer,
   timePeriodsUpdate: timePeriodUpdateReducer,
   gdp: gdpListReducer,
+  gdpStoredData: gdpStoredListReducer,
+  gdpStoredDataCreate: gdpStoredCreateReducer,
 });
 
 const startDateFromStorage = localStorage.getItem('startDate')

@@ -17,7 +17,7 @@ import {
 } from '../data/actions/timePeriodActions.js';
 import { listDataTypes } from '../data/actions/dataTypeActions.js';
 import { createBulkGroupedData, deleteAllGroupedData } from '../data/actions/groupedDataActions.js';
-import { listGdp } from '../data/actions/gdpActions.js';
+import { listGdp, listStoredGdp, createStoredGdp } from '../data/actions/gdpActions.js';
 
 import TimePeriodTypesList from '../layout/TimePeriodTypesList';
 import DateSlider from '../layout/calendar/DateSlider';
@@ -39,7 +39,8 @@ const ForecastSetup = () => {
   const { timePeriod } = getFromState.timePeriods;
   const { minDate, maxDate } = getFromState.salesDateMinMax.salesData;
   const { current, previousYear } = getFromState.salesDataRange.salesData;
-  const { gdp } = getFromState.gdp;
+  const { gdpData } = getFromState.gdp;
+  const { gdpStoredData } = getFromState.gdpStoredData;
 
   const [load, setLoad] = useState(true);
   const [errorDisplay, setErrorDisplay] = useState('none');
@@ -54,6 +55,13 @@ const ForecastSetup = () => {
 
       let { occurrences, dayEquivalent } = groupFrequency(firstLetter, startDate, endDate);
       let timeVariables = { occurrences, dayEquivalent, periodId, firstLetter };
+      let gdpToUse = gdpData.length === 0 ? gdpStoredData : gdpData;
+
+      if (gdpData.length !== 0) {
+        if (gdpStoredData.filter((i) => i.date === gdpData[0].date).length === 0) {
+          dispatch(createStoredGdp({ date: gdpData[0].date, value: gdpData[0].value }));
+        }
+      }
 
       let forecastData = calculateForecasts(
         timeVariables,
@@ -65,7 +73,7 @@ const ForecastSetup = () => {
         previousYear,
         movingPeriods,
         weightedPeriods,
-        gdp
+        gdpToUse
       );
 
       dispatch(createBulkTimePeriod(forecastData.timePeriods));
@@ -89,6 +97,7 @@ const ForecastSetup = () => {
       dispatch(minMaxSalesDates());
       dispatch(listDataTypes());
       dispatch(listGdp());
+      dispatch(listStoredGdp());
       setLoad(false);
     }
   }, [dispatch, load, startDate, endDate, errorDisplay]);
