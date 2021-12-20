@@ -301,7 +301,10 @@ const userInputDefault = (data, dataSales, lastTimePeriodId, dataArr, dataTypes)
   for (let i = 0; i < dataSales.length; i++) {
     let sum = 0;
     for (let j = 0; j < uniqueArr.length; j++) {
-      sum += data.filter((i) => i.dataTypeId === uniqueArr[j])[i].data;
+      sum +=
+        data.filter((i) => i.dataTypeId === uniqueArr[j])[i] === undefined
+          ? 0
+          : data.filter((i) => i.dataTypeId === uniqueArr[j])[i].data;
     }
 
     addToData(dataTypeId, lastTimePeriodId + (i + 1), Math.floor(sum / uniqueArr.length), dataArr);

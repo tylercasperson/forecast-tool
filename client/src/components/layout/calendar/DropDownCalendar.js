@@ -13,10 +13,10 @@ const DropDownCalendar = (props) => {
   const getFromState = useSelector((state) => state);
   const { startDate, endDate } = getFromState.dates;
 
-  const [tempStartDate, setTempStartDate] = useState(props.startValue);
-  const [tempEndDate, setTempEndDate] = useState(props.endValue);
-  const [displayStartDate, setDisplayStartDate] = useState(props.startDate);
-  const [displayEndDate, setDisplayEndDate] = useState(props.endDate);
+  const [tempStartDate, setTempStartDate] = useState(startDate);
+  const [tempEndDate, setTempEndDate] = useState(endDate);
+  const [displayStartDate, setDisplayStartDate] = useState(startDate);
+  const [displayEndDate, setDisplayEndDate] = useState(endDate);
   const [showHide, setShowHide] = useState('hide');
   const [monthTracker, setMonthTracker] = useState([0, 0]);
 
@@ -124,15 +124,15 @@ const DropDownCalendar = (props) => {
       onBlur={() => onBlur()}
     >
       <DateInput
-        text={new Date(props.startDate) < new Date(props.endDate) ? 'Start Date' : 'End Date'}
+        text={new Date(startDate) < new Date(endDate) ? 'Start Date' : 'End Date'}
         name='startDate'
         value={tempStartDate}
         showHide={showHide}
         onClick={(e) => onClick(e, 'start')}
         onChange={(e) => dateCapture(e)}
         dateSelected={displayStartDate}
-        startDate={props.startDate}
-        endDate={props.endDate}
+        startDate={startDate}
+        endDate={endDate}
         previousMonth={() => previousMonth('start')}
         nextMonth={() => nextMonth('start')}
         inputBorder={props.inputBorder}
@@ -141,15 +141,15 @@ const DropDownCalendar = (props) => {
         inputBackgroundColor={props.inputBackgroundColor}
       />
       <DateInput
-        text={new Date(props.startDate) < new Date(props.endDate) ? 'End Date' : 'Start Date'}
+        text={new Date(startDate) < new Date(endDate) ? 'End Date' : 'Start Date'}
         name='endDate'
         value={tempEndDate}
         showHide={showHide}
         onClick={(e) => onClick(e, 'end')}
         onChange={(e) => dateCapture(e)}
         dateSelected={displayEndDate}
-        startDate={props.startDate}
-        endDate={props.endDate}
+        startDate={startDate}
+        endDate={endDate}
         previousMonth={() => previousMonth('end')}
         nextMonth={() => nextMonth('end')}
         inputBorder={props.inputBorder}

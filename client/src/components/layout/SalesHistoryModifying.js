@@ -23,6 +23,7 @@ import { listGdp } from '../data/actions/gdpActions.js';
 
 import ButtonHover from './ButtonHover';
 import DropDownCalendar from './calendar/DropDownCalendar';
+import ErrorMessage from './ErrorMessage';
 
 const SalesHistoryModifying = (props) => {
   const dispatch = useDispatch();
@@ -36,9 +37,8 @@ const SalesHistoryModifying = (props) => {
   const { current, previousYear } = getFromState.salesDataRange.salesData;
   const { gdp } = getFromState.gdp;
 
-  const [tempStartDate, setTempStartDate] = useState(startDate);
-  const [tempEndDate, setTempEndDate] = useState(endDate);
   const [load, setLoad] = useState(true);
+  const [errorDisplay, setErrorDisplay] = useState('none');
 
   const forecastCalculations = () => {
     let lastTimePeriodId = timePeriod.length === 0 ? 1 : timePeriod[timePeriod.length - 1].id;
@@ -69,54 +69,64 @@ const SalesHistoryModifying = (props) => {
   };
 
   const addSeasonalTrends = () => {
-    let arr = randomSalesData();
+    if (new Date(startDate) <= new Date() && new Date(endDate) <= new Date()) {
+      let arr = randomSalesData();
 
-    let winter = arr.filter((i) => {
-      let month = i.date.split('-')[1];
-      let day = i.date.split('-')[2];
-      return (
-        (month === '10' && parseInt(day) > 15) ||
-        month === '11' ||
-        month === '12' ||
-        (month === '1' && parseInt(day) < 10)
-      );
-    });
+      let winter = arr.filter((i) => {
+        let month = i.date.split('-')[1];
+        let day = i.date.split('-')[2];
+        return (
+          (month === '10' && parseInt(day) > 15) ||
+          month === '11' ||
+          month === '12' ||
+          (month === '1' && parseInt(day) < 10)
+        );
+      });
 
-    winter.map((i) => {
-      let randomDate = format(add(new Date(i.date), { days: getRandomNumber(-2, 3) }), 'yyyy-M-d');
-      let randomNumber = getRandomNumber(0, 800);
+      winter.map((i) => {
+        let randomDate = format(
+          add(new Date(i.date), { days: getRandomNumber(-2, 3) }),
+          'yyyy-M-d'
+        );
+        let randomNumber = getRandomNumber(0, 800);
 
-      return arr.push({ date: randomDate, data: randomNumber });
-    });
+        return arr.push({ date: randomDate, data: randomNumber });
+      });
 
-    let summer = arr.filter((i) => {
-      let month = i.date.split('-')[1];
-      return month === '6' || month === '7' || month === '8';
-    });
+      let summer = arr.filter((i) => {
+        let month = i.date.split('-')[1];
+        return month === '6' || month === '7' || month === '8';
+      });
 
-    summer.map((i) => {
-      let randomDate = format(add(new Date(i.date), { days: getRandomNumber(-2, 3) }), 'yyyy-M-d');
-      let randomNumber = getRandomNumber(0, 400);
+      summer.map((i) => {
+        let randomDate = format(
+          add(new Date(i.date), { days: getRandomNumber(-2, 3) }),
+          'yyyy-M-d'
+        );
+        let randomNumber = getRandomNumber(0, 400);
 
-      return arr.push({ date: randomDate, data: randomNumber });
-    });
+        return arr.push({ date: randomDate, data: randomNumber });
+      });
 
-    let sortedArr = arr.sort((a, b) => {
-      return new Date(a.date) - new Date(b.date);
-    });
+      let sortedArr = arr.sort((a, b) => {
+        return new Date(a.date) - new Date(b.date);
+      });
 
-    dispatch(deleteAllSalesData());
-    dispatch(createBulkSalesData(sortedArr));
-    forecastCalculations();
-    setLoad(true);
+      dispatch(deleteAllSalesData());
+      dispatch(createBulkSalesData(sortedArr));
+      forecastCalculations();
+      setLoad(true);
+    }
   };
 
   const justRandomData = () => {
-    let arr = randomSalesData();
+    if (new Date(startDate) <= new Date() && new Date(endDate) <= new Date()) {
+      let arr = randomSalesData();
 
-    dispatch(deleteAllSalesData());
-    dispatch(createBulkSalesData(arr));
-    forecastCalculations();
+      dispatch(deleteAllSalesData());
+      dispatch(createBulkSalesData(arr));
+      forecastCalculations();
+    }
   };
 
   const randomSalesData = () => {
@@ -143,6 +153,12 @@ const SalesHistoryModifying = (props) => {
   };
 
   useEffect(() => {
+    if (new Date(startDate) <= new Date() && new Date(endDate) >= new Date()) {
+      setErrorDisplay('block');
+    } else {
+      setErrorDisplay('none');
+    }
+
     dispatch(
       listGroupedData(
         format(new Date(startDate), 'yyyy-M-d'),
@@ -159,7 +175,7 @@ const SalesHistoryModifying = (props) => {
       dispatch(listGdp());
       setLoad(false);
     }
-  }, [dispatch, load, startDate, endDate]);
+  }, [dispatch, load, startDate, endDate, errorDisplay]);
 
   return (
     <div
@@ -172,6 +188,7 @@ const SalesHistoryModifying = (props) => {
         backgroundColor: 'lightgrey',
       }}
     >
+      <ErrorMessage errorDisplay={errorDisplay} />
       <div
         style={{
           display: 'flex',
@@ -206,10 +223,6 @@ const SalesHistoryModifying = (props) => {
             }}
           >
             <DropDownCalendar
-              startDate={startDate}
-              endDate={endDate}
-              startValue={tempStartDate}
-              endValue={tempEndDate}
               inputWidth={'12vw'}
               inputFontSize={'2vmin'}
               inputBackgroundColor={'#efefef'}

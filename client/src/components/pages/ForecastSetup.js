@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
 
 import { calculateForecasts } from '../data/formulas/forecastFormulas.js';
 import { groupFrequency } from '../data/formulas/dateFormulas.js';
-import { rangeSalesData, minMaxSalesDates } from '../data/actions/salesDataActions.js';
+import {
+  rangeSalesData,
+  minMaxSalesDates,
+  listSalesData,
+} from '../data/actions/salesDataActions.js';
 import {
   createBulkTimePeriod,
   deleteAllTimePeriod,
@@ -19,9 +25,11 @@ import ForecastList from '../layout/ForecastList';
 import ButtonHover from '../layout/ButtonHover';
 import ChangeColors from '../layout/ChangeColors';
 import HeaderLabel from '../layout/HeaderLabel';
+import ErrorMessage from '../layout/ErrorMessage.js';
 
 const ForecastSetup = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const getFromState = useSelector((state) => state);
   const { startDate, endDate } = getFromState.dates;
@@ -34,37 +42,48 @@ const ForecastSetup = () => {
   const { gdp } = getFromState.gdp;
 
   const [load, setLoad] = useState(true);
+  const [errorDisplay, setErrorDisplay] = useState('none');
 
-  const onClick = () => {
-    let lastTimePeriodId = timePeriod.length === 0 ? 1 : timePeriod[timePeriod.length - 1].id;
+  const onClick = (e) => {
+    e.preventDefault();
+    if (new Date(startDate) <= new Date() && new Date(endDate) <= new Date()) {
+      let lastTimePeriodId = timePeriod.length === 0 ? 1 : timePeriod[timePeriod.length - 1].id;
 
-    dispatch(deleteAllGroupedData());
-    dispatch(deleteAllTimePeriod());
+      dispatch(deleteAllGroupedData());
+      dispatch(deleteAllTimePeriod());
 
-    let { occurrences, dayEquivalent } = groupFrequency(firstLetter, startDate, endDate);
-    let timeVariables = { occurrences, dayEquivalent, periodId, firstLetter };
+      let { occurrences, dayEquivalent } = groupFrequency(firstLetter, startDate, endDate);
+      let timeVariables = { occurrences, dayEquivalent, periodId, firstLetter };
 
-    let forecastData = calculateForecasts(
-      timeVariables,
-      startDate,
-      endDate,
-      current.salesData,
-      dataTypes,
-      lastTimePeriodId,
-      previousYear,
-      movingPeriods,
-      weightedPeriods,
-      gdp
-    );
+      let forecastData = calculateForecasts(
+        timeVariables,
+        startDate,
+        endDate,
+        current.salesData,
+        dataTypes,
+        lastTimePeriodId,
+        previousYear,
+        movingPeriods,
+        weightedPeriods,
+        gdp
+      );
 
-    dispatch(createBulkTimePeriod(forecastData.timePeriods));
-    dispatch(createBulkGroupedData(forecastData.data));
+      dispatch(createBulkTimePeriod(forecastData.timePeriods));
+      dispatch(createBulkGroupedData(forecastData.data));
 
-    localStorage.removeItem('scrollPosition');
+      localStorage.removeItem('scrollPosition');
+      navigate('/');
+    }
   };
 
   useEffect(() => {
+    if (new Date(startDate) <= new Date() && new Date(endDate) >= new Date()) {
+      setErrorDisplay('block');
+    } else {
+      setErrorDisplay('none');
+    }
     if (load) {
+      listSalesData(format(new Date(startDate), 'yyyy-M-d'), format(new Date(endDate), 'yyyy-M-d'));
       dispatch(rangeSalesData(startDate, endDate));
       dispatch(listTimePeriod());
       dispatch(minMaxSalesDates());
@@ -72,7 +91,7 @@ const ForecastSetup = () => {
       dispatch(listGdp());
       setLoad(false);
     }
-  }, [dispatch, load, startDate, endDate]);
+  }, [dispatch, load, startDate, endDate, errorDisplay]);
 
   return (
     <form action={'./'}>
@@ -84,6 +103,7 @@ const ForecastSetup = () => {
       {minDate && maxDate && <DateSlider />}
       <HeaderLabel header={'Group Forecast Data By'} />
       <TimePeriodTypesList />
+      <ErrorMessage errorDisplay={errorDisplay} />
       <ButtonHover onClick={(e) => onClick(e)} name={'Calculate'} className={'calculateButton'} />
     </form>
   );
