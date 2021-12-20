@@ -254,6 +254,9 @@ const LineChart = (props) => {
             setChartSpot(xScale(xLabel));
           }
 
+          let xPercentage = chartSpot / chartWidth;
+          let startAdjustment = xPercentage < 0.25 ? 100 : 75;
+
           svg
             .append('text')
             .attr('text-anchor', textAnchor)
@@ -261,7 +264,9 @@ const LineChart = (props) => {
             .attr('font-size', '1.3vmin')
             .attr(
               'x',
-              data.length === 0 ? 0 : widthAdjustment + chartSpot + x + positionX - textGroup
+              data.length === 0
+                ? 0
+                : startAdjustment + widthAdjustment + chartSpot + x + positionX - textGroup
             )
             .attr('y', 0 + margin.bottom - y)
             .text(text);
@@ -291,7 +296,9 @@ const LineChart = (props) => {
             .attr('fill', colors[legendData('nameOnly')])
             .attr(
               'x',
-              data.length === 0 ? 0 : chartSpot + textVariable + x + positionX + colorLabelGroup
+              data.length === 0
+                ? 0
+                : startAdjustment + chartSpot + textVariable + x + positionX + colorLabelGroup
             )
             .attr('y', colorYadjustment + 0 + margin.bottom - y - 8);
 
@@ -309,7 +316,7 @@ const LineChart = (props) => {
                 .append('text')
                 .attr('font-size', '2vmin')
                 .attr('font-weight', 'bold')
-                .attr('x', widthAdjustment + textTimePeriod)
+                .attr('x', startAdjustment + widthAdjustment + textTimePeriod)
                 .attr('y', 0 + margin.bottom - 20)
                 .attr('border', '1pt solid black')
                 .text(xLabel);
@@ -335,7 +342,7 @@ const LineChart = (props) => {
                     'x',
                     isNaN(textTimePeriod) || textAdjustment === undefined
                       ? 0
-                      : widthAdjustment + textTimePeriod + textAdjustment
+                      : startAdjustment + widthAdjustment + textTimePeriod + textAdjustment
                   )
                   .attr('y', 0 + margin.bottom - 32 + yAdjustment)
                   .attr('border', '1pt solid black')
