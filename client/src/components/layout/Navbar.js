@@ -1,4 +1,5 @@
 import React from 'react';
+import ButtonReset from './ButtonReset';
 
 const Navbar = () => {
   return (
@@ -57,6 +58,7 @@ const Navbar = () => {
             Sales History
           </a>
         </li>
+        <ButtonReset />
       </ul>
     </div>
   );

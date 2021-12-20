@@ -25,6 +25,9 @@ import {
   SALES_DATA_CREATE_REQUEST,
   SALES_DATA_CREATE_SUCCESS,
   SALES_DATA_CREATE_FAIL,
+  SALES_DATA_RESET_REQUEST,
+  SALES_DATA_RESET_SUCCESS,
+  SALES_DATA_RESET_FAIL,
 } from '../constants/salesDataConstants.js';
 
 export const listSalesData =
@@ -201,6 +204,25 @@ export const createBulkSalesData = (salesData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: SALES_DATA_BULK_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.message ? error.response.data.message : error.message,
+    });
+  }
+};
+
+export const resetSalesData = () => async (dispatch) => {
+  try {
+    dispatch({ type: SALES_DATA_RESET_REQUEST });
+
+    const { data } = await axios.post(`/api/salesData/reset/original`);
+
+    dispatch({
+      type: SALES_DATA_RESET_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: SALES_DATA_RESET_FAIL,
       payload:
         error.response && error.response.data.message ? error.response.data.message : error.message,
     });

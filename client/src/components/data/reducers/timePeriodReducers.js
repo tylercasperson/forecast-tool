@@ -20,6 +20,10 @@ import {
   TIME_PERIOD_UPDATE_SUCCESS,
   TIME_PERIOD_UPDATE_FAIL,
   TIME_PERIOD_UPDATE_RESET,
+  TIME_PERIOD_RESET_REQUEST,
+  TIME_PERIOD_RESET_SUCCESS,
+  TIME_PERIOD_RESET_FAIL,
+  TIME_PERIOD_RESET_RESET,
 } from '../constants/timePeriodConstants.js';
 
 export const timePeriodListReducer = (state = { timePeriod: [] }, action) => {
@@ -118,6 +122,25 @@ export const timePeriodUpdateReducer = (state = { timePeriod: [] }, action) => {
     case TIME_PERIOD_UPDATE_FAIL:
       return { loading: false, error: action.payload };
     case TIME_PERIOD_UPDATE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const timePeriodResetReducer = (state = { timePeriod: [] }, action) => {
+  switch (action.type) {
+    case TIME_PERIOD_RESET_REQUEST:
+      return { loading: true };
+    case TIME_PERIOD_RESET_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        timePeriod: action.payload,
+      };
+    case TIME_PERIOD_RESET_FAIL:
+      return { loading: false, error: action.payload };
+    case TIME_PERIOD_RESET_RESET:
       return {};
     default:
       return state;

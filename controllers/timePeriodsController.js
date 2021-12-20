@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const db = require('../models');
 const { Op } = require('sequelize');
+const { originalTimePeriods } = require('../scripts/originalData.js');
 
 const getTimePeriods = asyncHandler(async (req, res) => {
   const timePeriods = await db.timePeriods.findAll({});
@@ -68,6 +69,22 @@ const deleteAllTimePeriods = asyncHandler(async (req, res) => {
   res.json({ timePeriods });
 });
 
+const addOriginalTimePeriods = asyncHandler(async (req, res) => {
+  const timePeriods = await db.timePeriods.bulkCreate(
+    originalTimePeriods.map((i) => {
+      return {
+        id: i.id,
+        groupName: i.groupName,
+        startDate: i.startDate,
+        endDate: i.endDate,
+        timePeriodTypeID: i.timePeriodTypeID,
+      };
+    })
+  );
+
+  res.json({ timePeriods });
+});
+
 module.exports = {
   getTimePeriods,
   getOneTimePeriods,
@@ -76,4 +93,5 @@ module.exports = {
   deleteTimePeriods,
   deleteAllTimePeriods,
   addAlotOfTimePeriods,
+  addOriginalTimePeriods,
 };

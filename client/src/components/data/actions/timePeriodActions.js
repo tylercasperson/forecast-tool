@@ -18,6 +18,9 @@ import {
   TIME_PERIOD_UPDATE_REQUEST,
   TIME_PERIOD_UPDATE_SUCCESS,
   TIME_PERIOD_UPDATE_FAIL,
+  TIME_PERIOD_RESET_REQUEST,
+  TIME_PERIOD_RESET_SUCCESS,
+  TIME_PERIOD_RESET_FAIL,
 } from '../constants/timePeriodConstants.js';
 
 export const listTimePeriod = () => async (dispatch) => {
@@ -130,6 +133,25 @@ export const updateTimePeriod = (timePeriodId, dataRecord) => async (dispatch) =
   } catch (error) {
     dispatch({
       type: TIME_PERIOD_UPDATE_FAIL,
+      payload:
+        error.response && error.response.data.message ? error.response.data.message : error.message,
+    });
+  }
+};
+
+export const resetTimePeriod = () => async (dispatch) => {
+  try {
+    dispatch({ type: TIME_PERIOD_RESET_REQUEST });
+
+    const { data } = await axios.post(`/api/timePeriods/reset/original`);
+
+    dispatch({
+      type: TIME_PERIOD_RESET_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: TIME_PERIOD_RESET_FAIL,
       payload:
         error.response && error.response.data.message ? error.response.data.message : error.message,
     });

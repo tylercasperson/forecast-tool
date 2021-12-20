@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const db = require('../models');
 const { Op } = require('sequelize');
+const { originalGroupedData } = require('../scripts/originalData.js');
 
 const getGroupedData = asyncHandler(async (req, res) => {
   const groupedData = await db.groupedData.findAll({
@@ -86,6 +87,20 @@ const deleteAllGroupedData = asyncHandler(async (req, res) => {
   res.json({ groupedData });
 });
 
+const addOriginalGroupedData = asyncHandler(async (req, res) => {
+  const groupedData = await db.groupedData.bulkCreate(
+    originalGroupedData.map((i) => {
+      return {
+        timePeriodId: i.timePeriodId,
+        dataTypeId: i.dataTypeId,
+        data: i.data,
+      };
+    })
+  );
+
+  res.json({ groupedData });
+});
+
 module.exports = {
   getGroupedData,
   getOneGroupedData,
@@ -94,4 +109,5 @@ module.exports = {
   addAlotOfGroupedData,
   deleteGroupedData,
   deleteAllGroupedData,
+  addOriginalGroupedData,
 };

@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const db = require('../models');
 const { Op } = require('sequelize');
+const { originalSalesData } = require('../scripts/originalData.js');
 
 const getSalesData = asyncHandler(async (req, res) => {
   const salesData = await db.salesData.findAll({
@@ -100,6 +101,19 @@ const addAlotOfSalesData = asyncHandler(async (req, res) => {
   res.json({ salesData });
 });
 
+const addOriginalSalesData = asyncHandler(async (req, res) => {
+  const salesData = await db.salesData.bulkCreate(
+    originalSalesData.map((i) => {
+      return {
+        date: i.date,
+        data: i.data,
+      };
+    })
+  );
+
+  res.json({ salesData });
+});
+
 module.exports = {
   getSalesData,
   getOneSalesData,
@@ -110,4 +124,5 @@ module.exports = {
   addAlotOfSalesData,
   deleteSalesData,
   deleteAllSalesData,
+  addOriginalSalesData,
 };

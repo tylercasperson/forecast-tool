@@ -18,6 +18,9 @@ import {
   GROUPED_DATA_BULK_CREATE_REQUEST,
   GROUPED_DATA_BULK_CREATE_SUCCESS,
   GROUPED_DATA_BULK_CREATE_FAIL,
+  GROUPED_DATA_RESET_REQUEST,
+  GROUPED_DATA_RESET_SUCCESS,
+  GROUPED_DATA_RESET_FAIL,
 } from '../constants/groupedDataConstants.js';
 
 export const listGroupedData =
@@ -136,6 +139,25 @@ export const createBulkGroupedData = (groupedData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: GROUPED_DATA_BULK_CREATE_FAIL,
+      payload:
+        error.response && error.response.data.message ? error.response.data.message : error.message,
+    });
+  }
+};
+
+export const resetGroupedData = () => async (dispatch) => {
+  try {
+    dispatch({ type: GROUPED_DATA_RESET_REQUEST });
+
+    const { data } = await axios.post(`/api/groupedData/reset/original`);
+
+    dispatch({
+      type: GROUPED_DATA_RESET_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GROUPED_DATA_RESET_FAIL,
       payload:
         error.response && error.response.data.message ? error.response.data.message : error.message,
     });

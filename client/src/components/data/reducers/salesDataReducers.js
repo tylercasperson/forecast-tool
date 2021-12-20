@@ -26,6 +26,10 @@ import {
   SALES_DATA_BULK_CREATE_SUCCESS,
   SALES_DATA_BULK_CREATE_FAIL,
   SALES_DATA_BULK_CREATE_RESET,
+  SALES_DATA_RESET_REQUEST,
+  SALES_DATA_RESET_SUCCESS,
+  SALES_DATA_RESET_FAIL,
+  SALES_DATA_RESET_RESET,
 } from '../constants/salesDataConstants.js';
 
 export const salesDataListReducer = (state = { salesData: [] }, action) => {
@@ -150,6 +154,25 @@ export const salesDataBulkCreateReducer = (state = { salesData: [] }, action) =>
     case SALES_DATA_BULK_CREATE_FAIL:
       return { loading: false, error: action.payload };
     case SALES_DATA_BULK_CREATE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const salesDataResetReducer = (state = { salesData: [] }, action) => {
+  switch (action.type) {
+    case SALES_DATA_RESET_REQUEST:
+      return { loading: true };
+    case SALES_DATA_RESET_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        salesData: action.payload.salesData,
+      };
+    case SALES_DATA_RESET_FAIL:
+      return { loading: false, error: action.payload };
+    case SALES_DATA_RESET_RESET:
       return {};
     default:
       return state;
