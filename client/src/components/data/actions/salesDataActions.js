@@ -110,8 +110,6 @@ export const deleteSalesData = (salesDataId) => async (dispatch) => {
   try {
     dispatch({ type: SALES_DATA_DELETE_REQUEST });
 
-    console.log(salesDataId);
-
     const { data } = await axios.delete(`/api/salesData/${salesDataId}`);
 
     dispatch({
