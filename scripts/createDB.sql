@@ -14,7 +14,7 @@ CREATE TABLE dataTypes (
 );
 CREATE TABLE gdpData (
     id int auto_increment,
-    date string,
+    date varChar(255),
     value float(10,4),
     createdAt datetime,
     updatedAt datetime,
