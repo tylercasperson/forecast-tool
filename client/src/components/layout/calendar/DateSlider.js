@@ -179,6 +179,7 @@ const DateSlider = () => {
     }
     setMonthTracker([0, 0]);
     setDisplayStartDate(startDate);
+    setDisplayEndDate(endDate);
   }, [dispatch, startDate, endDate, minDate, maxDate, load, sliderLock]);
 
   return (
