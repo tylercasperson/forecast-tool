@@ -1,7 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { format } from 'date-fns';
+
+import { listGroupedData } from '../data/actions/groupedDataActions.js';
+import { listSalesData } from '../data/actions/salesDataActions.js';
+import { listTimePeriod } from '../data/actions/timePeriodActions.js';
+
 import ButtonReset from './ButtonReset';
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+
+  const getFromState = useSelector((state) => state);
+  const { startDate, endDate } = getFromState.dates;
+  const { timePeriod } = getFromState.timePeriods;
+
+  useEffect(() => {
+    dispatch(listTimePeriod());
+    dispatch(
+      listGroupedData(
+        format(new Date(startDate), 'yyyy-M-d'),
+        format(new Date(endDate), 'yyyy-M-d')
+      )
+    );
+    dispatch(
+      listSalesData(format(new Date(startDate), 'yyyy-M-d'), format(new Date(endDate), 'yyyy-M-d'))
+    );
+  }, [dispatch, startDate, endDate]);
   return (
     <div style={{ height: '8vh', marginBottom: '20px' }}>
       <ul
@@ -58,7 +83,9 @@ const Navbar = () => {
             Sales History
           </a>
         </li>
-        <ButtonReset />
+        {timePeriod.length !== 0 && (
+          <ButtonReset lastTimePeriodId={timePeriod[timePeriod.length - 1].id} />
+        )}
       </ul>
     </div>
   );

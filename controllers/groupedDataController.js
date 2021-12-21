@@ -91,7 +91,7 @@ const addOriginalGroupedData = asyncHandler(async (req, res) => {
   const groupedData = await db.groupedData.bulkCreate(
     originalGroupedData.map((i) => {
       return {
-        timePeriodId: i.timePeriodId,
+        timePeriodId: req.body.lastTimePeriodId + i.timePeriodId,
         dataTypeId: i.dataTypeId,
         data: i.data,
       };

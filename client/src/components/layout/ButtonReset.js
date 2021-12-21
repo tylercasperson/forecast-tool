@@ -4,7 +4,7 @@ import { deleteAllTimePeriod, resetTimePeriod } from '../data/actions/timePeriod
 import { deleteAllGroupedData, resetGroupedData } from '../data/actions/groupedDataActions.js';
 import { deleteAllSalesData, resetSalesData } from '../data/actions/salesDataActions.js';
 
-const ButtonReset = () => {
+const ButtonReset = (props) => {
   const dispatch = useDispatch();
 
   const onClick = () => {
@@ -13,7 +13,7 @@ const ButtonReset = () => {
     dispatch(deleteAllSalesData());
 
     dispatch(resetTimePeriod());
-    dispatch(resetGroupedData());
+    dispatch(resetGroupedData({ lastTimePeriodId: props.lastTimePeriodId }));
     dispatch(resetSalesData());
   };
 

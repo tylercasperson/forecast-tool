@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'date-fns';
 
 import { listGroupedData } from '../data/actions/groupedDataActions.js';
+import { listTimePeriod } from '../data/actions/timePeriodActions.js';
 import {
   saveStartDate,
   saveEndDate,
@@ -140,6 +141,7 @@ const Forecast = () => {
         format(new Date(endDate), 'yyyy-M-d')
       )
     );
+    dispatch(listTimePeriod());
   }, [dispatch, startDate, endDate]);
 
   return (

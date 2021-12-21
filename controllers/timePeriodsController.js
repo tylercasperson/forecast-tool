@@ -73,7 +73,6 @@ const addOriginalTimePeriods = asyncHandler(async (req, res) => {
   const timePeriods = await db.timePeriods.bulkCreate(
     originalTimePeriods.map((i) => {
       return {
-        id: i.id,
         groupName: i.groupName,
         startDate: i.startDate,
         endDate: i.endDate,

@@ -145,11 +145,11 @@ export const createBulkGroupedData = (groupedData) => async (dispatch) => {
   }
 };
 
-export const resetGroupedData = () => async (dispatch) => {
+export const resetGroupedData = (lastTimePeriodId) => async (dispatch) => {
   try {
     dispatch({ type: GROUPED_DATA_RESET_REQUEST });
 
-    const { data } = await axios.post(`/api/groupedData/reset/original`);
+    const { data } = await axios.post(`/api/groupedData/reset/original`, lastTimePeriodId);
 
     dispatch({
       type: GROUPED_DATA_RESET_SUCCESS,
