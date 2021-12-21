@@ -48,7 +48,7 @@ In the past I have used a lot of different forecasting techniques. The forecasti
 - NODE_ENV = development
 - PORT = 4000
 - alphaVantageApiKey = your alpha vantage api key
-- username = root
-- dbPassword = root
 - database = ForecastToolDB
 - host = 127.0.0.1
+- username = root
+- dbPassword = root
