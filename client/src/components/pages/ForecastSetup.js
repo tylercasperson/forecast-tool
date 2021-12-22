@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
+import { format, add } from 'date-fns';
 
 import { calculateForecasts } from '../data/formulas/forecastFormulas.js';
 import { groupFrequency } from '../data/formulas/dateFormulas.js';
@@ -95,7 +95,12 @@ const ForecastSetup = () => {
       setErrorDisplay('none');
     }
     if (load) {
-      listSalesData(format(new Date(startDate), 'yyyy-M-d'), format(new Date(endDate), 'yyyy-M-d'));
+      dispatch(
+        listSalesData(
+          format(add(new Date(startDate), { days: -1 }), 'yyyy-M-d'),
+          format(add(new Date(endDate), { days: 1 }), 'yyyy-M-d')
+        )
+      );
       dispatch(rangeSalesData(startDate, endDate));
       dispatch(listTimePeriod());
       dispatch(minMaxSalesDates());

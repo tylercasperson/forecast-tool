@@ -9,10 +9,10 @@ const getSalesData = asyncHandler(async (req, res) => {
       [Op.and]: [
         {
           date: {
-            [Op.gte]: [req.query.startDate],
+            [Op.gt]: [req.query.startDate],
           },
         },
-        { date: { [Op.lte]: req.query.endDate } },
+        { date: { [Op.lt]: req.query.endDate } },
       ],
     },
   });

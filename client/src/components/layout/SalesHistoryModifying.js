@@ -178,7 +178,10 @@ const SalesHistoryModifying = (props) => {
       )
     );
     dispatch(
-      listSalesData(format(new Date(startDate), 'yyyy-M-d'), format(new Date(endDate), 'yyyy-M-d'))
+      listSalesData(
+        format(add(new Date(startDate), { days: -1 }), 'yyyy-M-d'),
+        format(add(new Date(endDate), { days: 1 }), 'yyyy-M-d')
+      )
     );
     if (load) {
       dispatch(rangeSalesData(startDate, endDate));
