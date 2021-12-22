@@ -8,6 +8,14 @@ const ButtonReset = (props) => {
   const dispatch = useDispatch();
 
   const onClick = () => {
+    localStorage.removeItem('periods');
+    localStorage.removeItem('startDate');
+    localStorage.removeItem('endDate');
+    localStorage.removeItem('groupVariables');
+    localStorage.removeItem('showForecast');
+    localStorage.removeItem('colors');
+    localStorage.removeItem('scrollPosition');
+
     dispatch(deleteAllTimePeriod());
     dispatch(deleteAllGroupedData());
     dispatch(deleteAllSalesData());
