@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { format } from 'date-fns';
+import { format, add } from 'date-fns';
 import { nest } from 'd3-collection';
 
 import { dateFormat } from '../data/formulas/dateFormulas.js';
@@ -61,8 +61,8 @@ const TableData = (props) => {
 
     dispatch(
       listGroupedData(
-        format(new Date(props.startDate), 'yyyy-M-d'),
-        format(new Date(props.endDate), 'yyyy-M-d')
+        format(add(new Date(props.startDate), { days: -1 }), 'yyyy-M-d'),
+        format(add(new Date(props.endDate), { days: 1 }), 'yyyy-M-d')
       )
     );
   };

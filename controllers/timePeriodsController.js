@@ -6,6 +6,7 @@ const { originalTimePeriods } = require('../scripts/originalData.js');
 const getTimePeriods = asyncHandler(async (req, res) => {
   const timePeriods = await db.timePeriods.findAll({});
   res.json({ timePeriods });
+  console.log(timePeriods);
 });
 
 const getOneTimePeriods = asyncHandler(async (req, res) => {

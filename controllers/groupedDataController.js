@@ -13,15 +13,17 @@ const getGroupedData = asyncHandler(async (req, res) => {
       [Op.and]: [
         {
           '$timePeriod.startDate$': {
-            [Op.gte]: [req.query.startDate],
+            [Op.gt]: [req.query.startDate],
           },
         },
-        { '$timePeriod.endDate$': { [Op.lte]: req.query.endDate } },
+        { '$timePeriod.endDate$': { [Op.lt]: req.query.endDate } },
       ],
     },
     order: [['dataTypeId'], ['timePeriodId']],
   });
   res.json({ groupedData });
+  // console.log(groupedData.filter((i) => i.dataTypeId === 2));
+  console.log(req.query.endDate);
 });
 
 const getOneGroupedData = asyncHandler(async (req, res) => {

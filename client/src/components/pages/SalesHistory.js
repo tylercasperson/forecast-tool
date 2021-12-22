@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { format } from 'date-fns';
+import { format, add } from 'date-fns';
 
 import { listSalesData } from '../data/actions/salesDataActions.js';
 import { listGroupedData } from '../data/actions/groupedDataActions.js';
@@ -86,8 +86,8 @@ const SalesHistory = () => {
       );
       dispatch(
         listGroupedData(
-          format(new Date(startDate), 'yyyy-M-d'),
-          format(new Date(endDate), 'yyyy-M-d')
+          format(add(new Date(startDate), { days: -1 }), 'yyyy-M-d'),
+          format(add(new Date(endDate), { days: 1 }), 'yyyy-M-d')
         )
       );
     }
