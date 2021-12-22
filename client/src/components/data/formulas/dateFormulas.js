@@ -1,4 +1,5 @@
 import {
+  add,
   min,
   max,
   eachYearOfInterval,
@@ -139,25 +140,37 @@ export const groupFrequency = (firstLetter, startDate, endDate) => {
 
   switch (firstLetter) {
     case 'Y':
-    case 'y':
       occurrences = eachYearOfInterval(dateRange).length;
+      if (add(firstDate, { years: occurrences }) > add(secondDate, { years: 1 })) {
+        occurrences = occurrences - 1;
+      }
       break;
     case 'Q':
-    case 'q':
       occurrences = eachQuarterOfInterval(dateRange).length;
+      if (add(firstDate, { months: occurrences }) > add(secondDate, { months: 3 })) {
+        occurrences = occurrences - 1;
+      }
       break;
     case 'M':
-    case 'm':
       occurrences = eachMonthOfInterval(dateRange).length;
+      if (add(firstDate, { months: occurrences }) > add(secondDate, { months: 1 })) {
+        occurrences = occurrences - 1;
+      }
       break;
     case 'W':
-    case 'w':
       occurrences = eachWeekOfInterval(dateRange).length;
+      if (add(firstDate, { weeks: occurrences }) > add(secondDate, { weeks: 1 })) {
+        occurrences = occurrences - 1;
+      }
       break;
     default:
       occurrences = differenceInDays(secondDate, firstDate).length;
+      if (add(firstDate, { days: occurrences }) > add(secondDate, { days: 1 })) {
+        occurrences = occurrences - 1;
+      }
       break;
   }
+
   let dayEquivalent = Math.ceil(differenceInDays(secondDate, firstDate) / occurrences);
 
   return { occurrences, dayEquivalent };

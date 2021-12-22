@@ -53,7 +53,11 @@ const ForecastSetup = () => {
       dispatch(deleteAllGroupedData());
       dispatch(deleteAllTimePeriod());
 
-      let { occurrences, dayEquivalent } = groupFrequency(firstLetter, startDate, endDate);
+      let { occurrences, dayEquivalent } = groupFrequency(
+        firstLetter.toUpperCase(),
+        startDate,
+        endDate
+      );
       let timeVariables = { occurrences, dayEquivalent, periodId, firstLetter };
       let gdpToUse = gdpData.length === 0 ? gdpStoredData : gdpData;
 

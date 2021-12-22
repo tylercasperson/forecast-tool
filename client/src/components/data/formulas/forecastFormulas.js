@@ -5,7 +5,7 @@ export const calculateForecasts = (
   timeVariables,
   startDate,
   endDate,
-  salesDateRange,
+  salesDataArr,
   dataTypes,
   lastTimePeriodId,
   previousYear,
@@ -22,7 +22,7 @@ export const calculateForecasts = (
     dataArr,
     firstDate,
     secondDate,
-    salesDateRange,
+    salesDataArr,
     dataTypes,
     lastTimePeriodId
   );
@@ -58,7 +58,7 @@ const gatherSalesData = (
   dataArr,
   firstDate,
   secondDate,
-  salesDateRange,
+  salesDataArr,
   dataTypes,
   lastTimePeriodId
 ) => {
@@ -89,16 +89,20 @@ const gatherSalesData = (
       }
     };
 
-    let startDay = timeUnit(timeVariables.firstLetter, firstDate, i);
+    let startDay =
+      timeUnit(timeVariables.firstLetter, firstDate, i) > secondDate
+        ? secondDate
+        : timeUnit(timeVariables.firstLetter, firstDate, i);
+
     let stopOnDay =
       timeUnit('d', timeUnit(timeVariables.firstLetter, startDay, 1), -1) > secondDate
         ? secondDate
         : timeUnit('d', timeUnit(timeVariables.firstLetter, startDay, 1), -1);
 
-    let timePeriodTotal = salesDateRange
+    let timePeriodTotal = salesDataArr
       .filter((i) => {
         let dateSelected = new Date(dateFormat(i.date));
-        return dateSelected >= startDay && dateSelected < stopOnDay;
+        return dateSelected >= startDay && dateSelected <= stopOnDay;
       })
       .reduce((a, b) => {
         return a + b.data;

@@ -106,7 +106,7 @@ const TableData = (props) => {
           data.map((i, index) => {
             let findData = (something) => {
               let exists = i.values.find((o) => o.dataType.abbreviation === something);
-              return exists === undefined ? 0 : exists.data.toString();
+              return exists === undefined || exists.data === null ? 0 : exists.data.toString();
             };
             let background = index % 2 !== 0 ? 'lightgrey' : 'none';
             return (

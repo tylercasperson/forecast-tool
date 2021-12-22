@@ -116,7 +116,7 @@ const SalesHistory = () => {
         onChange={() => onChange()}
         onClick={() => onClick()}
       />
-      <SalesHistoryTable array={salesData} lock={lock} />
+      <SalesHistoryTable array={salesData} />
     </div>
   );
 };

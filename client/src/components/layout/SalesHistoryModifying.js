@@ -34,14 +34,14 @@ const SalesHistoryModifying = (props) => {
   const { firstLetter, periodId } = getFromState.groupVariables;
   const { dataTypes } = getFromState.dataTypes;
   const { timePeriod } = getFromState.timePeriods;
-  const { current, previousYear } = getFromState.salesDataRange.salesData;
+  const { previousYear } = getFromState.salesDataRange.salesData;
   const { gdpData } = getFromState.gdp;
   const { gdpStoredData } = getFromState.gdpStoredData;
 
   const [load, setLoad] = useState(true);
   const [errorDisplay, setErrorDisplay] = useState('none');
 
-  const forecastCalculations = () => {
+  const forecastCalculations = (arr) => {
     let lastTimePeriodId = timePeriod.length === 0 ? 1 : timePeriod[timePeriod.length - 1].id;
 
     setLoad(true);
@@ -49,7 +49,11 @@ const SalesHistoryModifying = (props) => {
     dispatch(deleteAllTimePeriod());
     dispatch(deleteAllGroupedData());
 
-    let { occurrences, dayEquivalent } = groupFrequency(firstLetter, startDate, endDate);
+    let { occurrences, dayEquivalent } = groupFrequency(
+      firstLetter.toUpperCase(),
+      startDate,
+      endDate
+    );
     let timeVariables = { occurrences, dayEquivalent, periodId, firstLetter };
     let gdpToUse = gdpData.length === 0 ? gdpStoredData : gdpData;
 
@@ -63,7 +67,7 @@ const SalesHistoryModifying = (props) => {
       timeVariables,
       startDate,
       endDate,
-      current.salesData,
+      arr,
       dataTypes,
       lastTimePeriodId,
       previousYear,
@@ -122,7 +126,7 @@ const SalesHistoryModifying = (props) => {
 
       dispatch(deleteAllSalesData());
       dispatch(createBulkSalesData(sortedArr));
-      forecastCalculations();
+      forecastCalculations(sortedArr);
       setLoad(true);
     }
   };
@@ -133,7 +137,7 @@ const SalesHistoryModifying = (props) => {
 
       dispatch(deleteAllSalesData());
       dispatch(createBulkSalesData(arr));
-      forecastCalculations();
+      forecastCalculations(arr);
     }
   };
 
