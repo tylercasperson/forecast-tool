@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { add, format } from 'date-fns';
 
@@ -112,6 +112,12 @@ const DropDownCalendar = (props) => {
     setMonthTracker([0, 0]);
     setDisplayStartDate(startDate);
   };
+
+  useEffect(() => {
+    setMonthTracker([0, 0]);
+    setDisplayStartDate(startDate);
+    setDisplayEndDate(endDate);
+  }, [startDate, endDate]);
 
   return (
     <div
