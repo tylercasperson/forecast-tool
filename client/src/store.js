@@ -13,6 +13,7 @@ import {
   salesDataUpdateReducer,
   salesDataCreateReducer,
   salesDataBulkCreateReducer,
+  salesDataResetReducer,
 } from './components/data/reducers/salesDataReducers.js';
 import {
   groupedDataListReducer,
@@ -21,6 +22,7 @@ import {
   groupedDataDeleteAllReducer,
   groupedDataCreateReducer,
   groupedDataBulkCreateReducer,
+  groupedDataResetReducer,
 } from './components/data/reducers/groupedDataReducers.js';
 import { timePeriodTypeListReducer } from './components/data/reducers/timePeriodTypeReducers.js';
 import {
@@ -30,6 +32,7 @@ import {
   timePeriodDeleteReducer,
   timePeriodDeleteAllReducer,
   timePeriodUpdateReducer,
+  timePeriodResetReducer,
 } from './components/data/reducers/timePeriodReducers.js';
 import {
   gdpListReducer,
@@ -52,12 +55,14 @@ const reducer = combineReducers({
   salesDataUpdate: salesDataUpdateReducer,
   salesDataCreate: salesDataCreateReducer,
   salesDataBulkCreate: salesDataBulkCreateReducer,
+  salesDataReset: salesDataResetReducer,
   groupedData: groupedDataListReducer,
   groupedDataUpdate: groupedDataUpdateReducer,
   groupedDataDelete: groupedDataDeleteReducer,
   groupedDataDeleteAll: groupedDataDeleteAllReducer,
   groupedDataCreate: groupedDataCreateReducer,
   groupedDataBulkCreate: groupedDataBulkCreateReducer,
+  groupedDataReset: groupedDataResetReducer,
   timePeriodTypes: timePeriodTypeListReducer,
   timePeriods: timePeriodListReducer,
   timePeriodCreate: timePeriodCreateReducer,
@@ -65,6 +70,7 @@ const reducer = combineReducers({
   timePeriodsDelete: timePeriodDeleteReducer,
   timePeriodsDeleteAll: timePeriodDeleteAllReducer,
   timePeriodsUpdate: timePeriodUpdateReducer,
+  timePeriodsReset: timePeriodResetReducer,
   gdp: gdpListReducer,
   gdpStoredData: gdpStoredListReducer,
   gdpStoredDataCreate: gdpStoredCreateReducer,

@@ -113,10 +113,18 @@ const SalesHistory = () => {
       <SalesHistoryModifying
         startDate={tempStartDate}
         endDate={tempEndDate}
+        groupedData={groupedData}
+        salesData={salesData}
         onChange={() => onChange()}
         onClick={() => onClick()}
       />
-      <SalesHistoryTable array={salesData} />
+      <SalesHistoryTable
+        array={salesData.filter(
+          (i) =>
+            add(new Date(i.date), { days: 1 }) > new Date(startDate) &&
+            add(new Date(i.date), { days: -1 }) < new Date(endDate)
+        )}
+      />
     </div>
   );
 };

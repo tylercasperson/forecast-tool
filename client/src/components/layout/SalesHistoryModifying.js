@@ -3,22 +3,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { add, differenceInDays, format } from 'date-fns';
 
 import { getRandomNumber } from '../data/formulas/numberFormulas';
-import { deleteAllSalesData, createBulkSalesData } from '../data/actions/salesDataActions.js';
-
-import { calculateForecasts } from '../data/formulas/forecastFormulas.js';
 import { groupFrequency } from '../data/formulas/dateFormulas';
+import { calculateForecasts } from '../data/formulas/forecastFormulas.js';
+import { deleteAllSalesData, createBulkSalesData } from '../data/actions/salesDataActions.js';
+import { SALES_DATA_BULK_CREATE_RESET } from '../data/constants/salesDataConstants.js';
 import { rangeSalesData, listSalesData } from '../data/actions/salesDataActions.js';
 import {
   createBulkTimePeriod,
   deleteAllTimePeriod,
   listTimePeriod,
 } from '../data/actions/timePeriodActions.js';
+import { TIME_PERIOD_BULK_CREATE_RESET } from '../data/constants/timePeriodConstants.js';
 import { listDataTypes } from '../data/actions/dataTypeActions.js';
 import {
   createBulkGroupedData,
   deleteAllGroupedData,
   listGroupedData,
 } from '../data/actions/groupedDataActions.js';
+import { GROUPED_DATA_BULK_CREATE_RESET } from '../data/constants/groupedDataConstants.js';
 import { listGdp, listStoredGdp, createStoredGdp } from '../data/actions/gdpActions.js';
 
 import ButtonHover from './ButtonHover';
@@ -37,6 +39,10 @@ const SalesHistoryModifying = (props) => {
   const { previousYear } = getFromState.salesDataRange.salesData;
   const { gdpData } = getFromState.gdp;
   const { gdpStoredData } = getFromState.gdpStoredData;
+
+  const { success: timePeriodBulkSuccess } = getFromState.timePeriodBulkCreate;
+  const { success: salesDataBulkSuccess } = getFromState.salesDataBulkCreate;
+  const { success: groupedDataBulkSuccess } = getFromState.groupedDataBulkCreate;
 
   const [load, setLoad] = useState(true);
   const [errorDisplay, setErrorDisplay] = useState('none');
@@ -81,63 +87,67 @@ const SalesHistoryModifying = (props) => {
   };
 
   const addSeasonalTrends = () => {
-    if (new Date(startDate) <= new Date() && new Date(endDate) <= new Date()) {
-      let arr = randomSalesData();
+    if (props.groupedData.length && props.salesData.length !== 0) {
+      if (new Date(startDate) <= new Date() && new Date(endDate) <= new Date()) {
+        let arr = randomSalesData();
 
-      let winter = arr.filter((i) => {
-        let month = i.date.split('-')[1];
-        let day = i.date.split('-')[2];
-        return (
-          (month === '10' && parseInt(day) > 15) ||
-          month === '11' ||
-          month === '12' ||
-          (month === '1' && parseInt(day) < 10)
-        );
-      });
+        let winter = arr.filter((i) => {
+          let month = i.date.split('-')[1];
+          let day = i.date.split('-')[2];
+          return (
+            (month === '10' && parseInt(day) > 15) ||
+            month === '11' ||
+            month === '12' ||
+            (month === '1' && parseInt(day) < 10)
+          );
+        });
 
-      winter.map((i) => {
-        let randomDate = format(
-          add(new Date(i.date), { days: getRandomNumber(-2, 3) }),
-          'yyyy-M-d'
-        );
-        let randomNumber = getRandomNumber(0, 800);
+        winter.map((i) => {
+          let randomDate = format(
+            add(new Date(i.date), { days: getRandomNumber(-2, 3) }),
+            'yyyy-M-d'
+          );
+          let randomNumber = getRandomNumber(0, 800);
 
-        return arr.push({ date: randomDate, data: randomNumber });
-      });
+          return arr.push({ date: randomDate, data: randomNumber });
+        });
 
-      let summer = arr.filter((i) => {
-        let month = i.date.split('-')[1];
-        return month === '6' || month === '7' || month === '8';
-      });
+        let summer = arr.filter((i) => {
+          let month = i.date.split('-')[1];
+          return month === '6' || month === '7' || month === '8';
+        });
 
-      summer.map((i) => {
-        let randomDate = format(
-          add(new Date(i.date), { days: getRandomNumber(-2, 3) }),
-          'yyyy-M-d'
-        );
-        let randomNumber = getRandomNumber(0, 400);
+        summer.map((i) => {
+          let randomDate = format(
+            add(new Date(i.date), { days: getRandomNumber(-2, 3) }),
+            'yyyy-M-d'
+          );
+          let randomNumber = getRandomNumber(0, 400);
 
-        return arr.push({ date: randomDate, data: randomNumber });
-      });
+          return arr.push({ date: randomDate, data: randomNumber });
+        });
 
-      let sortedArr = arr.sort((a, b) => {
-        return new Date(a.date) - new Date(b.date);
-      });
+        let sortedArr = arr.sort((a, b) => {
+          return new Date(a.date) - new Date(b.date);
+        });
 
-      dispatch(deleteAllSalesData());
-      dispatch(createBulkSalesData(sortedArr));
-      forecastCalculations(sortedArr);
-      setLoad(true);
+        dispatch(deleteAllSalesData());
+        dispatch(createBulkSalesData(sortedArr));
+        forecastCalculations(sortedArr);
+        setLoad(true);
+      }
     }
   };
 
   const justRandomData = () => {
-    if (new Date(startDate) <= new Date() && new Date(endDate) <= new Date()) {
-      let arr = randomSalesData();
+    if (props.groupedData.length && props.salesData.length !== 0) {
+      if (new Date(startDate) <= new Date() && new Date(endDate) <= new Date()) {
+        let arr = randomSalesData();
 
-      dispatch(deleteAllSalesData());
-      dispatch(createBulkSalesData(arr));
-      forecastCalculations(arr);
+        dispatch(deleteAllSalesData());
+        dispatch(createBulkSalesData(arr));
+        forecastCalculations(arr);
+      }
     }
   };
 
@@ -191,7 +201,26 @@ const SalesHistoryModifying = (props) => {
       dispatch(listStoredGdp());
       setLoad(false);
     }
-  }, [dispatch, load, startDate, endDate, errorDisplay]);
+
+    if (timePeriodBulkSuccess) {
+      dispatch({ type: SALES_DATA_BULK_CREATE_RESET });
+    }
+    if (salesDataBulkSuccess) {
+      dispatch({ type: TIME_PERIOD_BULK_CREATE_RESET });
+    }
+    if (groupedDataBulkSuccess) {
+      dispatch({ type: GROUPED_DATA_BULK_CREATE_RESET });
+    }
+  }, [
+    dispatch,
+    load,
+    startDate,
+    endDate,
+    errorDisplay,
+    timePeriodBulkSuccess,
+    salesDataBulkSuccess,
+    groupedDataBulkSuccess,
+  ]);
 
   return (
     <div

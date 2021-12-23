@@ -22,8 +22,6 @@ const getGroupedData = asyncHandler(async (req, res) => {
     order: [['dataTypeId'], ['timePeriodId']],
   });
   res.json({ groupedData });
-  // console.log(groupedData.filter((i) => i.dataTypeId === 2));
-  console.log(req.query.endDate);
 });
 
 const getOneGroupedData = asyncHandler(async (req, res) => {
