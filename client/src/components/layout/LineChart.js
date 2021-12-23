@@ -134,6 +134,12 @@ const LineChart = (props) => {
 
     svg.append('g').attr('class', 'yAxis').attr('transform', `translate(45,0)`).call(yAxis);
 
+    let yTickMarks = svg.select('g.yAxis').selectAll('g.tick')._groups[0];
+
+    Array.from(yTickMarks).map((i, index) =>
+      index % heightPerTick !== 0 ? (i.children[0].attributes.stroke.value = 'none') : ''
+    );
+
     if (props.data.length !== 0) {
       svg
         .append('rect')
