@@ -284,14 +284,18 @@ const calculateLinearRegression = (arr1, arr2, lastTimePeriodId, dataArr, dataTy
     return i.abbreviation === 'lr';
   })[0].id;
 
+  let arr1Average = arr1.reduce((a, b) => a + b.data, arr1[0].data) / arr1.length;
+  let lrPoint = lr.intercept + arr1[0].data * lr.slope;
+  let lrAdjustment = arr1Average / lrPoint;
+
   for (let i = 0; i < arr1.length; i++) {
     addToData(
       dataTypeId,
       lastTimePeriodId + (i + 1),
-      Math.round(lr.intercept + arr1[i].data * lr.slope),
+      Math.round((lr.intercept + arr1[i].data * lr.slope) * lrAdjustment),
       dataArr
     );
-    lrArr.push(Math.round(lr.intercept + arr1[i].data * lr.slope));
+    lrArr.push(Math.round((lr.intercept + arr1[i].data * lr.slope) * lrAdjustment));
   }
 };
 
