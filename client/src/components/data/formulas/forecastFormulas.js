@@ -292,10 +292,10 @@ const calculateLinearRegression = (arr1, arr2, lastTimePeriodId, dataArr, dataTy
     addToData(
       dataTypeId,
       lastTimePeriodId + (i + 1),
-      Math.round((lr.intercept + arr1[i].data * lr.slope) * lrAdjustment),
+      Math.abs(Math.round((lr.intercept + arr1[i].data * lr.slope) * lrAdjustment)),
       dataArr
     );
-    lrArr.push(Math.round((lr.intercept + arr1[i].data * lr.slope) * lrAdjustment));
+    lrArr.push(Math.abs(Math.round((lr.intercept + arr1[i].data * lr.slope) * lrAdjustment)));
   }
 };
 
