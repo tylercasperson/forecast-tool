@@ -203,10 +203,10 @@ const SalesHistoryModifying = (props) => {
     }
 
     if (timePeriodBulkSuccess) {
-      dispatch({ type: SALES_DATA_BULK_CREATE_RESET });
+      dispatch({ type: TIME_PERIOD_BULK_CREATE_RESET });
     }
     if (salesDataBulkSuccess) {
-      dispatch({ type: TIME_PERIOD_BULK_CREATE_RESET });
+      dispatch({ type: SALES_DATA_BULK_CREATE_RESET });
     }
     if (groupedDataBulkSuccess) {
       dispatch({ type: GROUPED_DATA_BULK_CREATE_RESET });

@@ -42,6 +42,7 @@ const Forecast = () => {
   const [showHoverText, setShowHoverText] = useState(true);
   const [showTimePeriod, setShowTimePeriod] = useState(true);
   const [showTimePeriodText, setShowTimePeriodText] = useState('Show Dates');
+  const [load, setLoad] = useState(true);
 
   const onChange = (e) => {
     let month = e.target.value.split('/')[0];
@@ -141,8 +142,12 @@ const Forecast = () => {
         format(add(new Date(endDate), { days: 1 }), 'yyyy-M-d')
       )
     );
-    dispatch(listTimePeriod());
-  }, [dispatch, startDate, endDate]);
+
+    if (load) {
+      dispatch(listTimePeriod());
+      setLoad(false);
+    }
+  }, [dispatch, startDate, endDate, load]);
 
   return (
     <div style={{ height: '92vh', textAlign: 'center' }}>

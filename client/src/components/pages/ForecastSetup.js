@@ -15,8 +15,10 @@ import {
   deleteAllTimePeriod,
   listTimePeriod,
 } from '../data/actions/timePeriodActions.js';
+import { TIME_PERIOD_BULK_CREATE_RESET } from '../data/constants/timePeriodConstants.js';
 import { listDataTypes } from '../data/actions/dataTypeActions.js';
 import { createBulkGroupedData, deleteAllGroupedData } from '../data/actions/groupedDataActions.js';
+import { GROUPED_DATA_BULK_CREATE_RESET } from '../data/constants/groupedDataConstants.js';
 import { listGdp, listStoredGdp, createStoredGdp } from '../data/actions/gdpActions.js';
 
 import TimePeriodTypesList from '../layout/TimePeriodTypesList';
@@ -41,6 +43,8 @@ const ForecastSetup = () => {
   const { current, previousYear } = getFromState.salesDataRange.salesData;
   const { gdpData } = getFromState.gdp;
   const { gdpStoredData } = getFromState.gdpStoredData;
+  const { success: timePeriodBulkSuccess } = getFromState.timePeriodBulkCreate;
+  const { success: groupedDataBulkSuccess } = getFromState.groupedDataBulkCreate;
 
   const [load, setLoad] = useState(true);
   const [errorDisplay, setErrorDisplay] = useState('none');
@@ -109,7 +113,22 @@ const ForecastSetup = () => {
       dispatch(listStoredGdp());
       setLoad(false);
     }
-  }, [dispatch, load, startDate, endDate, errorDisplay]);
+
+    if (timePeriodBulkSuccess) {
+      dispatch({ type: TIME_PERIOD_BULK_CREATE_RESET });
+    }
+    if (groupedDataBulkSuccess) {
+      dispatch({ type: GROUPED_DATA_BULK_CREATE_RESET });
+    }
+  }, [
+    dispatch,
+    load,
+    startDate,
+    endDate,
+    errorDisplay,
+    timePeriodBulkSuccess,
+    groupedDataBulkSuccess,
+  ]);
 
   return (
     <form action={'./'}>
